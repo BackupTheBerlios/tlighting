@@ -202,7 +202,6 @@ public class PopUpMenu extends JPopupMenu implements ActionListener
             aScreen.temp_instrument.setBarID(proj_class.selected_index);
             
             
-            
         }
         else if(e.getSource()==add_stage)
         {
@@ -229,11 +228,13 @@ public class PopUpMenu extends JPopupMenu implements ActionListener
             aScreen.temp_set.copySetObject((setobject)(proj_class.sets.get_object(proj_class.selected_index)));
     	}
         else if(e.getSource() == zoom_in)
-        {
+        {   //begin chaplin edit.
             if(proj_class.zoom_factor<100){
                 proj_class.zoom_factor+=1;
-                aScreen.horiz.setMaximum(600*proj_class.zoom_factor);
-                aScreen.vert.setMaximum(600*proj_class.zoom_factor);
+                aScreen.vert.setUnitIncrement((int)((1/(double)proj_class.zoom_factor)*(.05 * aScreen.vert.getHeight())));
+                aScreen.horiz.setUnitIncrement((int)((1/(double)proj_class.zoom_factor)*(.05 * aScreen.horiz.getWidth())));
+                aScreen.vert.setBlockIncrement((int)((1/(double)proj_class.zoom_factor)*(.25 * aScreen.vert.getHeight())));
+                aScreen.horiz.setBlockIncrement((int)((1/(double)proj_class.zoom_factor)*(.25 * aScreen.horiz.getWidth())));
                 aScreen.repaint();
             }
         }
@@ -241,8 +242,16 @@ public class PopUpMenu extends JPopupMenu implements ActionListener
         {
             if(proj_class.zoom_factor>1){
                 proj_class.zoom_factor-=.5; 
-                aScreen.horiz.setMaximum(600*proj_class.zoom_factor);
-                aScreen.vert.setMaximum(600*proj_class.zoom_factor);
+                //aScreen.horiz.setMaximum(600*proj_class.zoom_factor);
+                //aScreen.vert.setMaximum(600*proj_class.zoom_factor);
+                aScreen.vert.setUnitIncrement((int)((double)(proj_class.zoom_factor)*(.05 * aScreen.vert.getHeight())));
+                aScreen.horiz.setUnitIncrement((int)((double)(proj_class.zoom_factor)*(.05 * aScreen.horiz.getWidth())));
+                aScreen.vert.setBlockIncrement((int)((double)(proj_class.zoom_factor)*(.25 * aScreen.vert.getHeight())));
+                aScreen.horiz.setBlockIncrement((int)((double)(proj_class.zoom_factor)*(.25 * aScreen.horiz.getWidth())));
+                System.out.println("Inside zoom out.\n The zoom factor is: "+proj_class.zoom_factor);
+                System.out.println("the vert unit increment is: "+aScreen.vert.getUnitIncrement()+" the horizontal unit increment"+aScreen.horiz.getUnitIncrement());
+                System.out.println("the vert block increment is: "+aScreen.vert.getBlockIncrement()+"the horizontal unit block increment is:"+aScreen.horiz.getBlockIncrement());
+                //end chaplin edit.
                 aScreen.repaint();
             }
         }
