@@ -239,19 +239,19 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         if(temp_instrument!=null){
             temp_instrument.set_color(2);
             temp_instrument.draw(g2,proj_class.zoom_factor,0-scroll_x,0-scroll_y);
-            temp_bar.set_color(0);
+            temp_instrument.set_color(0);
         }
         
         if(temp_stage!=null){
-            temp_bar.set_color(2);
+            temp_stage.set_color(2);
             temp_stage.draw(g2,proj_class.zoom_factor,0-scroll_x,0-scroll_y);
-            temp_bar.set_color(0);
+            temp_stage.set_color(0);
         }
          
         if(temp_set!=null){
-            temp_bar.set_color(2);
+            temp_set.set_color(2);
             temp_set.draw(g2,proj_class.zoom_factor,0-scroll_x,0-scroll_y);
-            temp_bar.set_color(0);
+            temp_set.set_color(0);
         }
        // if(proj_class.selected_type==2){
 
@@ -341,6 +341,9 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
 
             if(proj_class.draw_mouse_state==0){
 
+                Vector allList = new Vector();
+                int num_in_list=0;
+                
                 //THE NORMAL STATE
 
                 //try to find out which object was selected
@@ -352,122 +355,68 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 int search_area=10;
 
                 boolean found_item=false;
-
-                //if the currently select object is the house skip it
-
-                if(proj_class.selected_type!=0){
-
-
-
+                
+                Random ran_obj= new Random();
+                
+                
+                //check if the house was selected
+                Object_Drawer items=proj_class.houses.get_objects_in_area(curx-search_area, cury-search_area, curx+search_area,cury+search_area);
+                if(items.get_num_objects()>0){
+                    allList.add(items.get_object(0));
+                    num_in_list++;
                 }
-
-                //if the currently selected object was the stage skip searching this
-
-                if(proj_class.selected_type!=1){
-
-
-
+               
+                //check if the stage was selected
+                items=proj_class.stages.get_objects_in_area(curx-search_area, cury-search_area, curx+search_area,cury+search_area);
+                if(items.get_num_objects()>0){
+                    allList.add(items.get_object(0));
+                    num_in_list++;
                 }
+   
 
-                //if the currently selected object was a bar skip searching this container
-
-                if(proj_class.selected_type!=2){
-
-
-
-                    Object_Drawer items=proj_class.bars.get_objects_in_area(curx-search_area, cury-search_area, curx+search_area,cury+search_area);
-
-
-
-                    if(items.get_num_objects()>0){
-
-                        //there was an item returned
-
-                        //TODO find a good algorithm to select throught the list of items
-
-                        proj_class.selected_type=2;
-
-                        General_Object temp_obj=items.get_object(0);
-
-                        proj_class.selected_index=temp_obj.index;
-
-                        temp_obj.color_index=1;
-
-                        //proj_class.selected_index=
-
-                        found_item=true;
-
+                //check if any bars were selected
+                items=proj_class.bars.get_objects_in_area(curx-search_area, cury-search_area, curx+search_area,cury+search_area);
+                if(items.get_num_objects()>0){
+                    int iter;
+                    for(iter=0;iter<items.get_num_objects();iter++){
+                        allList.add(items.get_object(iter));
+                        num_in_list++;
                     }
 
                 }
 
-                
-
-                
-
-                {
-
-                   //else they are trying to select an instrument so see if there are any
-
-                    Object_Drawer items=proj_class.instruments.get_objects_in_area(curx-search_area, cury-search_area, curx+search_area,cury+search_area);
-
-
-
-                    if(items.get_num_objects()>0){
-
-                        //there was an item returned
-
-                        //TODO find a good algorithm to select throught the list of items
-
-                        proj_class.selected_type=3;
-
-                        General_Object temp_obj=items.get_object(0);
-
-                        proj_class.selected_index=temp_obj.index;
-
-
-                        //proj_class.selected_index=
-
-                        found_item=true;
-
+                //check if any instruments were selected
+                items=proj_class.instruments.get_objects_in_area(curx-search_area, cury-search_area, curx+search_area,cury+search_area);
+                if(items.get_num_objects()>0){
+                    int iter;
+                    for(iter=0;iter<items.get_num_objects();iter++){
+                        allList.add(items.get_object(iter));
+                        num_in_list++;
                     }
-
                 }
 
+                //select a random number from the created list of objects
+                int ran_index=ran_obj.nextInt()%num_in_list;
                 
-
+                ran_index=Math.abs(ran_index);
                 
-
-                if(!found_item){
-
-                    if(proj_class.selected_type==2){
-
-                        if(proj_class.selected_index>=0){
-
-                            General_Object temp_obj=proj_class.bars.get_object(proj_class.selected_index);
-
-                            temp_obj.color_index=0;
-
-                        }
-
-                    }else if(proj_class.selected_type==3){
-
-                        if(proj_class.selected_index>=0){
-
-                            General_Object temp_obj=proj_class.instruments.get_object(proj_class.selected_index);
-
-                            temp_obj.color_index=0;
-
-                        }
-
-                    }
-
-                    proj_class.selected_type=-1;
-
-                    proj_class.selected_index=-1;
-
-                }
-
+                Object temp_obj=allList.get(ran_index);
+                
+                if(temp_obj instanceof house){
+                    proj_class.selected_type=0;
+                }else if(temp_obj instanceof stage){
+                    proj_class.selected_type=1;
+                }else if(temp_obj instanceof bar){
+                    proj_class.selected_type=2;
+                }else if(temp_obj instanceof instrument){
+                    proj_class.selected_type=3;
+                }else if(temp_obj instanceof setobject){
+                    proj_class.selected_type=4;
+                }     
+                
+                proj_class.selected_index=((General_Object)temp_obj).index;
+                
+                
                 repaint();
 
             }
@@ -610,7 +559,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
 
                     proj_class.selected_index=temp_instrument.index;
 
-                    
+                    temp_instrument=null;
 
                 }
 
