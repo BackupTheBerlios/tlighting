@@ -25,7 +25,8 @@ public class instrument extends drawing_prog.General_Object {
     public int Associated_barID;
     public int Associated_dimmerID;
     public String misc;
-    
+    public int aimx;
+    public int aimy;
     /** Creates a new instance of instrument */
     public instrument() {
         InventoryID = 0;
@@ -37,6 +38,8 @@ public class instrument extends drawing_prog.General_Object {
         Associated_dimmerID=0;
         misc="NULL";
         oClass=this;
+        aimx=-1;
+        aimy=-1;
     }
     
     public instrument(int InvID, int worldzs, String names, String link_types, String Desc, int barID,int dimerID, String miscs){
@@ -48,6 +51,8 @@ public class instrument extends drawing_prog.General_Object {
         Associated_barID = barID;
         Associated_dimmerID = dimerID;
         misc = miscs;
+        aimx=-1;
+        aimy=-1;
     }
     
      public void setX(int xval)
