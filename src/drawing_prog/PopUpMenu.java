@@ -110,9 +110,6 @@ public class PopUpMenu extends JPopupMenu implements ActionListener
             //System.out.println("adding a bar");
             aScreen.proj_class.draw_mouse_state =1;
             aScreen.temp_bar = new bar();
-
-            ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
-			ib.insertNewTreeNode();
         }
          else if(e.getSource()==move_bar)
         {

@@ -56,14 +56,7 @@ System.out.println("new object list created");
 	//- adds an object to the list
     public  int add_object(General_Object obj){
         obj.index=num_objects;
-        if (obj instanceof Data_Storage.bar)
-        {
-        	Data_Storage.bar b = (Data_Storage.bar)obj;
-        	b.setID("Bar"+num_objects);
-        	obj = b;
-        }
-System.out.println("Bar got added to vector: ");
-System.out.println("Size: "+object_list.size());
+        
         object_list.add(obj);
         num_objects++;
         return num_objects;

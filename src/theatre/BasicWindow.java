@@ -27,6 +27,8 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
     JMenuItem menuItem;
     JRadioButtonMenuItem rbMenuItem;
     
+    project proj;
+    
     public BasicWindow()
     {
     	super();
@@ -34,8 +36,9 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
     }
     
     //this is the initialization for the windows menu
-    public JMenuBar initmenu() 
+    public JMenuBar initmenu(project p) 
     {
+        proj=(project)p.oClass;
         //Create the menu bar.
         menuBar = new JMenuBar();
         
@@ -44,7 +47,19 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
         menu.setMnemonic(KeyEvent.VK_F);
         menu.getAccessibleContext().setAccessibleDescription(
                 "Basic Program functionality");
+        
         menuBar.add(menu);
+        
+        
+        //A New option to the file menu
+        menuItem = new JMenuItem("New",
+                                 KeyEvent.VK_N);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_2, ActionEvent.ALT_MASK));
+        menuItem.getAccessibleContext().setAccessibleDescription(
+                "Create a new design");
+        menuItem.addActionListener(this);
+        menu.add(menuItem);
         
         //a Open option to the file menu
         menuItem = new JMenuItem("Open...",
@@ -53,6 +68,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
                 KeyEvent.VK_1, ActionEvent.ALT_MASK));
         menuItem.getAccessibleContext().setAccessibleDescription(
                 "Open a design");
+        menuItem.addActionListener(this);
         menu.add(menuItem);
         
         //add save option to the file menu
@@ -60,6 +76,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
         menuItem.setMnemonic(KeyEvent.VK_S);
         menuItem.getAccessibleContext().setAccessibleDescription(
                 "Save a design");
+        menuItem.addActionListener(this);
         menu.add(menuItem);
         
         //add quit option to the file menu
@@ -67,6 +84,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
         menuItem.setMnemonic(KeyEvent.VK_S);
         menuItem.getAccessibleContext().setAccessibleDescription(
                 "Save a design");
+        menuItem.addActionListener(this);
         menu.add(menuItem);
 
         //Build the Edit menu.
@@ -81,18 +99,21 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
                                  KeyEvent.VK_O);
         menuItem.getAccessibleContext().setAccessibleDescription(
                 "Cut the selected object");
+        menuItem.addActionListener(this);
         menu.add(menuItem);
         
         //add copy option to the edit menu
         menuItem = new JMenuItem("Copy");
         menuItem.getAccessibleContext().setAccessibleDescription(
                 "Copy a selectedf object");
+        menuItem.addActionListener(this);
         menu.add(menuItem);
         
         //add Paste option to the edit menu
         menuItem = new JMenuItem("Paste");
         menuItem.getAccessibleContext().setAccessibleDescription(
                 "Paste the last item cut or copied");
+        menuItem.addActionListener(this);
         menu.add(menuItem);
 
         //Build the Options menu.
@@ -100,6 +121,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
         menu.setMnemonic(KeyEvent.VK_F);
         menu.getAccessibleContext().setAccessibleDescription(
                 "Options for the program");
+        menuItem.addActionListener(this);
         menuBar.add(menu);
         
         //add Cut option to the Edit menu
@@ -107,6 +129,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
                                  KeyEvent.VK_O);
         menuItem.getAccessibleContext().setAccessibleDescription(
                 "Change settings for the program");
+        menuItem.addActionListener(this);
         menu.add(menuItem);
         
         //Build the Options menu.
@@ -134,8 +157,31 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
         menuBar.add(menu);
         return menuBar;
     }
-    public void itemStateChanged(ItemEvent e){} 
+    public void itemStateChanged(ItemEvent e){
+        JMenuItem source = (JMenuItem)(e.getSource());
+        System.out.println("Item Event "+source.getText());
+    } 
     public void actionPerformed(ActionEvent e) { 
+        JMenuItem source = (JMenuItem)(e.getSource());
+        System.out.println("Action Event "+source.getText());
+        
+        if(source.getText()=="New"){
+        //New
+            //for right now just create a default house that can be edited to be the right size
+            proj=new project();
+            
+            proj.addHouse(600,600,"House_Object");
+            
+        }else if(source.getText()=="Open..."){
+            
+            
+        }else if(source.getText()=="Save.."){
+            
+        }else if(source.getText()=="Quit"){
+            System.exit(0);
+        }
+        
+        
     }
     public void setResolution()
     {
@@ -183,7 +229,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
         content.add(desktop, BorderLayout.CENTER);
 
          
-        frame.setJMenuBar(bwin.initmenu());
+        frame.setJMenuBar(bwin.initmenu(project_class));
         frame.setVisible(true);
 		
         try{
