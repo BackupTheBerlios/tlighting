@@ -19,17 +19,17 @@ import Data_Storage.*;
 public class DrawScreen extends theatre.Window implements ItemListener, ActionListener
 {
     JLabel primLabel, lineLabel, paintLabel, transLabel, strokeLabel; 
-    TransPanel display; 
+    public TransPanel display; 
     static JComboBox primitive, line, paint, trans, stroke; 
     JButton redraw; 
     public static boolean no2D = false; 
-    public project proj_class;
     
-    public DrawScreen(project aproj)
+    public static Object oClass = null;
+    public DrawScreen()
     {
     	this.setTitle("Object_Drawer_Class_Demonstration"); 
         this.setBounds(ExplorerBrowserPanel.iWidth, 0, BasicWindow.iScreenWidth-(ExplorerBrowserPanel.iWidth*2), BasicWindow.iScreenHeight);
-        proj_class=aproj;
+        
         //Dimension d= new Dimension();
         //d.height=100;
         //d.width=100;
@@ -41,11 +41,11 @@ public class DrawScreen extends theatre.Window implements ItemListener, ActionLi
         
         this.init(); // <--- UNCOMMENT THIS
         this.setVisible(true);
-        
+        oClass=this;
     }
     public void init() 
     { 
-        display = new TransPanel(proj_class); 
+        display = new TransPanel();
         display.setBackground(Color.white); 
         
         

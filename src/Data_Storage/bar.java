@@ -27,6 +27,7 @@ public class bar extends General_Object {
     private String barID;
     private String linkProj;
     
+    
     /** Creates a new instance of hold_bar */
     public bar() {
         distance=0;
@@ -34,7 +35,7 @@ public class bar extends General_Object {
         dis_dimmers=new int[10];
         barID="Bar";
         linkProj="NULL";
-        
+        oClass=this;
     }
     
     

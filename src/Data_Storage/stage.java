@@ -23,6 +23,7 @@ public class stage extends General_Object{
         description="NULL";
         linktohouse=0;
         vertices=0;
+        oClass=this;
     }
     
     public stage(int[] xs, int[] ys,int vertices, int hight, String note, String descrip, int linkhouse){

@@ -21,6 +21,7 @@ public class setobject extends General_Object{
         name="NULL";
         description="NULL";
         vertices=0;
+        oClass=this;
     }
     
     public setobject(int[] xs, int[] ys, int vertices, int siz, String nam, String descrip){

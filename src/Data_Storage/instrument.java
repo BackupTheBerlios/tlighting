@@ -36,6 +36,7 @@ public class instrument extends drawing_prog.General_Object {
         Associated_barID=0;
         Associated_dimmerID=0;
         misc="NULL";
+        oClass=this;
     }
     
     public instrument(int InvID, int worldzs, String names, String link_types, String Desc, int barID,int dimerID, String miscs){

@@ -27,6 +27,7 @@ public class General_Object {
 	private int bottomrighty; 		//- value to hold a quick reference to objects area in reference to world variables
 	private int linestyle;			//- value of the linestyle that the object should be drawn in
 
+        public static Object oClass = null;
 
     /** Creates a new instance of General_Object */
     public General_Object() {	//- Default Constructor

@@ -23,6 +23,7 @@ public class house extends General_Object{
         height=0;
         uniqueid="NULL";
         vertices=0;
+        oClass=this;
     }
     
     public house(int[] xs, int[] ys,int vertices, String nam, String descrip, int hight, String id){

@@ -24,17 +24,17 @@ public class Object_Drawer {
 	private int num_objects;				//- number of objects in the list
 	private boolean screen_set;				//- keeps track if there is a screen to draw to
         private boolean node_selected;
-        
+        public static Object oClass = null;
 
 
     /** Creates a new instance of Object_Drawer */
     public Object_Drawer() {  		//-default constructor
        num_objects =0;
        screen_set=false;
-System.out.println("new object list created");       
+        System.out.println("new object list created");       
        object_list = new Vector();
 
-
+       oClass=this;
     }
 
 	//- set the screen to draw to

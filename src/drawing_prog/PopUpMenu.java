@@ -21,18 +21,18 @@ import theatre.*;
 //class to display and handle the menu on the draw screen
 public class PopUpMenu extends JPopupMenu implements ActionListener
 {
-    JMenuItem edit_house, edit_stage, edit_bar,add_bar, move_bar, move_stage;
-    JMenuItem add_instrument;
+    JMenuItem edit_house, edit_stage, edit_bar,add_bar, move_bar, move_stage,add_stage;
+    JMenuItem add_instrument, add_set, edit_set;
     JMenuItem zoom_in,zoom_out;
-    JMenuItem cancel;
+    JMenuItem cancel,confirm;
     TransPanel aScreen;
 
     //create the menu depending on the item type that is selected
     public PopUpMenu(TransPanel ascr,int item)
     {
         aScreen = ascr;
-        
-        if(aScreen.proj_class.draw_mouse_state==0){    
+        project proj_class=(project)project.oClass;
+        if(proj_class.draw_mouse_state==0){    
 
             if(item==0){    
                 edit_house = new JMenuItem("Edit House Nodes");
@@ -62,11 +62,38 @@ public class PopUpMenu extends JPopupMenu implements ActionListener
             }
 
             addSeparator();
-
-            add_bar=new JMenuItem("Add Bar");
-            add_bar.addActionListener(this);
-            add(add_bar);
+            if(proj_class.houseadded){
+                if(!proj_class.stageadded){
+                    add_stage=new JMenuItem("Add Stage");
+                    add_stage.addActionListener(this);
+                    add(add_stage);    
+                }
+                add_bar=new JMenuItem("Add Bar");
+                add_bar.addActionListener(this);
+                add(add_bar);
+                
+                add_set=new JMenuItem("Add Set");
+                add_set.addActionListener(this);
+                add(add_set);
+            }
+        }
+        else if(proj_class.draw_mouse_state==8){
+            confirm=new JMenuItem("Commit");
+            confirm.addActionListener(this);
+            add(confirm);
             
+            cancel=new JMenuItem("Cancel");
+            cancel.addActionListener(this);
+            add(cancel);
+        }
+        else if(proj_class.draw_mouse_state==9){
+            confirm=new JMenuItem("Commit");
+            confirm.addActionListener(this);
+            add(confirm);
+            
+            cancel=new JMenuItem("Cancel");
+            cancel.addActionListener(this);
+            add(cancel);
         }
         else
         {
@@ -90,6 +117,7 @@ public class PopUpMenu extends JPopupMenu implements ActionListener
 
     public void actionPerformed(ActionEvent e)
     {
+        project proj_class=(project)project.oClass;
     	if (e.getSource() == edit_house)
     	{
     	    System.out.println("editing the house");
@@ -108,18 +136,18 @@ public class PopUpMenu extends JPopupMenu implements ActionListener
         else if(e.getSource()==add_bar)
         {
             //System.out.println("adding a bar");
-            aScreen.proj_class.draw_mouse_state =1;
+            proj_class.draw_mouse_state =1;
             aScreen.temp_bar = new bar();
         }
          else if(e.getSource()==move_bar)
         {
             System.out.println("moving a bar");
-            aScreen.proj_class.draw_mouse_state =6;
+            proj_class.draw_mouse_state =6;
         }
         else if(e.getSource()==add_instrument)
         {
             System.out.println("Adding an instrument");
-            aScreen.proj_class.draw_mouse_state =2;
+            proj_class.draw_mouse_state =2;
             aScreen.temp_instrument = new instrument();
             //temporarily hardcode the nodes for the instruments
             aScreen.temp_instrument.add_node(0,0);
@@ -132,17 +160,34 @@ public class PopUpMenu extends JPopupMenu implements ActionListener
             
             
         }
+        else if(e.getSource()==add_stage)
+        {
+            //ADD STAGE
+            //System.out.println("adding a stage");
+            proj_class.draw_mouse_state =8;
+            aScreen.temp_stage = new stage();
+            
+            
+        }
+        else if(e.getSource()==add_set)
+        {
+            //ADD SET PIECE
+            //System.out.println("adding a stage");
+            proj_class.draw_mouse_state =9;
+            aScreen.temp_set = new setobject();    
+            
+        }
         else if(e.getSource() == zoom_in)
         {
             
-            aScreen.proj_class.zoom_factor+=1;
+            proj_class.zoom_factor+=1;
             aScreen.horiz.setMaximum(600*aScreen.proj_class.zoom_factor);
             aScreen.vert.setMaximum(600*aScreen.proj_class.zoom_factor);
         
         }
         else if(e.getSource() == zoom_out)
         {
-            aScreen.proj_class.zoom_factor-=.5; 
+            proj_class.zoom_factor-=.5; 
             aScreen.horiz.setMaximum(600*aScreen.proj_class.zoom_factor);
             aScreen.vert.setMaximum(600*aScreen.proj_class.zoom_factor);
         
@@ -150,7 +195,20 @@ public class PopUpMenu extends JPopupMenu implements ActionListener
         }
         else if(e.getSource() == cancel)
         {
-            aScreen.proj_class.draw_mouse_state=0;
+            proj_class.draw_mouse_state=0;
+        }
+        else if(e.getSource()==confirm){
+            if(proj_class.draw_mouse_state==8){
+                //commit the adding of the stage
+                proj_class.addStage(aScreen.temp_stage);
+                aScreen.temp_stage=null;
+                proj_class.draw_mouse_state=0;
+            }else if(proj_class.draw_mouse_state==9){
+                proj_class.addSet(aScreen.temp_set);
+                aScreen.temp_set=null;
+                proj_class.draw_mouse_state=0;
+            }
+            
         }
         
         aScreen.repaint();
