@@ -23,4 +23,26 @@ public class xml_Reader {
         project proj_class=(project)project.oClass;
     }
     
+    //main run to load
+    //in strings are the path of the project folder as well as the bar file.
+    public void load_project(String inProjectPath,String inBarPath) {
+    }
+   
+    //individual load functions
+    public void get_house() {
+    }
+    public void get_bars() {
+    }
+    public void get_set() {
+    }
+    public void get_stage() {
+    }
+    public void get_inventory() {
+    }
+    public void get_knowntypes() {
+    }
+    public void get_instrument() {
+    }
+    
+    
 }

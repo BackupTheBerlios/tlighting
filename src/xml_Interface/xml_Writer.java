@@ -20,5 +20,22 @@ public class xml_Writer {
     public xml_Writer() {
         project proj_class=(project)project.oClass;
     }
-    
+     public void save_project(String inProjectPath,String inBarPath) {
+    }
+   
+    //individual load functions
+    public void set_house() {
+    }
+    public void set_bars() {
+    }
+    public void set_set() {
+    }
+    public void set_stage() {
+    }
+    public void set_inventory() {
+    }
+    public void set_knowntypes() {
+    }
+    public void set_instrument() {
+    }
 }
