@@ -183,8 +183,8 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
             temp_instrument.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
             //proj_class.zoom_factor
             //1/proj_class.zoom_factor
-            System.out.println("heyooooo drawing instrument!");
-            System.out.println("the zoom factor is: "+proj_class.zoom_factor+" scroll x is: "+proj_class.scroll_x+"scroll y is: "+proj_class.scroll_y);
+            //System.out.println("heyooooo drawing instrument!");
+            //System.out.println("the zoom factor is: "+proj_class.zoom_factor+" scroll x is: "+proj_class.scroll_x+"scroll y is: "+proj_class.scroll_y);
             temp_instrument.set_color(0);    
         }
         
@@ -218,25 +218,26 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         
       
         // }
- 
+        
+        
+        // code for displaying the current node being edited
         if(selected_node>=0){
             
             int t=proj_class.selected_type;
             
             if(t==0){
-                
                 //house
                 if(temp_house!=null){
-                    Ellipse2D.Double node_circ= new Ellipse2D.Double(temp_house.worldx+temp_house.x[selected_node],
-                            temp_house.worldy+temp_house.y[selected_node],6,6);
+                    Ellipse2D.Double node_circ= new Ellipse2D.Double(proj_class.WorldXtoScreen(temp_house.worldx+temp_house.x[selected_node]),
+                            proj_class.WorldYtoScreen(temp_house.worldy+temp_house.y[selected_node]),6,6);
                     g2.fill(node_circ);
                 }
             }else if(t==1){
                 
                 //stage
                 if(temp_stage!=null){
-                    Ellipse2D.Double node_circ= new Ellipse2D.Double(temp_stage.worldx+temp_stage.x[selected_node],
-                            temp_stage.worldy+temp_stage.y[selected_node],6,6);
+                    Ellipse2D.Double node_circ= new Ellipse2D.Double(proj_class.WorldXtoScreen(temp_stage.worldx+temp_stage.x[selected_node]),
+                            proj_class.WorldYtoScreen(temp_stage.worldy+temp_stage.y[selected_node]),6,6);
                     g2.fill(node_circ);
                 }
             }else if(t==2){
@@ -248,11 +249,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     g2.fill(node_circ);
                 }
             }else if(t==3){
-                
                 //instrument
-                
-                
-                
             }else if(t==4){
                 
                 //set
@@ -363,9 +360,9 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 //THE NORMAL STATE
                 //try to find out which object was selected
                 
-                int curx=e.getX();
+                int curx=proj_class.ScreenXtoWorld(e.getX());
                 
-                int cury=e.getY();
+                int cury=proj_class.ScreenYtoWorld(e.getY());
                 
                 int search_area=10;
                 
@@ -461,25 +458,18 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 //System.out.println("Mouse state was 1 adding "+temp_bar.num_nodes+" node");
                 //drawing a bar
                 if(temp_bar.num_nodes==0) {
-                    //begin chaplin edit
-                    if(proj_class.zoom_factor == 1) {
-                        temp_bar.worldx=e.getX();
-                        temp_bar.worldy=e.getY();
-                    } else {
-                        temp_bar.worldx=(e.getX()/proj_class.zoom_factor);
-                        temp_bar.worldy=(e.getY()/proj_class.zoom_factor);
-                    }
-                    //end chaplin edit
+                    //begin chaplin edit redited by JoshZ
+                        temp_bar.worldx=proj_class.ScreenXtoWorld(e.getX());
+                        temp_bar.worldy=proj_class.ScreenYtoWorld(e.getY());
+                    
+                    //end chaplin edit and reediting by JoshZ
                     
                     temp_bar.add_node(0,0);
                     
                 } else {
-                    //begin chaplin edit
-                    if(proj_class.zoom_factor == 1)
-                        temp_bar.add_node(e.getX()-temp_bar.worldx,e.getY()-temp_bar.worldy);
-                    else
-                        temp_bar.add_node((e.getX()/proj_class.zoom_factor)-temp_bar.worldx,(e.getY()/proj_class.zoom_factor)-temp_bar.worldy);
-                    //end chaplin edit
+                    //begin chaplin edit rededited by JOSHZ                   
+                    temp_bar.add_node(proj_class.ScreenXtoWorld(e.getX())-temp_bar.worldx,proj_class.ScreenYtoWorld(e.getY())-temp_bar.worldy);
+                    //end chaplin edit and reediting by JoshZ
                     if(temp_bar.num_nodes>=2) {
                         proj_class.addBar(temp_bar);
                         
@@ -512,12 +502,9 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 
                 //swap the points to make the math easier because assume point 1 is to the right
                 
-                //begin chaplin edit
-                if (proj_class.zoom_factor == 1)
-                    pot_x = e.getX();
-                else
-                    pot_x = (e.getX()/proj_class.zoom_factor);
-                //end chaplin edit
+                //begin chaplin edit reediting by JoshZ
+                    pot_x = proj_class.ScreenXtoWorld(e.getX());
+                //end chaplin edit reedited by JoshZ
                 if(barx1>barx2) {
                     int temp_int;
                     
@@ -592,14 +579,10 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 int xdiff;
                 int ydiff;
                 
-                //chaplin edit
-                if(proj_class.zoom_factor == 1) {
-                    xdiff = old_bar_x-e.getX();
-                    ydiff = old_bar_y-e.getY();
-                } else {
-                    xdiff = old_bar_x-(e.getX()/proj_class.zoom_factor);
-                    ydiff = old_bar_y-(e.getY()/proj_class.zoom_factor);
-                }
+                //chaplin edit then josh edit
+                    xdiff = old_bar_x-proj_class.ScreenXtoWorld(e.getX());
+                    ydiff = old_bar_y-proj_class.ScreenYtoWorld(e.getY());
+                
                 
                 
                 for(int iter=0;iter<proj_class.instruments.get_num_objects();iter++) {
@@ -611,35 +594,23 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 }
                 
                 //actually move the bar
-                if(proj_class.zoom_factor == 1) {
-                    proj_class.bars.get_object(proj_class.selected_index).worldx=e.getX();
-                    proj_class.bars.get_object(proj_class.selected_index).worldy=e.getY();
-                } else {
-                    proj_class.bars.get_object(proj_class.selected_index).worldx=(e.getX()/proj_class.zoom_factor);
-                    proj_class.bars.get_object(proj_class.selected_index).worldy=(e.getY()/proj_class.zoom_factor);
-                }
+                    proj_class.bars.get_object(proj_class.selected_index).worldx=proj_class.ScreenXtoWorld(e.getX());
+                    proj_class.bars.get_object(proj_class.selected_index).worldy=proj_class.ScreenYtoWorld(e.getY());
                 
                 proj_class.draw_mouse_state=0;
             } else if(proj_class.draw_mouse_state==8) {
                 //adding a stage object
                 
                 if(temp_stage.num_nodes==0) {
-                    if(proj_class.zoom_factor == 1) {
-                        temp_stage.worldx=e.getX();
-                        temp_stage.worldy=e.getY();
-                    } else {
-                        temp_stage.worldx=(e.getX()/proj_class.zoom_factor);
-                        temp_stage.worldy=(e.getY()/proj_class.zoom_factor);
-                    }
+                        temp_stage.worldx=proj_class.ScreenXtoWorld(e.getX());
+                        temp_stage.worldy=proj_class.ScreenYtoWorld(e.getY());
+                        
                     temp_stage.add_node(0,0);
                     
                 } else {
                     
-                    if(proj_class.zoom_factor == 1) {
-                        temp_stage.add_node(e.getX()-temp_stage.worldx,e.getY()-temp_stage.worldy);
-                    } else {
-                        temp_stage.add_node((e.getX()/proj_class.zoom_factor)-temp_stage.worldx,(e.getY()/proj_class.zoom_factor)-temp_stage.worldy);
-                    }
+                   temp_stage.add_node(proj_class.ScreenXtoWorld(e.getX())-temp_stage.worldx,proj_class.ScreenYtoWorld(e.getY())-temp_stage.worldy);
+                   
                     if(temp_stage.num_nodes>=15) {
                         proj_class.addStage(temp_stage);
                         
@@ -655,21 +626,14 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 
                 if(temp_set.num_nodes==0) {
                     
-                    if(proj_class.zoom_factor == 1) {
-                        temp_set.worldx=e.getX();
-                        temp_set.worldy=e.getY();
-                    } else {
-                        temp_set.worldx=e.getX()/proj_class.zoom_factor;
-                        temp_set.worldy=e.getY()/proj_class.zoom_factor;
-                    }
+                        temp_set.worldx=proj_class.ScreenXtoWorld(e.getX());
+                        temp_set.worldy=proj_class.ScreenYtoWorld(e.getY());
+                    
                     temp_set.add_node(0,0);
                     
                 } else {
-                    if(proj_class.zoom_factor == 1) {
-                        temp_set.add_node(e.getX()-temp_set.worldx,e.getY()-temp_set.worldy);
-                    } else {
-                        temp_set.add_node((e.getX()/proj_class.zoom_factor)-temp_set.worldx,(e.getY()/proj_class.zoom_factor)-temp_set.worldy);
-                    }
+                        temp_set.add_node(proj_class.ScreenXtoWorld(e.getX())-temp_set.worldx,proj_class.ScreenYtoWorld(e.getY())-temp_set.worldy);
+                    
                     
                     if(temp_set.num_nodes>=15) {
                         proj_class.addSet(temp_set);
@@ -689,11 +653,11 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 if(selected_node<0) {
                     //find a node to select
                     
-                    selected_node=temp_house.closest_node(e.getX(),e.getY());
+                    selected_node=temp_house.closest_node(proj_class.ScreenXtoWorld(e.getX()),proj_class.ScreenYtoWorld(e.getY()));
                 } else {
                     //set the node to the new position
                     
-                    temp_house.move_node(selected_node, e.getX(), e.getY());
+                    temp_house.move_node(selected_node, proj_class.ScreenXtoWorld(e.getX()), proj_class.ScreenYtoWorld(e.getY()));
                     
                     selected_node=-1;
                 }
@@ -705,12 +669,12 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 if(selected_node<0) {
                     //find a node to select
                     
-                    selected_node=temp_stage.closest_node(e.getX(),e.getY());
+                    selected_node=temp_stage.closest_node(proj_class.ScreenXtoWorld(e.getX()),proj_class.ScreenYtoWorld(e.getY()));
                     
                 } else {
                     //set the node to the new position
                     
-                    temp_stage.move_node(selected_node, e.getX(), e.getY());
+                    temp_stage.move_node(selected_node, proj_class.ScreenXtoWorld(e.getX()), proj_class.ScreenYtoWorld(e.getY()));
                     
                     selected_node=-1;
                 }
@@ -722,12 +686,12 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 if(selected_node<0) {
                     
                     //find a node to select
-                    selected_node=temp_bar.closest_node(e.getX(),e.getY());
+                    selected_node=temp_bar.closest_node(proj_class.ScreenXtoWorld(e.getX()),proj_class.ScreenYtoWorld(e.getY()));
                     
                 } else {
                     //set the node to the new position
                     
-                    temp_bar.move_node(selected_node, e.getX(), e.getY());
+                    temp_bar.move_node(selected_node, proj_class.ScreenXtoWorld(e.getX()), proj_class.ScreenYtoWorld(e.getY()));
                     
                     selected_node=-1;
                 }
@@ -739,11 +703,11 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 if(selected_node<0) {
                     //find a node to select
                     
-                    selected_node=temp_set.closest_node(e.getX(),e.getY());
+                    selected_node=temp_set.closest_node(proj_class.ScreenXtoWorld(e.getX()),proj_class.ScreenYtoWorld(e.getY()));
                 } else {
                     //set the node to the new position
                     
-                    temp_set.move_node(selected_node, e.getX(), e.getY());
+                    temp_set.move_node(selected_node, proj_class.ScreenXtoWorld(e.getX()), proj_class.ScreenYtoWorld(e.getY()));
                     
                     selected_node=-1;
                 }
