@@ -1,172 +1,57 @@
 package drawing_prog;
 
-
-
-
-
-
-
 import java.awt.*; 
-
 import java.awt.event.*; 
-
 import java.awt.geom.*; 
-
 import java.awt.image.*; 
-
 import javax.swing.*;
-
-//import java.sql.*;
-
 import java.util.*;
 
 //custom libraries used
-
 import theatre.*;
-
 import Data_Storage.*;
 
-
-
-
-
-
-
 public class TransPanel extends JPanel implements MouseListener, AdjustmentListener
-
-
-
 { 
-
-
-
     AffineTransform at = new AffineTransform(); 
-
-
-
     int w, h; 
-
-
-
     Shape shapes[] = new Shape[3]; 
-
-
-
     BufferedImage bi; 
-
-
-
-    
-
-
-
     JScrollBar horiz;
-
-
-
     JScrollBar vert;
 
-
-
-    
-
-
-
     public bar temp_bar;
-
     public instrument temp_instrument; 
-
     public stage temp_stage;
-
     public setobject temp_set;
-
     public house temp_house;
-
-    
-
     public int selected_node;
-
-    
-
-
-
     public project proj_class;
-
-
-
-    
-
-
-
     boolean firstTime = true; 
-
-
-
     public int[] x;
-
-
-
     public int[] y;
-
-
-
     public int numedges;
-
-
-
     Object_Drawer olist; 
-
-
-
     int selected_object;
-
-
-
     double zoomfactor;
-
-
-
     int scroll_x;
-
-
-
     int scroll_y;
-
-
 
     public static Object oClass = null;
 
-
-
     public TransPanel()
-
     { 
-
         setBackground(Color.white); 
-
-
         setLayout(null);
 
         horiz = new JScrollBar();
-
         horiz.setOrientation(Adjustable.HORIZONTAL);
-
         horiz.addAdjustmentListener(this);
-
         add(horiz);      
 
-
-
         vert = new JScrollBar();
-
         vert.setOrientation(Adjustable.VERTICAL);
-
-
-
         vert.addAdjustmentListener(this);
-
-
-
         add(vert);
         //begin chaplin edit
         //horiz.setBounds(15,0,600,15); //x, y, width, height.
@@ -187,50 +72,21 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         vert.setMaximum(BasicWindow.iScreenHeight - 149); //static was 600
         //end chaplin edit
 
-
-        
-
         project proj_class=(project)project.oClass;
-
         proj_class.selected_type= -1;
-
-
         proj_class.selected_index=-1;
-
-
         proj_class.zoom_factor=1;
-
-
-
         scroll_x=0;
-
-
-
         scroll_y=0;
-
-        
-
         selected_node=-1;
-
-        
-
         oClass=this;
-
         addMouseListener(this);
-
     } 
 
-
-
     public void drawobjects(Graphics2D g2)
-
-
-
     {
         project proj_class=(project)project.oClass;
-
         proj_class.houses.set_screen(g2);
-
         proj_class.bars.set_screen(g2);
 
         proj_class.instruments.set_screen(g2);
@@ -730,7 +586,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 }     
 
                 proj_class.selected_index=((General_Object)temp_obj).index;
-
+                ItemBrowser.displayInfo(temp_obj);
                 repaint();
             }
 
