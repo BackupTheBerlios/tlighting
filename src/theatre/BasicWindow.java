@@ -206,8 +206,10 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
                     JOptionPane.showMessageDialog(error_Window,"Error Improper File Type");
                 }
             }
+            //End Addition For Load
         }else if(source.getText()=="Save.."){
-            
+            //Revision By Greg Silverstein 3/3 For Save
+            save_XMLFILE.save_project(s_projPath, s_barPath);
         }else if(source.getText()=="Quit"){
             System.exit(0);
         }
