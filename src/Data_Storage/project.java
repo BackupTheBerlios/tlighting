@@ -95,7 +95,7 @@ public class project{
     }
     
     public boolean addBar(bar abar){
-        int current=houses.get_num_objects();
+        int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
         if(abar.getminx()>curhouse.getminx() && abar.getminy()>curhouse.getminy()){
             if(abar.getmaxx()<curhouse.getmaxx() && abar.getmaxy()<curhouse.getmaxy()){
@@ -140,7 +140,7 @@ public class project{
     }
     
     public boolean addInstrument(instrument aInstrument){
-        int current=houses.get_num_objects();
+        int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
         if(aInstrument.getX()>curhouse.getminx() && aInstrument.getY()>curhouse.getminy()){
             if(aInstrument.getX()<curhouse.getmaxx() && aInstrument.getY()<curhouse.getmaxy()){
@@ -161,7 +161,7 @@ public class project{
     }
     
     public boolean addStage(stage aStage){
-        int current=houses.get_num_objects();
+        int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
         if(aStage.getminx()>curhouse.getminx() && aStage.getminy()>curhouse.getminy()){
             if(aStage.getmaxx()<curhouse.getmaxx() && aStage.getmaxy()<curhouse.getmaxy()){
@@ -184,7 +184,7 @@ public class project{
     }
     
     public boolean addSet(setobject aSet){
-        int current=houses.get_num_objects();
+        int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
         if(aSet.getminx()>curhouse.getminx() && aSet.getminy()>curhouse.getminy()){
             if(aSet.getmaxx()<curhouse.getmaxx() && aSet.getmaxy()<curhouse.getmaxy()){
@@ -206,7 +206,7 @@ public class project{
     }
     
     public boolean SetBar(bar abar,int index){
-        int current=houses.get_num_objects();
+        int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
         if(abar.getminx()>curhouse.getminx() && abar.getminy()>curhouse.getminy()){
             if(abar.getmaxx()<curhouse.getmaxx() && abar.getmaxy()<curhouse.getmaxy()){
@@ -233,7 +233,7 @@ public class project{
         return false;
     }
     public boolean SetSetObject(setobject aset,int index){
-        int current=houses.get_num_objects();
+        int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
         if(aset.getminx()>curhouse.getminx() && aset.getminy()>curhouse.getminy()){
             if(aset.getmaxx()<curhouse.getmaxx() && aset.getmaxy()<curhouse.getmaxy()){
@@ -253,7 +253,7 @@ public class project{
     }
     
     public boolean SetStage(stage astage,int index){
-        int current=houses.get_num_objects();
+        int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
         if(astage.getminx()>curhouse.getminx() && astage.getminy()>curhouse.getminy()){
             if(astage.getmaxx()<curhouse.getmaxx() && astage.getmaxy()<curhouse.getmaxy()){
