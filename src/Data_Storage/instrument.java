@@ -52,37 +52,37 @@ public class instrument extends drawing_prog.General_Object {
     
      public void setX(int xval)
      {
-        this.worldx = xval; //only one point on instrument, so set first index.
+        worldx = xval; //only one point on instrument, so set first index.
      }    
     
     public void setY(int yval)
     {
-        this.worldy = yval; //only one point on instrument, so set first index.
+        worldy = yval; //only one point on instrument, so set first index.
     }
     
     public void setZ(int zval)
     {
-        this.worldz = zval; //only one point on instrument, so set first index.
+        worldz = zval; //only one point on instrument, so set first index.
     }
     
     public void setInvnetoryID(int id)
     {
-        this.InventoryID = id;
+        InventoryID = id;
     }
     
     public void setBarID(int barid)
     {
-        this.Associated_barID = barid;
+        Associated_barID = barid;
     }
     
     public void setDimmerID(int dimid)
     {
-        this.Associated_dimmerID = dimid;
+        Associated_dimmerID = dimid;
     }
     
     public void setName(String name)
     {
-        this.name = name;
+        name = name;
     }
     
     public void setType(String type)

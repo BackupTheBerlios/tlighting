@@ -156,7 +156,8 @@ public class PopUpMenu extends JPopupMenu implements ActionListener
             aScreen.temp_instrument.add_node(15,20);
             aScreen.temp_instrument.add_node(5,20);
             aScreen.temp_instrument.add_node(5,5);
-            aScreen.temp_instrument.setBarID(aScreen.proj_class.selected_index);
+            aScreen.temp_instrument.setBarID(proj_class.selected_index);
+            
             
             
         }
@@ -181,16 +182,16 @@ public class PopUpMenu extends JPopupMenu implements ActionListener
         {
             
             proj_class.zoom_factor+=1;
-            aScreen.horiz.setMaximum(600*aScreen.proj_class.zoom_factor);
-            aScreen.vert.setMaximum(600*aScreen.proj_class.zoom_factor);
-        
+            aScreen.horiz.setMaximum(600*proj_class.zoom_factor);
+            aScreen.vert.setMaximum(600*proj_class.zoom_factor);
+            aScreen.repaint();
         }
         else if(e.getSource() == zoom_out)
         {
             proj_class.zoom_factor-=.5; 
-            aScreen.horiz.setMaximum(600*aScreen.proj_class.zoom_factor);
-            aScreen.vert.setMaximum(600*aScreen.proj_class.zoom_factor);
-        
+            aScreen.horiz.setMaximum(600*proj_class.zoom_factor);
+            aScreen.vert.setMaximum(600*proj_class.zoom_factor);
+            aScreen.repaint();
         
         }
         else if(e.getSource() == cancel)

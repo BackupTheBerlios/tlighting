@@ -31,7 +31,7 @@ public class Object_Drawer {
     public Object_Drawer() {  		//-default constructor
        num_objects =0;
        screen_set=false;
-        System.out.println("new object list created");       
+        //System.out.println("new object list created");       
        object_list = new Vector();
 
        oClass=this;
