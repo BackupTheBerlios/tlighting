@@ -108,44 +108,6 @@ public class stage extends General_Object{
         return this.linktohouse;
     }
 
-    
-    public int getminx(){
-         int temp=1000;
-        for(int i=0; i<this.vertices; i++){
-            if(this.x[i]<temp){
-                temp=this.x[i];
-            }
-        }
-        return temp;
-    }
-    public int getminy(){
-        int temp=1000;
-        for(int i=0; i<this.vertices; i++){
-            if(this.y[i]<temp){
-                temp=this.y[i];
-            }
-        }
-        return temp;
-    }
-    public int getmaxx(){
-        int temp=0;
-        for(int i=0; i<this.vertices; i++){
-            if(this.x[i]>temp){
-                temp=this.x[i];
-            }
-        }
-        return temp;
-    }
-    public int getmaxy(){
-        int temp=0;
-        for(int i=0; i<this.vertices; i++){
-            if(this.y[i]>temp){
-                temp=this.y[i];
-            }
-        }
-        return temp;
-    }
-
     public void copyStage(stage astage){
         copy_General_Object(astage);
         height=astage.getheight();
