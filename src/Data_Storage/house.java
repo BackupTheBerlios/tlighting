@@ -15,6 +15,7 @@ public class house extends General_Object{
     private int height;
     private String uniqueid;
     private int vertices;
+    private double slopes[];
     
     /** Creates a new instance of house */
     public house() {
@@ -24,9 +25,11 @@ public class house extends General_Object{
         uniqueid="NULL";
         vertices=0;
         oClass=this;
+        setslopes();
     }
     
-    public house(int[] xs, int[] ys,int vertices, String nam, String descrip, int hight, String id){
+    public house(int[] xs, int[] ys,int vertice, String nam, String descrip, int hight, String id){
+        vertices=vertice;
          for(int i=0;i<vertices;i++){
             x[i]=xs[i];
             y[i]=ys[i];
@@ -35,6 +38,22 @@ public class house extends General_Object{
          description=descrip;
          height=hight;
          uniqueid=id;
+         setslopes();
+    }
+    
+    public void setslopes(){
+        for(int i=0; i<this.vertices-1; i++){
+            this.slopes[i]=(this.y[i+1]-this.y[i])/(this.x[i+1]-this.x[i]);
+        }
+        this.slopes[this.vertices-1]=(this.y[0]-this.y[this.vertices-1])/(this.x[0]-this.x[this.vertices-1]);
+    }
+    
+    public double getslope(int index){
+        return this.slopes[index];
+    }
+    
+    public double[] getslopes(){
+        return this.slopes;
     }
     
     public void setx(int[] xs, int vertices){
@@ -107,11 +126,16 @@ public class house extends General_Object{
         return this.uniqueid;
     }
     
+    public int getvertices(){
+        return this.vertices;
+    }
+    
     public void copyHouse(house ahouse){
         copy_General_Object(ahouse);
         name=ahouse.getname();
         description=ahouse.getdescription();
         height=ahouse.getheight();
         uniqueid=ahouse.getid();
+        ahouse.setslopes();
     }
 }

@@ -92,6 +92,10 @@ public class stage extends General_Object{
         return this.y[index];
     }
     
+    public int getvertices(){
+        return this.vertices;
+    }
+    
     public int getheight(){
         return this.height;
     }

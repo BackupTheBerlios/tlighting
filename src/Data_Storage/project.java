@@ -133,13 +133,23 @@ public class project{
         house curhouse = (house)houses.get_object(current);
         if(abar.getminx()>curhouse.getminx() && abar.getminy()>curhouse.getminy()){
             if(abar.getmaxx()<curhouse.getmaxx() && abar.getmaxy()<curhouse.getmaxy()){
-                int tempnum=bars.get_num_objects();
-                abar.setID("Bar"+tempnum);
-                //System.out.println("Bar "+abar.getID()+" got added");
-                if(bars.add_object(abar)==tempnum+1){
-                    ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
-                    ib.insertNewTreeNode();
-                    return true;
+                if((checkonborder(abar.getX(0), abar.getY(0)))&&(checkverti(abar.getX(0), abar.getY(0)))&&(checkhorizon(abar.getX(0), abar.getY(0)))){
+                    if((checkonborder(abar.getX(1), abar.getY(1)))&&(checkverti(abar.getX(1), abar.getY(1)))&&(checkhorizon(abar.getX(1), abar.getY(1)))){
+                        int tempnum=bars.get_num_objects();
+                        abar.setID("Bar"+tempnum);
+                        //System.out.println("Bar "+abar.getID()+" got added");
+                        if(bars.add_object(abar)==tempnum+1){
+                            ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
+                            ib.insertNewTreeNode();
+                            return true;
+                        }
+                        else{
+                            return false;
+                        }
+                    }
+                    else{
+                        return false;
+                    }
                 }
                 else{
                     return false;
@@ -168,6 +178,7 @@ public class project{
         newHouse.add_node(len,width);
         newHouse.add_node(0,width);
         newHouse.setid(name);
+        newHouse.setslopes();
         houses.add_object(newHouse);
         forceRepaint();
         ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
@@ -182,13 +193,19 @@ public class project{
         house curhouse = (house)houses.get_object(current);
         if(aInstrument.getX()>curhouse.getminx() && aInstrument.getY()>curhouse.getminy()){
             if(aInstrument.getX()<curhouse.getmaxx() && aInstrument.getY()<curhouse.getmaxy()){
-                int tempnum=instruments.get_num_objects();
-                aInstrument.setName("Instrument"+tempnum);
-                if(instruments.add_object(aInstrument)==tempnum+1){
-                    ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
-                    ib.insertNewTreeNode();
-                    return true;
-                }else{
+                if((checkonborder(aInstrument.getX(), aInstrument.getY()))&&(checkverti(aInstrument.getX(), aInstrument.getY()))&&(checkhorizon(aInstrument.getX(), aInstrument.getY()))){
+                    int tempnum=instruments.get_num_objects();
+                    aInstrument.setName("Instrument"+tempnum);
+                    if(instruments.add_object(aInstrument)==tempnum+1){
+                        ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
+                        ib.insertNewTreeNode();
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else{
                     return false;
                 }
             }
@@ -203,17 +220,29 @@ public class project{
     
     //function called to add a tage to the project
     public boolean addStage(stage aStage){
+        boolean allset=true;
+        int vertics=aStage.getvertices();
         int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
         if(aStage.getminx()>curhouse.getminx() && aStage.getminy()>curhouse.getminy()){
             if(aStage.getmaxx()<curhouse.getmaxx() && aStage.getmaxy()<curhouse.getmaxy()){
-                int tempnum=stages.get_num_objects();
-                aStage.setdescription("Stage");
-                if(stages.add_object(aStage)==tempnum+1){
-                    stageadded=true;
-                    ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
-                    ib.insertNewTreeNode();
-                    return true;
+                for(int i=0; i<vertics;i++){
+                    if((!checkonborder(aStage.getx(i), aStage.gety(i)))||(!checkverti(aStage.getx(i), aStage.gety(i)))||(!checkhorizon(aStage.getx(i), aStage.gety(i)))){
+                        allset=false;
+                    }
+                }
+                if(allset){
+                    int tempnum=stages.get_num_objects();
+                    aStage.setdescription("Stage");
+                    if(stages.add_object(aStage)==tempnum+1){
+                        stageadded=true;
+                        ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
+                        ib.insertNewTreeNode();
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
                 }
                 else{
                     return false;
@@ -230,16 +259,28 @@ public class project{
     
     //function called to commit adding a set object to the project
     public boolean addSet(setobject aSet){
+        boolean allset=true;
+        int vertics=aSet.getvertices();
         int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
         if(aSet.getminx()>curhouse.getminx() && aSet.getminy()>curhouse.getminy()){
             if(aSet.getmaxx()<curhouse.getmaxx() && aSet.getmaxy()<curhouse.getmaxy()){
-                int tempnum=sets.get_num_objects();
-                aSet.setname("Set"+tempnum);
-                if(sets.add_object(aSet)==tempnum+1){
-                    ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
-                    ib.insertNewTreeNode();
-                    return true;
+                for(int i=0; i<vertics;i++){
+                    if((!checkonborder(aSet.getx(i), aSet.gety(i)))||(!checkverti(aSet.getx(i), aSet.gety(i)))||(!checkhorizon(aSet.getx(i), aSet.gety(i)))){
+                        allset=false;
+                    }
+                }
+                if(allset){
+                    int tempnum=sets.get_num_objects();
+                    aSet.setname("Set"+tempnum);
+                    if(sets.add_object(aSet)==tempnum+1){
+                        ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
+                        ib.insertNewTreeNode();
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
                 }
                 else{
                     return false;
@@ -260,14 +301,25 @@ public class project{
         house curhouse = (house)houses.get_object(current);
         if(abar.getminx()>curhouse.getminx() && abar.getminy()>curhouse.getminy()){
             if(abar.getmaxx()<curhouse.getmaxx() && abar.getmaxy()<curhouse.getmaxy()){
-                if(index<bars.get_num_objects()){
-                    ((bar)bars.get_object(index)).copyBar(abar);
-                    return true;
+                if((checkonborder(abar.getX(0), abar.getY(0)))&&(checkverti(abar.getX(0), abar.getY(0)))&&(checkhorizon(abar.getX(0), abar.getY(0)))){
+                    if((checkonborder(abar.getX(1), abar.getY(1)))&&(checkverti(abar.getX(1), abar.getY(1)))&&(checkhorizon(abar.getX(1), abar.getY(1)))){
+                        if(index<bars.get_num_objects()){
+                            ((bar)bars.get_object(index)).copyBar(abar);
+                            return true;
+                        }
+                        return false;
+                    }
+                    else{
+                        return false;
+                    }
                 }
-                return false;
+                else{
+                    return false;
+                }
             }
-            else{
-                return false;
+            else
+            {
+              return false;  
             }
         }
         else{
@@ -286,15 +338,28 @@ public class project{
     
     //function called when a set object is edited by nodes
     public boolean SetSetObject(setobject aset,int index){
+
+        boolean allset=true;
+        int vertics=aset.getvertices();
         int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
         if(aset.getminx()>curhouse.getminx() && aset.getminy()>curhouse.getminy()){
             if(aset.getmaxx()<curhouse.getmaxx() && aset.getmaxy()<curhouse.getmaxy()){
-                if(index<sets.get_num_objects()){
-                    ((setobject)sets.get_object(index)).copySetObject(aset);
-                    return true;
+                for(int i=0; i<vertics;i++){
+                    if((!checkonborder(aset.getx(i), aset.gety(i)))||(!checkverti(aset.getx(i), aset.gety(i)))||(!checkhorizon(aset.getx(i), aset.gety(i)))){
+                        allset=false;
+                    }
                 }
-                return false;
+                if(allset){
+                    if(index<sets.get_num_objects()){
+                        ((setobject)sets.get_object(index)).copySetObject(aset);
+                        return true;
+                    }
+                    return false;
+                }
+                else{
+                    return false;
+                }
             }
             else{
                 return false;
@@ -304,18 +369,30 @@ public class project{
             return false;
         }
     }
-    
+
     //function called when a stage is edited by nodes
     public boolean SetStage(stage astage,int index){
+        boolean allset=true;
+        int vertics=astage.getvertices();
         int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
         if(astage.getminx()>curhouse.getminx() && astage.getminy()>curhouse.getminy()){
             if(astage.getmaxx()<curhouse.getmaxx() && astage.getmaxy()<curhouse.getmaxy()){
-                if(index<stages.get_num_objects()){
-                    ((stage)stages.get_object(index)).copyStage(astage);
-                    return true;
+                for(int i=0; i<vertics;i++){
+                    if((!checkonborder(astage.getx(i), astage.gety(i)))||(!checkverti(astage.getx(i), astage.gety(i)))||(!checkhorizon(astage.getx(i), astage.gety(i)))){
+                        allset=false;
+                    }
                 }
-                return false;
+                if(allset){
+                    if(index<stages.get_num_objects()){
+                        ((stage)stages.get_object(index)).copyStage(astage);
+                        return true;
+                    }
+                    return false;
+                }
+                else{
+                    return false;
+                }
             }
             else{
                 return false;
@@ -359,12 +436,109 @@ public class project{
     public int ScreenYtoWorld(int y){
         return ((y/zoom_factor)+scroll_y);
     }
-    
+
     public void print_schematic(){
         TransPanel drawing=(TransPanel)TransPanel.oClass;
         PrintUtilities.printComponent(drawing); 
     }
 
+    public boolean checkonborder(int x, int y){
+        boolean onborder=false;
+        int current=houses.get_num_objects()-1;
+        house curhouse = (house)houses.get_object(current);
+        int vertics=curhouse.getvertices();
+        
+        int i=0;
+        while((onborder!=true)&&(i<vertics)){
+            if(curhouse.y[i]==(curhouse.getslope(i)*(curhouse.x[i]-x))+y){
+                if(((x>=curhouse.x[i])&&(x<=curhouse.x[i+1]))||((x<=curhouse.x[i])&&(x>=curhouse.x[i+1]))){
+                        onborder=true;
+                }
+                else{
+                    i++;
+                }
+            }
+            else{
+                i++;
+            }
+        }
+        return onborder;
+    }
+
+    public boolean checkverti(int x, int y){
+        double results[]=new double[30];
+        int lesser=0;
+        int greater=0;
+        int current=houses.get_num_objects()-1;
+        house curhouse = (house)houses.get_object(current);
+        int vertics=curhouse.getvertices();
+        
+        for(int i=0; i<vertics-1; i++){
+            results[i]=(curhouse.getslope(i)*(x-curhouse.getx(i)))+curhouse.gety(i);
+            if(((results[i]<=curhouse.gety(i+1))&&(results[i]>=curhouse.gety(i)))||((results[i]>=curhouse.gety(i+1))&&(results[i]<=curhouse.gety(i)))){
+                if(results[i]<y){
+                    lesser++;
+                }
+                else{
+                    greater++;
+                }
+            }
+        }
+        
+        results[vertics-1]=(curhouse.getslope(vertics-1)*(x-curhouse.getx(vertics-1)))+curhouse.gety(vertics-1);
+        if(((results[vertics-1]<=curhouse.gety(0))&&(results[vertics-1]>=curhouse.gety(vertics-1)))||((results[vertics-1]>=curhouse.gety(0))&&(results[vertics-1]<=curhouse.gety(vertics-1)))){
+            if(results[vertics-1]<y){
+                lesser++;
+            }
+            else{
+                greater++;
+            }
+        }
+        
+        if((lesser>0)&&(greater>0)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     
-    
+       public boolean checkhorizon(int x, int y){
+        double results[]=new double[30];
+        int lesser=0;
+        int greater=0;
+        int current=houses.get_num_objects()-1;
+        house curhouse = (house)houses.get_object(current);
+        int vertics=curhouse.getvertices();
+        
+        for(int i=0; i<vertics-1; i++){
+            results[i]=(((y-curhouse.gety(i))/curhouse.getslope(i))+curhouse.getx(i));
+            if(((results[i]<=curhouse.getx(i+1))&&(results[i]>=curhouse.getx(i)))||((results[i]>=curhouse.getx(i+1))&&(results[i]<=curhouse.getx(i)))){
+                if(results[i]<x){
+                    lesser++;
+                }
+                else{
+                    greater++;
+                }
+            }
+        }
+        
+        results[vertics-1]=(((y-curhouse.gety(vertics-1))/curhouse.getslope(vertics-1))+curhouse.getx(vertics-1));
+        if(((results[vertics-1]<=curhouse.gety(0))&&(results[vertics-1]>=curhouse.gety(vertics-1)))||((results[vertics-1]>=curhouse.gety(0))&&(results[vertics-1]<=curhouse.gety(vertics-1)))){
+            if(results[vertics-1]<x){
+                lesser++;
+            }
+            else{
+                greater++;
+            }
+        }
+        
+        if((lesser>0)&&(greater>0)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 }

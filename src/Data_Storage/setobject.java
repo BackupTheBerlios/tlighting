@@ -86,6 +86,10 @@ public class setobject extends General_Object{
         return this.y[index];
     }
     
+    public int getvertices(){
+        return this.vertices;
+    }
+    
     public int getsize(){
         return this.size;
     }
