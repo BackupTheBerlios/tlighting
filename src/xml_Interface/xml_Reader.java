@@ -55,35 +55,30 @@ public class xml_Reader {
         //if it was a house object
         if(xml.getName().equalsIgnoreCase("house_info")){
             result=get_house(xml);
+        }else if(xml.getName().equalsIgnoreCase("bar_list")){
+            //if it was a bar list
+            get_bars(xml);
+        }else if(xml.getName().equalsIgnoreCase("stage_info")){
+            //if it was a stage object
+            get_stage();
+        }else if(xml.getName().equalsIgnoreCase("set_list")){
+            //if it was a set list
+            get_set();
+        }else if(xml.getName().equalsIgnoreCase("inventory_list")){
+            //if it was an inventory list
+            get_inventory();
+        }else if(xml.getName().equalsIgnoreCase("type_list")){
+            //if it was a type list
+            get_knowntypes();
+        }else if(xml.getName().equalsIgnoreCase("instrument_list")){
+            //if it was an instrument list
+            get_instrument();
         }
-        /*
-        //if it was a bar list
-        get_bars();
-         
-        //if it was a stage object
-        get_stage();
-         
-        //if it was a set list
-        get_set();
-         
-        //if it was an inventory list
-        get_inventory();
-         
-        //if it was a type list
-        get_knowntypes();
-         
-        //if it was an instrument list
-        get_instrument();
-         */
         return result;
     }
     
     //individual load functions
     private boolean get_house(IXMLElement xml) {
-        
-        
-        
-        
         //create a temp house object
         IXMLElement h_xml=xml.getFirstChildNamed("house");
         house temp_h=new house();
@@ -117,6 +112,26 @@ public class xml_Reader {
         temp_h.worldy=overally;
         temp_h.setheight(overallz);
         
+        //get the nodes for the house
+        int num=h_xml.getChildrenCount();
+        int i;
+        for(i=0;i<num;i++){
+            IXMLElement n_xml=null;
+            
+            try{
+                n_xml=h_xml.getChildAtIndex(i);
+            }catch(Exception e){
+                System.out.println("Error opening nodes for house");
+            }
+            if(n_xml!=null){
+                int x=Integer.parseInt(n_xml.getAttribute("x","10"));
+                int y=Integer.parseInt(n_xml.getAttribute("y","10"));
+                temp_h.add_node(x,y);
+            }
+        }
+        
+        
+        //temp_h.add_node(
         
         // see if all other objects fit in it
         
@@ -136,30 +151,68 @@ public class xml_Reader {
         
         
     }
-    private void get_bars() {
-        try{
-            IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
-            IXMLReader reader = StdXMLReader.fileReader(s_bPath);
-            parser.setReader(reader);
-            IXMLElement xml = (IXMLElement) parser.parse();
-        }catch(Exception e){
-            System.out.println("exception parsing bars");
+    private void get_bars(IXMLElement xml) {
+        
+        //create a temp bar object list
+        //for each bar in the list
+        int num=xml.getChildrenCount();
+        int i;
+        for(i=0;i<num;i++){
+            
+            IXMLElement b_xml=xml.getChildAtIndex(i);
+            bar temp_b=new bar();
+            
+            //and add all the bars info to it
+            //attributes for bar id, description, x1, x2, y1, y2, z1, z2, house_id
+            String bar_id;
+            int x1=0,x2=0,y1=0,y2=0,z1=0,z2=0;
+            String house_id;
+            bar_id=b_xml.getAttribute("bar_id","DEFAULT");
+            house_id=b_xml.getAttribute("house_id","DEFAULT");
+            try{
+                x1=Integer.parseInt(b_xml.getAttribute("x1","100"));
+                x2=Integer.parseInt(b_xml.getAttribute("x2","100"));
+                y1=Integer.parseInt(b_xml.getAttribute("y1","100"));
+                y2=Integer.parseInt(b_xml.getAttribute("y2","100"));
+                z1=Integer.parseInt(b_xml.getAttribute("z1","100"));
+                z2=Integer.parseInt(b_xml.getAttribute("z2","100"));
+            }catch(Exception e){
+                
+                System.out.println("there was an error parseing the size of the bar from file");
+            }
+            
+            //make the poitns in the correct format
+            int wx=x1;
+            int wy=y1;
+            x1=0;
+            y1=0;
+            x2=x2-wx;
+            y2=y2-wy;
+            
+            temp_b.worldx=wx;
+            temp_b.worldy=wy;
+            temp_b.add_node(x1, y1);
+            temp_b.add_node(x2, y2);
+            
+            //get all the dimmers on the bar
+            int i2;
+            int num2=b_xml.getChildrenCount();
+            for(i2=0;i2<num2;i2++){
+                IXMLElement n_xml=b_xml.getChildAtIndex(i2);
+                int dimmer;
+                dimmer=Integer.parseInt(n_xml.getAttribute("dimmer","0"));
+                temp_b.setDimmers(i2,dimmer);
+            }
+            
+            //check if the bar is valid
+            
+            //now add the bar to the project
+            
+            proj_class.addBar(temp_b);
         }
-        //create a temp bar object list and add all teh bars to it
-        
-        //check if all the bars are valid
-        
-        //now set the variables in the project class
     }
     private void get_set() {
-        try{
-            IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
-            IXMLReader reader = StdXMLReader.fileReader(s_pPath + "set.xml");
-            parser.setReader(reader);
-            IXMLElement xml = (IXMLElement) parser.parse();
-        }catch(Exception e){
-            System.out.println("exception parsing set");
-        }
+        
         //create a temporary set list
         
         
@@ -172,14 +225,7 @@ public class xml_Reader {
         //if they are not valid do not add them
     }
     private void get_stage() {
-        try{
-            IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
-            IXMLReader reader = StdXMLReader.fileReader(s_pPath + "stage.xml");
-            parser.setReader(reader);
-            IXMLElement xml = (IXMLElement) parser.parse();
-        }catch(Exception e){
-            System.out.println("exception parsing stage");
-        }
+        
         //create a temporary stage object
         
         //check if the stage object is valid
@@ -188,14 +234,7 @@ public class xml_Reader {
         
     }
     private void get_inventory() {
-        try{
-            IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
-            IXMLReader reader = StdXMLReader.fileReader(s_pPath + "inventory.xml");
-            parser.setReader(reader);
-            IXMLElement xml = (IXMLElement) parser.parse();
-        }catch(Exception e){
-            System.out.println("exception parsing inventory");
-        }
+        
         
         //create a temp inventory list
         
@@ -205,14 +244,7 @@ public class xml_Reader {
         
     }
     private void get_knowntypes() {
-        try{
-            IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
-            IXMLReader reader = StdXMLReader.fileReader(s_pPath + "known.xml");
-            parser.setReader(reader);
-            IXMLElement xml = (IXMLElement) parser.parse();
-        }catch(Exception e){
-            System.out.println("Exception parsing known types");
-        }
+        
         
         //create a temp list of types
         
@@ -224,14 +256,7 @@ public class xml_Reader {
         
     }
     private void get_instrument() {
-        try{
-            IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
-            IXMLReader reader = StdXMLReader.fileReader(s_pPath + "instrument.xml");
-            parser.setReader(reader);
-            IXMLElement xml = (IXMLElement) parser.parse();
-        }catch(Exception e){
-            System.out.println("exception parsing instruments");
-        }
+        
         //create a temp list of instruments
         
         //check to see if the bars exists for teh bars to go on and if they are in the right positions
