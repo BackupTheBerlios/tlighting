@@ -149,7 +149,35 @@ public class project{
         }
     }
     
+    public boolean SetBar(bar abar,int index){
+        if(index<bars.get_num_objects()){
+            ((bar)bars.get_object(index)).copyBar(abar);
+            return true;
+        }
+        return false;
+    }
     
+    public boolean SetHouse(house ahouse,int index){
+        if(index<houses.get_num_objects()){
+            ((house)houses.get_object(index)).copyHouse(ahouse);            
+            return true;
+        }
+        return false;
+    }
+    public boolean SetSetObject(setobject aset,int index){
+        if(index<sets.get_num_objects()){
+            ((setobject)sets.get_object(index)).copySetObject(aset);
+            return true;
+        }
+        return false;
+    }
+    public boolean SetStage(stage astage,int index){
+        if(index<stages.get_num_objects()){
+            ((stage)stages.get_object(index)).copyStage(astage); 
+            return true;
+        }
+        return false;
+    }
     public void forceRepaint(){
         TransPanel tp=(TransPanel)TransPanel.oClass;
         tp.repaint();

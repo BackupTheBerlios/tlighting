@@ -106,4 +106,12 @@ public class house extends General_Object{
     public String getid(){
         return this.uniqueid;
     }
+    
+    public void copyHouse(house ahouse){
+        copy_General_Object(ahouse);
+        name=ahouse.getname();
+        description=ahouse.getdescription();
+        height=ahouse.getheight();
+        uniqueid=ahouse.getid();
+    }
 }

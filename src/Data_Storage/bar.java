@@ -30,6 +30,7 @@ public class bar extends General_Object {
     
     /** Creates a new instance of hold_bar */
     public bar() {
+        z=new int[30];
         distance=0;
         num_dimmers=0;
         dis_dimmers=new int[10];
@@ -41,6 +42,7 @@ public class bar extends General_Object {
     
     public bar (int[] xs, int[] ys,int[] zs, int num_dimers, int[] dis_dimers, String barId, String linkproj){
         int temp;
+        z=new int[30];
         for(int i=0;i<2;i++){
             x[i]=xs[i];
             y[i]=ys[i];
@@ -255,6 +257,24 @@ public class bar extends General_Object {
     public String getProjectName()
     {
         return this.linkProj; 
+    }
+    
+    public void copyBar(bar abar){
+        int iter;
+        copy_General_Object(abar);
+       
+        for(iter=0;iter<abar.num_nodes;iter++){
+            z[iter]=abar.z[iter];
+        }
+        distance=abar.distance;
+        num_dimmers=abar.num_dimmers;
+        for(iter=0;iter<num_dimmers;iter++){
+            dimmers[iter]=abar.dimmers[iter];
+            dis_dimmers[iter]=abar.dis_dimmers[iter];
+        }
+        barID=abar.barID;
+        linkProj=abar.linkProj;
+        
     }
     
     public void barOutput()

@@ -107,4 +107,12 @@ public class stage extends General_Object{
     public int getlinktohouse(){
         return this.linktohouse;
     }
+    
+    public void copyStage(stage astage){
+        copy_General_Object(astage);
+        height=astage.getheight();
+        notes=astage.getnotes();
+        description=astage.getdescription();
+        linktohouse=astage.getlinktohouse();
+    }
 }

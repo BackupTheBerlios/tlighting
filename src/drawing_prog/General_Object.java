@@ -133,8 +133,8 @@ public class General_Object {
 	//- ability to edit where a node is located
 	public boolean move_node(int index, int newx, int newy){
 		if(index<num_nodes){
-			x[index]=newx;
-			y[index]=newy;
+			x[index]=newx-worldx;
+			y[index]=newy-worldy;
 			return true;
 		}
 
@@ -325,7 +325,31 @@ public class General_Object {
 		return false;
 	}
 
-	//- set the value of the objects line style
+	public int closest_node(int pos_x,int pos_y){
+            int iter;
+            double closest_dist;
+            int closest_index;
+            if(num_nodes>0){
+                closest_dist=Math.sqrt(((worldx+x[0])-pos_x)*((worldx+x[0])-pos_x)+((worldy+y[0])-pos_y)*((worldy+y[0])-pos_y));
+                closest_index=0;
+                
+                for(iter=1;iter<num_nodes;iter++){
+                    double dist =Math.sqrt(((worldx+x[iter])-pos_x)*((worldx+x[iter])-pos_x)+((worldy+y[iter])-pos_y)*((worldy+y[iter])-pos_y));
+                    if(dist<closest_dist){
+                        closest_dist=dist;
+                        closest_index=iter;
+                    }
+                }
+                return closest_index;
+            }else{
+                return -1;
+            }
+            
+            
+        }
+        
+        
+        //- set the value of the objects line style
 	public int set_linestyle(int ls){
 		int old_linestyle;
 
@@ -346,6 +370,21 @@ public class General_Object {
 		return old_color;
 	}
 
-       
+      
+        public void copy_General_Object(General_Object obj){
+            
+            worldx=obj.worldx;				
+            worldy=obj.worldy;				
+            num_nodes=0;
+            int iter;
+            for(iter=0;iter<obj.num_nodes;iter++){
+                add_node(obj.x[iter],obj.y[iter]);
+            }
+            
+            index=obj.index; 				
+            grouped=obj.grouped; 		
+            color_index=obj.color_index; 		
+        
+        }
 
 }

@@ -45,11 +45,12 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
     
 
     public bar temp_bar;
-
     public instrument temp_instrument; 
     public stage temp_stage;
     public setobject temp_set;
-
+    public house temp_house;
+    
+    public int selected_node;
     
 
     public project proj_class;
@@ -77,15 +78,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
     public static Object oClass = null;
 
     public TransPanel()
-
     { 
-
-        
-    
-        
-
-        
-
         setBackground(Color.white); 
 
         setLayout(null);
@@ -93,46 +86,12 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         
 
         horiz = new JScrollBar();
-
         horiz.setOrientation(Adjustable.HORIZONTAL);
-
-        //horiz.setSize()
-
-        //Dimension d= new Dimension();
-
-        //d.height=20;
-
-        //d.width=BasicWindow.iScreenWidth-(DragandDropPanel.iWidth*2);
-
-        
-
-        //horiz.setBounds(DragandDropPanel.iWidth, 0, BasicWindow.iScreenWidth-(DragandDropPanel.iWidth*2), BasicWindow.iScreenHeight);
-
-        
-
-        //horiz.setPreferredSize(d);
-
         horiz.addAdjustmentListener(this);
-
-        add(horiz);
-
-      
-
-        
-
-        //horiz.setValue(horiz.getMaximum()/2);
-
-        
+        add(horiz);      
 
         vert = new JScrollBar();
-
         vert.setOrientation(Adjustable.VERTICAL);
-
-        //d.width=20;
-
-        //d.height=DragandDropPanel.iHeight;
-
-        //vert.setPreferredSize(d);
 
         vert.addAdjustmentListener(this);
 
@@ -141,14 +100,11 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         
 
         horiz.setBounds(15,0,600,15);
-
         horiz.setMaximum(600);
 
         vert.setBounds(0,15,15,600);
-
         vert.setMaximum(600);
 
-        //vert.setValue(vert.getMaximum()/2);
         
         project proj_class=(project)project.oClass;
         proj_class.selected_type= -1;
@@ -161,6 +117,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
 
         scroll_y=0;
         
+        selected_node=-1;
         
         oClass=this;
         addMouseListener(this);
@@ -253,13 +210,50 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
             temp_set.draw(g2,proj_class.zoom_factor,0-scroll_x,0-scroll_y);
             temp_set.set_color(0);
         }
+        if(temp_house!=null){
+            temp_house.set_color(2);
+            temp_house.draw(g2,proj_class.zoom_factor,0-scroll_x,0-scroll_y);
+            temp_house.set_color(0);
+        }
        // if(proj_class.selected_type==2){
 
         //    proj_class.bars.draw_object(proj_class.selected_index,proj_class.zoom_factor,0-scroll_x,0-scroll_y);
 
        // }
 
+        if(selected_node>=0){
+            int t=proj_class.selected_type;
+            if(t==0){
+                //house
+                Ellipse2D.Double node_circ= new Ellipse2D.Double(temp_house.worldx+temp_house.x[selected_node],
+                        temp_house.worldy+temp_house.y[selected_node],
+                        6,6);
+                g2.fill(node_circ);
+            }else if(t==1){
+                //stage
+                Ellipse2D.Double node_circ= new Ellipse2D.Double(temp_stage.worldx+temp_stage.x[selected_node],
+                        temp_stage.worldy+temp_stage.y[selected_node],
+                        6,6);
+                g2.fill(node_circ);
+            }else if(t==2){
+                //bar
+                Ellipse2D.Double node_circ= new Ellipse2D.Double(temp_bar.worldx+temp_bar.x[selected_node],
+                        temp_bar.worldy+temp_bar.y[selected_node],
+                        6,6);
+                g2.fill(node_circ);
+            }else if(t==3){
+                //instrument
+                
+            }else if(t==4){
+                //set
+                Ellipse2D.Double node_circ= new Ellipse2D.Double(temp_set.worldx+temp_set.x[selected_node],
+                        temp_set.worldy+temp_set.y[selected_node],
+                        6,6);
+                g2.fill(node_circ);
+            }
+            
         
+        }
 
     }
 
@@ -620,18 +614,47 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     }
                 }
             }else if(proj_class.draw_mouse_state==4){
-             //edit nodes of house   
-            
-                proj_class.draw_mouse_state=0;
+                //edit nodes of house   
+                if(selected_node<0){
+                    //find a node to select
+                    selected_node=temp_house.closest_node(e.getX(),e.getY());
+                }else{
+                   //set the node to the new position
+                   temp_house.move_node(selected_node, e.getX(), e.getY()); 
+                   selected_node=-1;
+                }
             }else if(proj_class.draw_mouse_state==5){
-             //edit node of stage   
-                proj_class.draw_mouse_state=0;
+                //edit node of stage   
+                if(selected_node<0){
+                    //find a node to select
+                    selected_node=temp_stage.closest_node(e.getX(),e.getY());
+                }else{
+                   //set the node to the new position
+                   temp_stage.move_node(selected_node, e.getX(), e.getY()); 
+                   selected_node=-1;
+                }
             }else if(proj_class.draw_mouse_state==3){
-             //edit nodes of bar   
-                proj_class.draw_mouse_state=0;
+                //edit nodes of bar   
+                if(selected_node<0){
+                    //find a node to select
+                    selected_node=temp_bar.closest_node(e.getX(),e.getY());
+                }else{
+                   //set the node to the new position
+                   temp_bar.move_node(selected_node, e.getX(), e.getY()); 
+                   selected_node=-1;
+                }
+                
+                //proj_class.draw_mouse_state=0;
             }else if(proj_class.draw_mouse_state==10){
-             //edit nodes of set object   
-                proj_class.draw_mouse_state=0;
+                //edit nodes of set object
+                if(selected_node<0){
+                    //find a node to select
+                    selected_node=temp_set.closest_node(e.getX(),e.getY());
+                }else{
+                   //set the node to the new position
+                   temp_set.move_node(selected_node, e.getX(), e.getY()); 
+                   selected_node=-1;
+                }
             }
                 
 
@@ -639,13 +662,6 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
 
         }
 
-        
-
-        //y[numedges]=e.getY();
-
-        //x[numedges]=e.getX();
-
-        //numedges++;
 
     }
 

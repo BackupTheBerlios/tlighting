@@ -98,4 +98,12 @@ public class setobject extends General_Object{
         return this.description;
     }
     
+    public void copySetObject(setobject aset){
+        copy_General_Object(aset);
+        size=aset.getsize();
+        name=aset.getname();
+        description=aset.getdescription();
+        
+    }
+    
 }
