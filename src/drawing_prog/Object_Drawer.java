@@ -212,6 +212,11 @@ public class Object_Drawer {
 	}
 
         public General_Object get_object(int index){
-            return (General_Object)object_list.get(index);
+            if(index<num_objects){
+                return (General_Object)object_list.get(index);
+            }else{
+                return null;
+            }
+        
         }
 }
