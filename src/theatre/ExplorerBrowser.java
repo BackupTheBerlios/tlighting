@@ -7,6 +7,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 import Data_Storage.*;
+import drawing_prog.General_Object;
 
 public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionListener,KeyListener
 {
@@ -264,6 +265,74 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
     }
     
     void trStructure_mouseClicked(java.awt.event.MouseEvent event) {
+        //handle a new object being selected
+        
+        //if the drawing state is in selection mode
+        if(p.draw_mouse_state==0){
+            TreePath path = trStructure.getPathForLocation(event.getX(),event.getY());
+            if(path!=null){
+                //parent for figureing out what type is selected
+                String parent=(String)((DefaultMutableTreeNode)path.getParentPath().getLastPathComponent()).getUserObject();
+                String child=(String)((DefaultMutableTreeNode)path.getLastPathComponent()).getUserObject();
+                
+                General_Object temp_obj=null;
+                //run through the parents to see if a valid object type was selected
+                //types are defined as follows 0=house 1=stage 2=bar 3=instrument 4=set 5=inventory
+                if(parent.equalsIgnoreCase("House")){
+                    p.selected_type=0;
+                    p.selected_index=0;
+                    temp_obj=p.houses.get_object(0);
+                }else if(parent.equalsIgnoreCase("Stage")){
+                    p.selected_type=1;
+                    p.selected_index=0;
+                    temp_obj=p.stages.get_object(0);
+                }else if(parent.equalsIgnoreCase("Bars")){
+                    p.selected_type=2;
+                    //figure out what index it is
+                    int i;
+                    for(i=0;i<p.bars.get_num_objects();i++){
+                        if(((bar)p.bars.get_object(i)).getID().equalsIgnoreCase(child)){
+                            p.selected_index=i;
+                            temp_obj=p.bars.get_object(i);
+                            i=p.bars.get_num_objects();
+                        }
+                    }
+                    
+                }else if(parent.equalsIgnoreCase("Instruments")){
+                    p.selected_type=3;
+                    //figure out what index it is
+                    int i;
+                    for(i=0;i<p.instruments.get_num_objects();i++){
+                        if(((instrument)p.instruments.get_object(i)).getName().equalsIgnoreCase(child)){
+                            p.selected_index=i;
+                            temp_obj=p.instruments.get_object(i);
+                            i=p.instruments.get_num_objects();
+                        }
+                    }
+                }else if(parent.equalsIgnoreCase("Set Objects")){
+                    p.selected_type=4;
+                    //figure out what index it is
+                    int i;
+                    for(i=0;i<p.sets.get_num_objects();i++){
+                        if(((setobject)p.sets.get_object(i)).getname().equalsIgnoreCase(child)){
+                            p.selected_index=i;
+                            temp_obj=p.sets.get_object(i);
+                            i=p.sets.get_num_objects();
+                        }
+                    }
+                
+                }else if(parent.equalsIgnoreCase("Inventory")){
+                    p.selected_type=5;
+                    //p.selected_index=p.getIndexbyName()
+                }
+                
+                if(temp_obj!=null){
+                    ItemBrowser.displayInfo(temp_obj);
+                }
+                p.forceRepaint();
+            }
+        }
+        
         
     }
     
