@@ -51,7 +51,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         add(vert);
         //begin chaplin edit
         //horiz.setBounds(15,0,600,15); //x, y, width, height.
-        horiz.setBounds(0,BasicWindow.iScreenHeight - 149,BasicWindow.iScreenWidth-(ExplorerBrowserPanel.iWidth*2) - 24, 15);
+        horiz.setBounds(0,BasicWindow.iScreenHeight - 169,BasicWindow.iScreenWidth-(ExplorerBrowserPanel.iWidth*2) - 24, 15);
         horiz.setUnitIncrement((int)(.05 * horiz.getWidth())); //these set how far the scroll bar moves
         System.out.println("the unit increment is: " +horiz.getUnitIncrement());
         horiz.setBlockIncrement((int)(.25 * horiz.getWidth())); //sets increment based on click above/below scroll knob.  Check this.
@@ -71,7 +71,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         proj_class=(project)project.oClass;
         proj_class.selected_type= -1;
         proj_class.selected_index=-1;
-        proj_class.zoom_factor=1;
+        proj_class.zoom_factor=5;
         proj_class.scroll_x=0;
         proj_class.scroll_y=0;
         selected_node=-1;
@@ -365,7 +365,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         
         project proj_class=(project)project.oClass;
         
-        if((e.getButton() == MouseEvent.BUTTON3)||((e.getModifiers()&MouseEvent.CTRL_DOWN_MASK)!=0)){
+        if((e.getButton() == MouseEvent.BUTTON3)||((e.getModifiersEx()&MouseEvent.CTRL_DOWN_MASK)!=0)){
             //System.out.println("Mouse 3 Was Clicked with in stage area at "+e.getX()+" "+e.getY());
             
             PopUpMenu menu = new PopUpMenu(this,proj_class.selected_type);
@@ -588,36 +588,16 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 //moving a bar
                 bar selected_bar=(bar)proj_class.bars.get_object(proj_class.selected_index);
                 
-                int old_bar_x;
-                
-                old_bar_x=selected_bar.worldx;
-                
-                int old_bar_y;
-                
-                old_bar_y=selected_bar.worldy;
                 
                 
                 
-                int xdiff;
-                int ydiff;
-                
-                //chaplin edit then josh edit
-                xdiff = old_bar_x-proj_class.ScreenXtoWorld(e.getX());
-                ydiff = old_bar_y-proj_class.ScreenYtoWorld(e.getY());
-                
-                
-                
-                for(int iter=0;iter<proj_class.instruments.get_num_objects();iter++) {
-                    if(((instrument)proj_class.instruments.get_object(iter)).getBarID()==proj_class.selected_index) {
-                        proj_class.instruments.get_object(iter).worldx-=xdiff;
-                        
-                        proj_class.instruments.get_object(iter).worldy-=ydiff;
-                    }
-                }
                 
                 //actually move the bar
-                proj_class.bars.get_object(proj_class.selected_index).worldx=proj_class.ScreenXtoWorld(e.getX());
-                proj_class.bars.get_object(proj_class.selected_index).worldy=proj_class.ScreenYtoWorld(e.getY());
+                bar tb=new bar();
+                tb.copyBar((bar)proj_class.bars.get_object(proj_class.selected_index));
+                tb.worldx=proj_class.ScreenXtoWorld(e.getX());
+                tb.worldy=proj_class.ScreenYtoWorld(e.getY());
+                proj_class.SetBar(tb,proj_class.selected_index);
                 
                 proj_class.draw_mouse_state=0;
                 ///***********************************************************
@@ -764,9 +744,13 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 ydiff = old_stage_y-proj_class.ScreenYtoWorld(e.getY());
                 
                 //actually move the stage
-                proj_class.stages.get_object(0).worldx=proj_class.ScreenXtoWorld(e.getX());
-                proj_class.stages.get_object(0).worldy=proj_class.ScreenYtoWorld(e.getY());
-                
+                //proj_class.stages.get_object(0).worldx=proj_class.ScreenXtoWorld(e.getX());
+                //proj_class.stages.get_object(0).worldy=proj_class.ScreenYtoWorld(e.getY());
+                stage ts=new stage();
+                ts.copyStage((stage)proj_class.stages.get_object(0));
+                ts.worldx=proj_class.ScreenXtoWorld(e.getX());
+                ts.worldy=proj_class.ScreenYtoWorld(e.getY());
+                proj_class.SetStage(ts,0);
                 proj_class.draw_mouse_state=0;
                 
                 
@@ -790,8 +774,13 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 ydiff = old_y-proj_class.ScreenYtoWorld(e.getY());
                 
                 //actually move the house
-                proj_class.houses.get_object(0).worldx=proj_class.ScreenXtoWorld(e.getX());
-                proj_class.houses.get_object(0).worldy=proj_class.ScreenYtoWorld(e.getY());
+                //proj_class.houses.get_object(0).worldx=proj_class.ScreenXtoWorld(e.getX());
+                //proj_class.houses.get_object(0).worldy=proj_class.ScreenYtoWorld(e.getY());
+                house th=new house();
+                th.copyHouse((house)proj_class.houses.get_object(0));
+                th.worldx=proj_class.ScreenXtoWorld(e.getX());
+                th.worldy=proj_class.ScreenYtoWorld(e.getY());
+                proj_class.SetHouse(th,0);
                 
                 proj_class.draw_mouse_state=0;
                 
@@ -819,9 +808,13 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 ydiff = old_y-proj_class.ScreenYtoWorld(e.getY());
                 
                 //actually move the house
-                proj_class.sets.get_object(proj_class.selected_index).worldx=proj_class.ScreenXtoWorld(e.getX());
-                proj_class.sets.get_object(proj_class.selected_index).worldy=proj_class.ScreenYtoWorld(e.getY());
-                
+                //proj_class.sets.get_object(proj_class.selected_index).worldx=proj_class.ScreenXtoWorld(e.getX());
+                //proj_class.sets.get_object(proj_class.selected_index).worldy=proj_class.ScreenYtoWorld(e.getY());
+                setobject ts=new setobject();
+                ts.copySetObject((setobject)proj_class.sets.get_object(proj_class.selected_index));
+                ts.worldx=proj_class.ScreenXtoWorld(e.getX());
+                ts.worldy=proj_class.ScreenYtoWorld(e.getY());
+                proj_class.SetSetObject(ts,proj_class.selected_index);
                 proj_class.draw_mouse_state=0;
                 
                 
