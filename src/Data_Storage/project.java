@@ -33,6 +33,8 @@ public class project{
     public int selected_node;
     
     public int zoom_factor;
+    public int scroll_x;
+    public int scroll_y;
     public int draw_mouse_state;
    //draw mouse stages are defiend as 0=normal 1=adding a bar 2=adding an instruemnt 3= editing a bar 
     //4=editing a house 5=editing a stage 6=moving a bar 7= moving an instrument 8=adding a stage 
@@ -67,7 +69,9 @@ public class project{
     
         selected_type=-1;
         selected_index=-1;
-        zoom_factor=-1;
+        zoom_factor=0;
+        scroll_x=0;
+        scroll_y=0;
         draw_mouse_state=0;
         open_project_name="";
         project_open=false;
@@ -87,7 +91,9 @@ public class project{
     
         selected_type=-1;
         selected_index=-1;
-        zoom_factor=-1;
+        zoom_factor=1;
+        scroll_x=0;
+        scroll_y=0;
         draw_mouse_state=0;
         open_project_name="";
         project_open=false;
@@ -101,7 +107,7 @@ public class project{
             if(abar.getmaxx()<curhouse.getmaxx() && abar.getmaxy()<curhouse.getmaxy()){
                 int tempnum=bars.get_num_objects();
                 abar.setID("Bar"+tempnum);
-                System.out.println("Bar "+abar.getID()+" got added");
+                //System.out.println("Bar "+abar.getID()+" got added");
                 if(bars.add_object(abar)==tempnum+1){
                     ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
                     ib.insertNewTreeNode();
@@ -135,6 +141,8 @@ public class project{
         newHouse.setid(name);
         houses.add_object(newHouse);
         forceRepaint();
+        ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
+        ib.insertNewTreeNode();
         return houseadded=true;
         
     }
@@ -145,7 +153,10 @@ public class project{
         if(aInstrument.getX()>curhouse.getminx() && aInstrument.getY()>curhouse.getminy()){
             if(aInstrument.getX()<curhouse.getmaxx() && aInstrument.getY()<curhouse.getmaxy()){
                 int tempnum=instruments.get_num_objects();
+                aInstrument.setName("Instrument"+tempnum);
                 if(instruments.add_object(aInstrument)==tempnum+1){
+                    ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
+                    ib.insertNewTreeNode();
                     return true;
                 }else{
                     return false;
@@ -166,8 +177,11 @@ public class project{
         if(aStage.getminx()>curhouse.getminx() && aStage.getminy()>curhouse.getminy()){
             if(aStage.getmaxx()<curhouse.getmaxx() && aStage.getmaxy()<curhouse.getmaxy()){
                 int tempnum=stages.get_num_objects();
+                aStage.setdescription("Stage");
                 if(stages.add_object(aStage)==tempnum+1){
                     stageadded=true;
+                    ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
+                    ib.insertNewTreeNode();
                     return true;
                 }
                 else{
@@ -189,7 +203,10 @@ public class project{
         if(aSet.getminx()>curhouse.getminx() && aSet.getminy()>curhouse.getminy()){
             if(aSet.getmaxx()<curhouse.getmaxx() && aSet.getmaxy()<curhouse.getmaxy()){
                 int tempnum=sets.get_num_objects();
+                aSet.setname("Set"+tempnum);
                 if(sets.add_object(aSet)==tempnum+1){
+                    ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
+                    ib.insertNewTreeNode();
                     return true;
                 }
                 else{
@@ -289,4 +306,19 @@ public class project{
     public boolean isInstrumentVisible() { return bInstrumentVisible;}
     public void setInstrumentVisible(boolean b) { bInstrumentVisible = b; }
 
+    //conversion fucntions to translate world and screen coordinates to each other
+    public int WorldXtoScreen(int x){    
+        return ((x/zoom_factor)+scroll_x);
+    }
+    public int WorldYtoScreen(int y){
+        return ((y/zoom_factor)+scroll_y);
+    }
+    public int ScreenXtoWorld(int x){
+        return ((x*zoom_factor)-scroll_x);
+    } 
+    public int ScreenYtoWorld(int y){
+        return ((y*zoom_factor)-scroll_y);
+    }
+    
+    
 }
