@@ -32,7 +32,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
     public int numedges;
     int selected_object;
     double zoomfactor;
-
+    
     
     public static Object oClass = null;
     
@@ -120,7 +120,24 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         }
         if(proj_class.isInstrumentVisible()){
             proj_class.instruments.draw_list(proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
-        }    
+            //draw the aim points for every instrument
+            for(int i=0;i<proj_class.instruments.get_num_objects();i++){
+                int x=((instrument)proj_class.instruments.get_object(i)).aimx;
+                int y=((instrument)proj_class.instruments.get_object(i)).aimy;
+                //int lx=((instrument)proj_class.instruments.get_object(i)).worldx;
+                //int ly=((instrument)proj_class.instruments.get_object(i)).worldy;
+                g2.draw(new Line2D.Double(proj_class.WorldXtoScreen(x-3), proj_class.WorldYtoScreen(y-3),
+                        proj_class.WorldXtoScreen(x+3),proj_class.WorldYtoScreen(y+3)));
+                g2.draw(new Line2D.Double(proj_class.WorldXtoScreen(x-3), proj_class.WorldYtoScreen(y+3),
+                        proj_class.WorldXtoScreen(x+3), proj_class.WorldYtoScreen(y-3)));
+                /*Line2D dotted =new Line2D.Double(proj_class.WorldXtoScreen(x), proj_class.WorldYtoScreen(y),
+                        proj_class.WorldXtoScreen(lx), proj_class.WorldYtoScreen(ly));
+                 
+                g2.draw(dotted);
+                 */
+            }
+            
+        }
         
         
         //redraw the item that is selected
@@ -156,6 +173,28 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
             General_Object temp_obj=proj_class.instruments.get_object(proj_class.selected_index);
             temp_obj.set_color(1);
             temp_obj.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
+            
+            //draw teh selected aim poitn also
+            
+            int x=((instrument)proj_class.instruments.get_object(proj_class.selected_index)).aimx;
+            int y=((instrument)proj_class.instruments.get_object(proj_class.selected_index)).aimy;
+            int lx=((instrument)proj_class.instruments.get_object(proj_class.selected_index)).worldx;
+            int ly=((instrument)proj_class.instruments.get_object(proj_class.selected_index)).worldy;
+            
+            if((x>=0)&&(y>=0)){
+                
+                /*g2.draw(new Line2D.Double(proj_class.WorldXtoScreen(x-3), proj_class.WorldYtoScreen(y-3),
+                        proj_class.WorldXtoScreen(x+3),proj_class.WorldYtoScreen(y+3)));
+                g2.draw(new Line2D.Double(proj_class.WorldXtoScreen(x-3), proj_class.WorldYtoScreen(y+3),
+                        proj_class.WorldXtoScreen(x+3), proj_class.WorldYtoScreen(y-3)));
+                g2.setColor(Color.YELLOW);
+                */
+                Line2D dotted =new Line2D.Double(proj_class.WorldXtoScreen(x), proj_class.WorldYtoScreen(y),
+                        proj_class.WorldXtoScreen(lx), proj_class.WorldYtoScreen(ly));
+                g2.draw(dotted);
+                
+                g2.setColor(Color.BLACK);
+            }
             temp_obj.set_color(0);
         }else if(proj_class.selected_type==4){
             
@@ -166,7 +205,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
             temp_obj.set_color(0);
         }
         
-
+        
         //draw half drawn bars
         
         
@@ -176,7 +215,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
             temp_bar.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
             temp_bar.set_color(0);
         }
-
+        
         if(temp_instrument!=null){
             temp_instrument.set_color(2);
             
@@ -185,7 +224,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
             //1/proj_class.zoom_factor
             //System.out.println("heyooooo drawing instrument!");
             //System.out.println("the zoom factor is: "+proj_class.zoom_factor+" scroll x is: "+proj_class.scroll_x+"scroll y is: "+proj_class.scroll_y);
-            temp_instrument.set_color(0);    
+            temp_instrument.set_color(0);
         }
         
         
@@ -212,11 +251,11 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         }
         
         // if(proj_class.selected_type==2){
-       
+        
         
         //    proj_class.bars.draw_object(proj_class.selected_index,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
         
-      
+        
         // }
         
         
@@ -258,35 +297,29 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                             temp_set.worldy+temp_set.y[selected_node],6,6);
                     g2.fill(node_circ);
                 }
-                
             }
-            
         }
-        
-        
-        
     }
     
     
     
-    public void paintComponent(Graphics g)
-    {
-
+    public void paintComponent(Graphics g) {
+        
         super.paintComponent(g);
-
+        
         Graphics2D g2 = (Graphics2D) g;
-
+        
         
         java.sql.Date t=new java.sql.Date(5);
         
         long start_t;
         
         long end_t;
-
+        
         //System.out.println("Painting start");
-
+        
         start_t=t.getTime();
-
+        
         drawobjects(g2);
         long diff=0;
         
@@ -297,47 +330,35 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         
     }
     
-    
-    
     /* Blank mouse listener methods  */
-    
-    
-    
-    public void mouseClicked(MouseEvent event) {
-        
-        
-        
-        
-        
-        
-        
-    }
-    
-    
-    
+    public void mouseClicked(MouseEvent event) {}
     public void mouseEntered(MouseEvent event) {}
-    
-    
-    
     public void mouseExited(MouseEvent event) {}
-    
-    
-    
     public void mouseReleased(MouseEvent event) {
-        
-        
-        
-        
-        
-        
-        
     }
     
     
+    //draw mouse stages are defiend as 0=normal 1=adding a bar 2=adding an instruemnt 3= editing a bar
+    //4=editing a house 5=editing a stage 6=moving a bar 7= moving an instrument 8=adding a stage
+    //9=adding a set peice 10=editing a set piece 11=moving a stage 12=moving a house 13=moving a set 14=aiming a light
     
     
-    
-    
+    /*implemented:
+     *selection = 0
+     *addiing bar = 1
+     *adding an instrument = 2
+     *editing a bar = 3
+     *editing a house =4
+     *editing a stage = 5
+     *moving a bar = 6
+     *
+     *adding a stage = 8
+     *adding a set piece = 9
+     *editing a set piece = 10
+     *
+     *
+     *
+     */
     
     /* Mouse pressed */
     public void mousePressed(MouseEvent e){
@@ -352,6 +373,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
             menu.show((Component)this, e.getX(), e.getY());
         } else {
             //System.out.println("Mouse Was Clicked with in stage area at "+e.getX()+" "+e.getY());
+            //**************************************************************************
             if(proj_class.draw_mouse_state==0) {
                 Vector allList = new Vector();
                 
@@ -380,19 +402,19 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 }
                 //check if the stage was selected
                 if(proj_class.isStageVisible()){
-                items=proj_class.stages.get_objects_in_area(curx-search_area, cury-search_area, curx+search_area,cury+search_area);
-                
-                if(items.get_num_objects()>0) {
-                    allList.add(items.get_object(0));
-                    num_in_list++;
-                }
+                    items=proj_class.stages.get_objects_in_area(curx-search_area, cury-search_area, curx+search_area,cury+search_area);
+                    
+                    if(items.get_num_objects()>0) {
+                        allList.add(items.get_object(0));
+                        num_in_list++;
+                    }
                 }
                 //check if any bars were selected
                 if(proj_class.isBarVisible()){
                     items=proj_class.bars.get_objects_in_area(curx-search_area, cury-search_area, curx+search_area,cury+search_area);
-                
-                    if(items.get_num_objects()>0) {
                     
+                    if(items.get_num_objects()>0) {
+                        
                         int iter;
                         for(iter=0;iter<items.get_num_objects();iter++) {
                             allList.add(items.get_object(iter));
@@ -402,28 +424,28 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 }
                 //check if any instruments were selected
                 if(proj_class.isInstrumentVisible()){
-                items=proj_class.instruments.get_objects_in_area(curx-search_area, cury-search_area, curx+search_area,cury+search_area);
-                
-                if(items.get_num_objects()>0) {
-                    int iter;
-                    for(iter=0;iter<items.get_num_objects();iter++) {
-                        allList.add(items.get_object(iter));
-                        num_in_list++;
+                    items=proj_class.instruments.get_objects_in_area(curx-search_area, cury-search_area, curx+search_area,cury+search_area);
+                    
+                    if(items.get_num_objects()>0) {
+                        int iter;
+                        for(iter=0;iter<items.get_num_objects();iter++) {
+                            allList.add(items.get_object(iter));
+                            num_in_list++;
+                        }
                     }
-                }
                 }
                 
                 //check if any set objects were selected
                 if(proj_class.isSetItemVisible()){
-                items=proj_class.sets.get_objects_in_area(curx-search_area, cury-search_area, curx+search_area,cury+search_area);
-                
-                if(items.get_num_objects()>0) {
-                    int iter;
-                    for(iter=0;iter<items.get_num_objects();iter++) {
-                        allList.add(items.get_object(iter));
-                        num_in_list++;
+                    items=proj_class.sets.get_objects_in_area(curx-search_area, cury-search_area, curx+search_area,cury+search_area);
+                    
+                    if(items.get_num_objects()>0) {
+                        int iter;
+                        for(iter=0;iter<items.get_num_objects();iter++) {
+                            allList.add(items.get_object(iter));
+                            num_in_list++;
+                        }
                     }
-                }
                 }
                 
                 if(num_in_list>0){
@@ -452,22 +474,22 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     repaint();
                 }
             }
-            
+            //*********************************************************************************
             else if(proj_class.draw_mouse_state==1) {
                 //creation of a bar
                 //System.out.println("Mouse state was 1 adding "+temp_bar.num_nodes+" node");
                 //drawing a bar
                 if(temp_bar.num_nodes==0) {
                     //begin chaplin edit redited by JoshZ
-                        temp_bar.worldx=proj_class.ScreenXtoWorld(e.getX());
-                        temp_bar.worldy=proj_class.ScreenYtoWorld(e.getY());
+                    temp_bar.worldx=proj_class.ScreenXtoWorld(e.getX());
+                    temp_bar.worldy=proj_class.ScreenYtoWorld(e.getY());
                     
                     //end chaplin edit and reediting by JoshZ
                     
                     temp_bar.add_node(0,0);
                     
                 } else {
-                    //begin chaplin edit rededited by JOSHZ                   
+                    //begin chaplin edit rededited by JOSHZ
                     temp_bar.add_node(proj_class.ScreenXtoWorld(e.getX())-temp_bar.worldx,proj_class.ScreenYtoWorld(e.getY())-temp_bar.worldy);
                     //end chaplin edit and reediting by JoshZ
                     if(temp_bar.num_nodes>=2) {
@@ -479,6 +501,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     }
                 }
                 
+                //**************************************************************
             } else if(proj_class.draw_mouse_state==2) {
                 //adding an instrument to the selected bar
                 //since the instrument has to be on the bar that was selected
@@ -503,7 +526,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 //swap the points to make the math easier because assume point 1 is to the right
                 
                 //begin chaplin edit reediting by JoshZ
-                    pot_x = proj_class.ScreenXtoWorld(e.getX());
+                pot_x = proj_class.ScreenXtoWorld(e.getX());
                 //end chaplin edit reedited by JoshZ
                 if(barx1>barx2) {
                     int temp_int;
@@ -560,6 +583,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     
                 }
                 
+                //*******************************************************************
             } else if(proj_class.draw_mouse_state==6) {
                 //moving a bar
                 bar selected_bar=(bar)proj_class.bars.get_object(proj_class.selected_index);
@@ -572,16 +596,14 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 
                 old_bar_y=selected_bar.worldy;
                 
-                //move all the instrumetns attached to the bar
                 
-                //need to compensate for zoom factor just to tired to do it tonight
                 
                 int xdiff;
                 int ydiff;
                 
                 //chaplin edit then josh edit
-                    xdiff = old_bar_x-proj_class.ScreenXtoWorld(e.getX());
-                    ydiff = old_bar_y-proj_class.ScreenYtoWorld(e.getY());
+                xdiff = old_bar_x-proj_class.ScreenXtoWorld(e.getX());
+                ydiff = old_bar_y-proj_class.ScreenYtoWorld(e.getY());
                 
                 
                 
@@ -594,23 +616,24 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 }
                 
                 //actually move the bar
-                    proj_class.bars.get_object(proj_class.selected_index).worldx=proj_class.ScreenXtoWorld(e.getX());
-                    proj_class.bars.get_object(proj_class.selected_index).worldy=proj_class.ScreenYtoWorld(e.getY());
+                proj_class.bars.get_object(proj_class.selected_index).worldx=proj_class.ScreenXtoWorld(e.getX());
+                proj_class.bars.get_object(proj_class.selected_index).worldy=proj_class.ScreenYtoWorld(e.getY());
                 
                 proj_class.draw_mouse_state=0;
+                ///***********************************************************
             } else if(proj_class.draw_mouse_state==8) {
                 //adding a stage object
                 
                 if(temp_stage.num_nodes==0) {
-                        temp_stage.worldx=proj_class.ScreenXtoWorld(e.getX());
-                        temp_stage.worldy=proj_class.ScreenYtoWorld(e.getY());
-                        
+                    temp_stage.worldx=proj_class.ScreenXtoWorld(e.getX());
+                    temp_stage.worldy=proj_class.ScreenYtoWorld(e.getY());
+                    
                     temp_stage.add_node(0,0);
                     
                 } else {
                     
-                   temp_stage.add_node(proj_class.ScreenXtoWorld(e.getX())-temp_stage.worldx,proj_class.ScreenYtoWorld(e.getY())-temp_stage.worldy);
-                   
+                    temp_stage.add_node(proj_class.ScreenXtoWorld(e.getX())-temp_stage.worldx,proj_class.ScreenYtoWorld(e.getY())-temp_stage.worldy);
+                    
                     if(temp_stage.num_nodes>=15) {
                         proj_class.addStage(temp_stage);
                         
@@ -620,19 +643,19 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                         
                     }
                 }
+                //*****************************************************************
             } else if(proj_class.draw_mouse_state==9) {
-                
                 //adding a stage object
                 
                 if(temp_set.num_nodes==0) {
                     
-                        temp_set.worldx=proj_class.ScreenXtoWorld(e.getX());
-                        temp_set.worldy=proj_class.ScreenYtoWorld(e.getY());
+                    temp_set.worldx=proj_class.ScreenXtoWorld(e.getX());
+                    temp_set.worldy=proj_class.ScreenYtoWorld(e.getY());
                     
                     temp_set.add_node(0,0);
                     
                 } else {
-                        temp_set.add_node(proj_class.ScreenXtoWorld(e.getX())-temp_set.worldx,proj_class.ScreenYtoWorld(e.getY())-temp_set.worldy);
+                    temp_set.add_node(proj_class.ScreenXtoWorld(e.getX())-temp_set.worldx,proj_class.ScreenYtoWorld(e.getY())-temp_set.worldy);
                     
                     
                     if(temp_set.num_nodes>=15) {
@@ -645,8 +668,8 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     
                 }
                 
+                //***********************************************************
             } else if(proj_class.draw_mouse_state==4) {
-                
                 //edit nodes of house
                 //change this??
                 
@@ -662,6 +685,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     selected_node=-1;
                 }
                 
+                //*********************************************************
             } else if(proj_class.draw_mouse_state==5) {
                 //edit node of stage
                 //change this??
@@ -679,6 +703,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     selected_node=-1;
                 }
                 
+                //**************************************************************
             } else if(proj_class.draw_mouse_state==3) {
                 //edit nodes of bar
                 //change this??
@@ -697,6 +722,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 }
                 //proj_class.draw_mouse_state=0;
                 
+                //**************************************************************
             } else if(proj_class.draw_mouse_state==10) {
                 //edit nodes of set object
                 //change this??
@@ -712,6 +738,105 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     selected_node=-1;
                 }
             }
+            //*******************************************************************
+            else if(proj_class.draw_mouse_state==7){
+                //move an instrument
+                
+                
+                
+            }
+            ///**************************************************************
+            else if(proj_class.draw_mouse_state==11){
+                //move the stage
+                stage selected_stage=(stage)proj_class.stages.get_object(0);
+                
+                int old_stage_x;
+                old_stage_x=selected_stage.worldx;
+                
+                int old_stage_y;
+                old_stage_y=selected_stage.worldy;
+                
+                
+                int xdiff;
+                int ydiff;
+                
+                xdiff = old_stage_x-proj_class.ScreenXtoWorld(e.getX());
+                ydiff = old_stage_y-proj_class.ScreenYtoWorld(e.getY());
+                
+                //actually move the stage
+                proj_class.stages.get_object(0).worldx=proj_class.ScreenXtoWorld(e.getX());
+                proj_class.stages.get_object(0).worldy=proj_class.ScreenYtoWorld(e.getY());
+                
+                proj_class.draw_mouse_state=0;
+                
+                
+            }
+            //****************************************************************
+            else if(proj_class.draw_mouse_state==12){
+                //moving the house
+                house selected_house=(house)proj_class.houses.get_object(0);
+                
+                int old_x;
+                old_x=selected_house.worldx;
+                
+                int old_y;
+                old_y=selected_house.worldy;
+                
+                
+                int xdiff;
+                int ydiff;
+                
+                xdiff = old_x-proj_class.ScreenXtoWorld(e.getX());
+                ydiff = old_y-proj_class.ScreenYtoWorld(e.getY());
+                
+                //actually move the house
+                proj_class.houses.get_object(0).worldx=proj_class.ScreenXtoWorld(e.getX());
+                proj_class.houses.get_object(0).worldy=proj_class.ScreenYtoWorld(e.getY());
+                
+                proj_class.draw_mouse_state=0;
+                
+                
+            }
+            //*****************************************************************
+            else if(proj_class.draw_mouse_state==13){
+                //moving a set
+                setobject selected_set=(setobject)proj_class.sets.get_object(proj_class.selected_index);
+                
+                int old_x;
+                old_x=selected_set.worldx;
+                
+                int old_y;
+                old_y=selected_set.worldy;
+                
+                
+                
+                
+                
+                int xdiff;
+                int ydiff;
+                
+                xdiff = old_x-proj_class.ScreenXtoWorld(e.getX());
+                ydiff = old_y-proj_class.ScreenYtoWorld(e.getY());
+                
+                //actually move the house
+                proj_class.sets.get_object(proj_class.selected_index).worldx=proj_class.ScreenXtoWorld(e.getX());
+                proj_class.sets.get_object(proj_class.selected_index).worldy=proj_class.ScreenYtoWorld(e.getY());
+                
+                proj_class.draw_mouse_state=0;
+                
+                
+            }
+            //********************************************************************
+            else if(proj_class.draw_mouse_state==14){
+                //aim a light
+                
+                //first click set that as the point
+                //to reaim the light redo this function
+                ((instrument)proj_class.instruments.get_object(proj_class.selected_index)).aimx=proj_class.ScreenXtoWorld(e.getX());
+                ((instrument)proj_class.instruments.get_object(proj_class.selected_index)).aimy=proj_class.ScreenYtoWorld(e.getY());
+                proj_class.draw_mouse_state=0;
+            }
+            //******************************************
             repaint();
         }
     }
