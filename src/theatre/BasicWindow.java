@@ -181,6 +181,9 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
         }else if(source.getText()=="Open..."){
             //Addition Made By Greg Silverstein 3/3
             //Open Functionality
+            
+            load_XMLFILE= new xml_Reader();
+            
             file_Window = new JInternalFrame();
             file_Window.setLocation(0,0);
             file_Window.setBounds(0,0, 400,400);
@@ -208,8 +211,28 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
             }
             //End Addition For Load
         }else if(source.getText()=="Save.."){
-            //Revision By Greg Silverstein 3/3 For Save
-            save_XMLFILE.save_project(s_projPath, s_barPath);
+            //Revision By Greg Silverstein 3/3 For Save then by JoshZ 3/19/05
+            //Open Functionality
+            
+            save_XMLFILE = new xml_Writer();
+            
+            file_Window = new JInternalFrame();
+            file_Window.setLocation(0,0);
+            file_Window.setBounds(0,0, 400,400);
+            file_Window.setVisible(true);
+            m_fileChooser = new JFileChooser();
+            int retval = m_fileChooser.showOpenDialog(file_Window);
+            if (retval == JFileChooser.APPROVE_OPTION) {
+                //... The user selected a file, process it.
+                m_fileChooser.setVisible(true);
+                File file = m_fileChooser.getSelectedFile();
+                
+                s_barPath = file.getAbsolutePath();
+                s_projPath = file.getParent();
+                save_XMLFILE.save_project(s_projPath, s_barPath);
+            }
+            
+            
         }else if(source.getText()=="Quit"){
             System.exit(0);
         }
