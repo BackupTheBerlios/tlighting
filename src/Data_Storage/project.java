@@ -229,6 +229,7 @@ public class project{
                 for(int i=0; i<vertics;i++){
                     if((!checkonborder(aStage.getx(i), aStage.gety(i)))||(!checkverti(aStage.getx(i), aStage.gety(i)))||(!checkhorizon(aStage.getx(i), aStage.gety(i)))){
                         allset=false;
+                        i=vertics;
                     }
                 }
                 if(allset){
@@ -268,6 +269,7 @@ public class project{
                 for(int i=0; i<vertics;i++){
                     if((!checkonborder(aSet.getx(i), aSet.gety(i)))||(!checkverti(aSet.getx(i), aSet.gety(i)))||(!checkhorizon(aSet.getx(i), aSet.gety(i)))){
                         allset=false;
+                        i=vertics;
                     }
                 }
                 if(allset){
@@ -348,6 +350,7 @@ public class project{
                 for(int i=0; i<vertics;i++){
                     if((!checkonborder(aset.getx(i), aset.gety(i)))||(!checkverti(aset.getx(i), aset.gety(i)))||(!checkhorizon(aset.getx(i), aset.gety(i)))){
                         allset=false;
+                        i=vertics;
                     }
                 }
                 if(allset){
@@ -381,6 +384,7 @@ public class project{
                 for(int i=0; i<vertics;i++){
                     if((!checkonborder(astage.getx(i), astage.gety(i)))||(!checkverti(astage.getx(i), astage.gety(i)))||(!checkhorizon(astage.getx(i), astage.gety(i)))){
                         allset=false;
+                        i=vertics;
                     }
                 }
                 if(allset){
