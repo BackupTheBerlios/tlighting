@@ -19,6 +19,7 @@ public class house extends General_Object{
     
     /** Creates a new instance of house */
     public house() {
+        slopes=new double[30];
         name="NULL";
         description="NULL";
         height=0;
@@ -42,10 +43,20 @@ public class house extends General_Object{
     }
     
     public void setslopes(){
-        for(int i=0; i<this.vertices-1; i++){
-            this.slopes[i]=(this.y[i+1]-this.y[i])/(this.x[i+1]-this.x[i]);
+        if(vertices>0){
+            for(int i=0; i<this.vertices-1; i++){
+                if((this.x[i+1]-this.x[i])!=0){
+                    this.slopes[i]=(this.y[i+1]-this.y[i])/(this.x[i+1]-this.x[i]);
+                }else{
+                    this.slopes[i]=0;
+                }
+            }
+            if((this.x[0]-this.x[this.vertices-1])!=0){
+                this.slopes[this.vertices-1]=(this.y[0]-this.y[this.vertices-1])/(this.x[0]-this.x[this.vertices-1]);
+            }else{
+                this.slopes[vertices-1]=0;
+            }
         }
-        this.slopes[this.vertices-1]=(this.y[0]-this.y[this.vertices-1])/(this.x[0]-this.x[this.vertices-1]);
     }
     
     public double getslope(int index){
@@ -137,5 +148,9 @@ public class house extends General_Object{
         height=ahouse.getheight();
         uniqueid=ahouse.getid();
         ahouse.setslopes();
+    }
+    
+    public void setVertices(){
+        vertices=num_nodes;
     }
 }
