@@ -13,7 +13,7 @@ import Data_Storage.*;
 /**
  *
  * @author Greg Silverstein
- * edited by JoshZ 3/19/05
+ * edited by JoshZ 3/19/05 and again 3/20/05
  */
 //*****************************************************************************
 public class xml_Writer {
@@ -30,19 +30,25 @@ public class xml_Writer {
     }
     public void save_project(String inProjectPath,String inBarPath) {
         
+        //make sure the project class is not null is unlikely but can happen
         if(proj_class!=null){
+            //check if there is a house object
             if(proj_class.houses.get_num_objects()>0){
                 set_house(inProjectPath);
                 
+                //there is a house object so check if there are any bars
                 if(proj_class.bars.get_num_objects()>0){
                     set_bars(inProjectPath);
                 }
+                //check if there are any set pieces
                 if(proj_class.sets.get_num_objects()>0){
                     set_set(inProjectPath);
                 }
+                //check if there is a stage
                 if(proj_class.stages.get_num_objects()>0){
                     set_stage(inProjectPath);
                 }
+                //check if there are any instruments
                 if(proj_class.instruments.get_num_objects()>0){
                     set_instrument(inProjectPath);
                 }
@@ -53,49 +59,69 @@ public class xml_Writer {
         
     }
     
-    //individual load functions
+    //individual save functions
     
     //*****************************************************************************
     public void set_house(String projPath) {
-        File outputfile;
-        XMLWriter writer=null;
-        FileOutputStream out = null;
+        //variables to use to open a file and write xml to it
+        File outputfile; //file to open
+        XMLWriter writer=null; // xml writer
+        FileOutputStream out = null; // output stream to send to xml writer
         
+        //catch any exceptions with openeing the file
         try{
+            //open a house file
             outputfile = new File(projPath+"/house.xml");
+            //if it does not exist then create it
             outputfile.createNewFile();
+            //open the output stream
             out = new FileOutputStream(outputfile);
         }catch(Exception e){
             System.out.println("Exception opening file");
         }
         
+        //catch any exceptions with openeing the xml writer
         try{
+            //if the output stream did not open then can't open the xml writer
             if(out!=null){
+                //create a new xml writer
                 writer = new XMLWriter((OutputStream)out);
             }
         }catch(Exception e){
             System.out.println("exception opening writer");
         }
         
+        //root object to contain all other objects adn hold link to project id
+        XMLElement parent_obj=new XMLElement();
         
-        
+        //xml house object
         XMLElement house_obj=new XMLElement();
+        
+        //create the parent element
+        parent_obj.createElement("list_root");
+        //set the name that will appear in the file
+        parent_obj.setName("house_info");
+        //give it the proj id as an attribute so we can do some checkign when reading it back in
+        parent_obj.setAttribute("project_name","PROJ_ID");
+        
+        //create the house element
         house_obj.createElement("house_obj");
+        //set the name of the element to the hosue object
         house_obj.setName("house");
         
         //attributes for house name, overallx, overally, overallz, name, description, id, proj_id
-        
+        //set all the attributes that will show up in the house tag
         if(((house)proj_class.houses.get_object(0)).getname()!=null){
             house_obj.setAttribute("name",((house)proj_class.houses.get_object(0)).getname());
         }
         //if((((house)proj_class.houses.get_object(0)).worldx)!=null){
-            house_obj.setAttribute("overallx",String.valueOf(((house)proj_class.houses.get_object(0)).worldx));
+        house_obj.setAttribute("overallx",String.valueOf(((house)proj_class.houses.get_object(0)).worldx));
         //}
         //if((((house)proj_class.houses.get_object(0)).worldy)!=null){
-            house_obj.setAttribute("overally",String.valueOf(((house)proj_class.houses.get_object(0)).worldy));
+        house_obj.setAttribute("overally",String.valueOf(((house)proj_class.houses.get_object(0)).worldy));
         //}
         //if(((house)proj_class.houses.get_object(0)).getheight()){
-            house_obj.setAttribute("overallz",String.valueOf(((house)proj_class.houses.get_object(0)).getheight()));
+        house_obj.setAttribute("overallz",String.valueOf(((house)proj_class.houses.get_object(0)).getheight()));
         //}
         if(((house)proj_class.houses.get_object(0)).getdescription()!=null){
             house_obj.setAttribute("description",((house)proj_class.houses.get_object(0)).getdescription());
@@ -104,20 +130,42 @@ public class xml_Writer {
             house_obj.setAttribute("id",((house)proj_class.houses.get_object(0)).getid());
         }
         //if(){
-            house_obj.setAttribute("proj_id","proj_id_0");
+        house_obj.setAttribute("proj_id","proj_id_0");
         //}
         
-        house_obj.setContent("HOUSE EDGES"); //nodes should go here
+        //now have to create children elements that represent the house points
         
+        int i;
+        int num_nodes=((house)proj_class.houses.get_object(0)).num_nodes;
+        int val;
+        for(i=0;i<num_nodes;i++){
+            XMLElement node_obj=new XMLElement();
+            node_obj.setName("node");
+            
+            val=((house)proj_class.houses.get_object(0)).getx(i);
+            node_obj.setAttribute("x",String.valueOf(val));
+            
+            val=((house)proj_class.houses.get_object(0)).gety(i);
+            node_obj.setAttribute("y",String.valueOf(val));
+            
+            val=((house)proj_class.houses.get_object(0)).getheight();
+            node_obj.setAttribute("z",String.valueOf(val));
+            house_obj.addChild(node_obj);
+        }
+        
+        //add the house element to the parent object
+        parent_obj.addChild(house_obj);
+        
+        //catch any errors writing xml to the file
         try{
+            //if the writer is invalid then can't write to it you moron
             if(writer!=null){
-            writer.write(house_obj);
+                //write the xml starting with the parent object and all children recursively from it
+                writer.write(parent_obj,true);
             }
         }catch(Exception e){
             System.out.println("Error exporting house object ot xml");
         }
-        
-        //manually write the xml from the file outputstream
         
     }
     
@@ -143,7 +191,14 @@ public class xml_Writer {
             System.out.println("exception opening writer");
         }
         
+        XMLElement parent_obj=new XMLElement();
+        parent_obj.createElement("root_List");
+        parent_obj.setName("bar_list");
+        parent_obj.setAttribute("project_name","PROJ_ID");
+        
         int i;
+        //have to create a new tag element of each bar and add it to the parent object as a child
+        //parent object will have multiple children. 1 for each bar
         for(i=0;i<proj_class.bars.get_num_objects();i++){
             XMLElement bar_obj=new XMLElement();
             bar_obj.createElement("bar_obj");
@@ -154,40 +209,51 @@ public class xml_Writer {
                 bar_obj.setAttribute("id",((bar)proj_class.bars.get_object(i)).getID());
             }
             //if(){
-                bar_obj.setAttribute("description","BAR DESCRIPTION");
+            bar_obj.setAttribute("description","BAR DESCRIPTION");
             //}
             //if(){
-                bar_obj.setAttribute("x1",String.valueOf(((bar)proj_class.bars.get_object(i)).getX(0)));
+            bar_obj.setAttribute("x1",String.valueOf(((bar)proj_class.bars.get_object(i)).getX(0)));
             //}
             //if(){
-               bar_obj.setAttribute("x2",String.valueOf(((bar)proj_class.bars.get_object(i)).getX(1)));
-            //}        
-            //if(){
-                bar_obj.setAttribute("y1",String.valueOf(((bar)proj_class.bars.get_object(i)).getY(0)));
+            bar_obj.setAttribute("x2",String.valueOf(((bar)proj_class.bars.get_object(i)).getX(1)));
             //}
             //if(){
-                bar_obj.setAttribute("y2",String.valueOf(((bar)proj_class.bars.get_object(i)).getY(1)));
+            bar_obj.setAttribute("y1",String.valueOf(((bar)proj_class.bars.get_object(i)).getY(0)));
             //}
             //if(){
-               bar_obj.setAttribute("z1",String.valueOf(((bar)proj_class.bars.get_object(i)).getZ(0)));
+            bar_obj.setAttribute("y2",String.valueOf(((bar)proj_class.bars.get_object(i)).getY(1)));
             //}
             //if(){
-                bar_obj.setAttribute("z2",String.valueOf(((bar)proj_class.bars.get_object(i)).getZ(1)));
+            bar_obj.setAttribute("z1",String.valueOf(((bar)proj_class.bars.get_object(i)).getZ(0)));
+            //}
+            //if(){
+            bar_obj.setAttribute("z2",String.valueOf(((bar)proj_class.bars.get_object(i)).getZ(1)));
             //}
             if(((house)proj_class.houses.get_object(0)).getid()!=null){
                 bar_obj.setAttribute("house_id",((house)proj_class.houses.get_object(0)).getid());
             }
-            
-            bar_obj.setContent("DIMMERS"); //nodes should go here
-            
-            try{
-                if(writer!=null){
-                    writer.write(bar_obj);
-                }
-            }catch(Exception e){
-                System.out.println("Error exporting house object ot xml");
+            //need to do this add a list of dimmers in as child elments to the bar
+            int i2;
+            int num_dim=((bar)proj_class.bars.get_object(i)).getNum_dimmers();
+            int val;
+            for(i2=0;i2<num_dim;i2++){
+                XMLElement node_obj=new XMLElement();
+                node_obj.setName("dimmer");
+                
+                val=((bar)proj_class.bars.get_object(i)).getDimmer(i2);
+                node_obj.setAttribute("number",String.valueOf(val));
+                bar_obj.addChild(node_obj);
             }
+            parent_obj.addChild(bar_obj);
         }
+        try{
+            if(writer!=null){
+                writer.write(parent_obj);
+            }
+        }catch(Exception e){
+            System.out.println("Error exporting bar object ot xml");
+        }
+        
     }
     
     //*****************************************************************************
@@ -212,6 +278,11 @@ public class xml_Writer {
             System.out.println("exception opening writer");
         }
         
+        //write the xml header
+        XMLElement parent_obj=new XMLElement();
+        parent_obj.createElement("root_List");
+        parent_obj.setName("set_list");
+        parent_obj.setAttribute("project_name","PROJ_ID");
         int i;
         for(i=0;i<proj_class.sets.get_num_objects();i++){
             XMLElement set_obj=new XMLElement();
@@ -228,16 +299,36 @@ public class xml_Writer {
             set_obj.setAttribute("y",String.valueOf(((setobject)proj_class.sets.get_object(i)).worldy));
             set_obj.setAttribute("z",String.valueOf(((setobject)proj_class.sets.get_object(i)).getsize()));
             
-            set_obj.setContent("SET EDGES"); //nodes should go here
-            
-            try{
-                if(writer!=null){
-                writer.write(set_obj);
-                }
-            }catch(Exception e){
-                System.out.println("Error exporting house object ot xml");
+            int i2;
+            int num_nodes=((setobject)proj_class.sets.get_object(i)).num_nodes;
+            int val;
+            for(i2=0;i2<num_nodes;i2++){
+                XMLElement node_obj=new XMLElement();
+                node_obj.setName("node");
+                
+                val=((setobject)proj_class.sets.get_object(i)).getx(i2);
+                node_obj.setAttribute("x",String.valueOf(val));
+                
+                val=((setobject)proj_class.sets.get_object(i)).gety(i2);
+                node_obj.setAttribute("y",String.valueOf(val));
+                
+                val=((setobject)proj_class.sets.get_object(i)).getsize();
+                node_obj.setAttribute("z",String.valueOf(val));
+                set_obj.addChild(node_obj);
             }
+            
+            parent_obj.addChild(set_obj);
         }
+        
+        
+        try{
+            if(writer!=null){
+                writer.write(parent_obj);
+            }
+        }catch(Exception e){
+            System.out.println("Error exporting set object ot xml");
+        }
+        
     }
     
     //*****************************************************************************
@@ -247,7 +338,7 @@ public class xml_Writer {
         FileOutputStream out = null;
         
         try{
-            outputfile = new File(projPath+"/bars.xml");
+            outputfile = new File(projPath+"/stage.xml");
             outputfile.createNewFile();
             out = new FileOutputStream(outputfile);
         }catch(Exception e){
@@ -262,28 +353,59 @@ public class xml_Writer {
             System.out.println("exception opening writer");
         }
         
+        //write the xml header
         
         XMLElement stage_obj=new XMLElement();
+        
+        XMLElement parent_obj=new XMLElement();
+        parent_obj.createElement("list_root");
+        parent_obj.setName("stage_info");
+        parent_obj.setAttribute("project_name","PROJ_ID");
+        
         stage_obj.createElement("stage_obj");
         stage_obj.setName("stage");
         
-        //attributes for stage name, id, house_id, x, y, z
         
-        stage_obj.setAttribute("description",((stage)proj_class.stages.get_object(0)).getdescription());
-        stage_obj.setAttribute("notes",((stage)proj_class.stages.get_object(0)).getnotes());
-        stage_obj.setAttribute("house_id",((house)proj_class.houses.get_object(0)).getid());
+        //attributes for stage name, id, house_id, x, y, z
+        if(((stage)proj_class.stages.get_object(0)).getdescription()!=null){
+            stage_obj.setAttribute("description",((stage)proj_class.stages.get_object(0)).getdescription());
+        }
+        if(((stage)proj_class.stages.get_object(0)).getnotes()!=null){
+            stage_obj.setAttribute("notes",((stage)proj_class.stages.get_object(0)).getnotes());
+        }
+        if(((house)proj_class.houses.get_object(0)).getid()!=null){
+            stage_obj.setAttribute("house_id",((house)proj_class.houses.get_object(0)).getid());
+        }
         stage_obj.setAttribute("x",String.valueOf(((stage)proj_class.stages.get_object(0)).worldx));
         stage_obj.setAttribute("y",String.valueOf(((stage)proj_class.stages.get_object(0)).worldy));
         stage_obj.setAttribute("z",String.valueOf(((stage)proj_class.stages.get_object(0)).getheight()));
         
-        stage_obj.setContent("STAGE EDGES"); //nodes should go here
+        int i;
+        int num_nodes=((stage)proj_class.stages.get_object(0)).num_nodes;
+        int val;
+        for(i=0;i<num_nodes;i++){
+            XMLElement node_obj=new XMLElement();
+            node_obj.setName("node");
+            
+            val=((stage)proj_class.stages.get_object(0)).getx(i);
+            node_obj.setAttribute("x",String.valueOf(val));
+            
+            val=((stage)proj_class.stages.get_object(0)).gety(i);
+            node_obj.setAttribute("y",String.valueOf(val));
+            
+            val=((stage)proj_class.stages.get_object(0)).getheight();
+            node_obj.setAttribute("z",String.valueOf(val));
+            stage_obj.addChild(node_obj);
+        }
+        
+        parent_obj.addChild(stage_obj);
         
         try{
             if(writer!=null){
-            writer.write(stage_obj);
+                writer.write(parent_obj,true);
             }
         }catch(Exception e){
-            System.out.println("Error exporting house object ot xml");
+            System.out.println("Error exporting stage object ot xml");
         }
         
     }
@@ -295,7 +417,7 @@ public class xml_Writer {
         FileOutputStream out = null;
         
         try{
-            outputfile = new File(projPath+"/bars.xml");
+            outputfile = new File(projPath+"/inventory.xml");
             outputfile.createNewFile();
             out = new FileOutputStream(outputfile);
         }catch(Exception e){
@@ -310,26 +432,30 @@ public class xml_Writer {
             System.out.println("exception opening writer");
         }
         
+        //write the xml header
+        XMLElement parent_obj=new XMLElement();
+        parent_obj.createElement("root_List");
+        parent_obj.setName("inventory_list");
+        parent_obj.setAttribute("project_name","PROJ_ID");
         int i;
         for(i=0;i<proj_class.bars.get_num_objects();i++){
-            XMLElement bar_obj=new XMLElement();
-            bar_obj.createElement("bar_obj");
-            bar_obj.setName("bar");
+            XMLElement inv_obj=new XMLElement();
+            inv_obj.createElement("inv_obj");
+            inv_obj.setName("inventory");
             
-            //attributes for bar
+            inv_obj.setAttribute("id",((bar)proj_class.bars.get_object(i)).getID());
             
-            bar_obj.setAttribute("id",((bar)proj_class.bars.get_object(i)).getID());
-            
-            bar_obj.setContent("HOUSE CONTENT"); //nodes should go here
-            
-            try{
-                if(writer!=null){
-                    writer.write(bar_obj);
-                }
-            }catch(Exception e){
-                System.out.println("Error exporting house object ot xml");
-            }
+            inv_obj.setContent("INV CONTENT"); //nodes should go here
+            parent_obj.addChild(inv_obj);
         }
+        try{
+            if(writer!=null){
+                writer.write(parent_obj);
+            }
+        }catch(Exception e){
+            System.out.println("Error exporting inventory object ot xml");
+        }
+        
     }
     
     //*****************************************************************************
@@ -339,7 +465,7 @@ public class xml_Writer {
         FileOutputStream out = null;
         
         try{
-            outputfile = new File(projPath+"/bars.xml");
+            outputfile = new File(projPath+"/known_types.xml");
             outputfile.createNewFile();
             out = new FileOutputStream(outputfile);
         }catch(Exception e){
@@ -354,22 +480,29 @@ public class xml_Writer {
             System.out.println("exception opening writer");
         }
         
+        XMLElement parent_obj=new XMLElement();
+        parent_obj.createElement("root_List");
+        parent_obj.setName("type_list");
+        parent_obj.setAttribute("project_name","PROJ_ID");
+        
         int i;
         for(i=0;i<proj_class.bars.get_num_objects();i++){
-            XMLElement bar_obj=new XMLElement();
-            bar_obj.createElement("bar_obj");
-            bar_obj.setName("bar");
+            XMLElement type_obj=new XMLElement();
+            type_obj.createElement("bar_obj");
+            type_obj.setName("bar");
             
             //attributes for bar
             
-            bar_obj.setAttribute("id",((bar)proj_class.bars.get_object(i)).getID());
+            type_obj.setAttribute("id",((bar)proj_class.bars.get_object(i)).getID());
             
-            bar_obj.setContent("HOUSE CONTENT"); //nodes should go here
+            type_obj.setContent("HOUSE CONTENT"); //nodes should go here
+            
+            parent_obj.addChild(type_obj);
             
             try{
-                writer.write(bar_obj);
+                writer.write(parent_obj,true);
             }catch(Exception e){
-                System.out.println("Error exporting house object ot xml");
+                System.out.println("Error exporting types to xml");
             }
         }
     }
@@ -379,6 +512,7 @@ public class xml_Writer {
         File outputfile;
         XMLWriter writer=null;
         FileOutputStream out = null;
+        
         
         try{
             outputfile = new File(projPath+"/instruments.xml");
@@ -396,10 +530,15 @@ public class xml_Writer {
             System.out.println("exception opening writer");
         }
         
+        XMLElement parent_obj=new XMLElement();
+        parent_obj.createElement("root_List");
+        parent_obj.setName("instrument_list");
+        parent_obj.setAttribute("project_name","PROJ_ID");
+        
         int i;
-        for(i=0;i<proj_class.bars.get_num_objects();i++){
+        for(i=0;i<proj_class.instruments.get_num_objects();i++){
             XMLElement ins_obj=new XMLElement();
-            ins_obj.createElement("bar_obj");
+            ins_obj.createElement("instrument_obj");
             ins_obj.setName("instrument");
             
             //attributes for instrument name, description, bar_id, x, y, z, inventory_id, dimmer_id, type
@@ -414,15 +553,14 @@ public class xml_Writer {
             ins_obj.setAttribute("inventory_id",String.valueOf(((instrument)proj_class.instruments.get_object(i)).getInventoryID()));
             ins_obj.setAttribute("dimmer_id",String.valueOf(((instrument)proj_class.instruments.get_object(i)).getDimmerId()));
             
-            ins_obj.setContent("Instrument Contents"); //nodes should go here
-            
-            try{
-                if(writer!=null){
-                    writer.write(ins_obj);
-                }
-            }catch(Exception e){
-                System.out.println("Error exporting house object ot xml");
+            parent_obj.addChild(ins_obj);
+        }
+        try{
+            if(writer!=null){
+                writer.write(parent_obj,true);
             }
+        }catch(Exception e){
+            System.out.println("Error exporting instruments object ot xml");
         }
     }
 }
