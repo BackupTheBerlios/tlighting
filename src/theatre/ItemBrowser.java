@@ -6,6 +6,8 @@
 
 package theatre;
 
+import Data_Storage.*;
+
 /**
  *
  * @author  Administrator
@@ -20,7 +22,24 @@ public class ItemBrowser extends Window {
         this.setBounds(BasicWindow.iScreenWidth-(BasicWindow.iScreenWidth/5), 0, BasicWindow.iScreenWidth/5-5, BasicWindow.iScreenHeight/2-20);
         this.setVisible(true);
     }
-    
+    public void displayInfo(Object o)
+    {
+        if (o instanceof bar)
+        {
+            bar b = (bar)o;
+            jTable1.clearSelection();
+            // bar ID
+            b.getID();
+        }
+        else if (o instanceof instrument)
+        {
+            instrument i = (instrument)o;
+        }
+        else if (o instanceof setobject)
+        {
+            setobject s = (setobject)o;
+        }
+    }
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
