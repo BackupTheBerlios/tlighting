@@ -18,35 +18,43 @@ import Data_Storage.*;
 
 public class project{
     
-    
+    //name of project
     public String open_project_name;
+    //indicates if the project is valid
     public boolean project_open;
     
+    //indicates if there is a valid house created
     public boolean houseadded;
+    //indicates if a stage has been added so you can't add a second one
     public boolean stageadded;
     
     //variables to help in drawing the objects inthe draw screen
     public int selected_type;
-    //types are defined as follows 0=house 1=stage 2=bar 3=instrument 4=set
+    //types are defined as follows 0=house 1=stage 2=bar 3=instrument 4=set 5=inventory
     public int selected_index;
     //keep track of the selected node of the selected item
     public int selected_node;
     
+    //shows how much the window is zoomed in
     public int zoom_factor;
+    //shows how much the screen is scrolled
     public int scroll_x;
+    //shows how much the screen is scrolled
     public int scroll_y;
+    //indicates the state the mouse is in
     public int draw_mouse_state;
    //draw mouse stages are defiend as 0=normal 1=adding a bar 2=adding an instruemnt 3= editing a bar 
     //4=editing a house 5=editing a stage 6=moving a bar 7= moving an instrument 8=adding a stage 
     //9=adding a set peice 10=editing a set piece
     
+    //container objects with drawing functionality for objects
     public Object_Drawer stages;
     public Object_Drawer sets;
     public Object_Drawer bars;
     public Object_Drawer instruments;
     public Object_Drawer houses;
     
-    
+    //istance of the explorer pane
     public Object oExplorer;
    // public Object_Drawer inventory; //these are not drawn objects so should not be Object Drawer types
     //public Object_Drawer wiring_sheet;
@@ -100,6 +108,7 @@ public class project{
         houseadded=false;
     }
     
+    //function that is called to commit a bar being added to the list of bars
     public boolean addBar(bar abar){
         int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
@@ -128,6 +137,7 @@ public class project{
         
     }
    
+    //function called to commit adding a house to the project
     public boolean addHouse(int len, int width, String name){
         //this.resetproject();
         house newHouse= new house();
@@ -147,6 +157,7 @@ public class project{
         
     }
     
+    //function called to commit adding an instrument to a bar
     public boolean addInstrument(instrument aInstrument){
         int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
@@ -171,6 +182,7 @@ public class project{
         }
     }
     
+    //function called to add a tage to the project
     public boolean addStage(stage aStage){
         int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
@@ -197,6 +209,7 @@ public class project{
         }
     }
     
+    //function called to commit adding a set object to the project
     public boolean addSet(setobject aSet){
         int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
@@ -222,6 +235,7 @@ public class project{
         }
     }
     
+    //function called when a bar is being moved or edited
     public boolean SetBar(bar abar,int index){
         int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
@@ -242,6 +256,7 @@ public class project{
         }
     }
     
+    //function called when a house is being edited by nodes
     public boolean SetHouse(house ahouse,int index){
         if(index<houses.get_num_objects()){
             ((house)houses.get_object(index)).copyHouse(ahouse);            
@@ -249,6 +264,8 @@ public class project{
         }
         return false;
     }
+    
+    //function called when a set object is edited by nodes
     public boolean SetSetObject(setobject aset,int index){
         int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
@@ -269,6 +286,7 @@ public class project{
         }
     }
     
+    //function called when a stage is edited by nodes
     public boolean SetStage(stage astage,int index){
         int current=houses.get_num_objects()-1;
         house curhouse = (house)houses.get_object(current);
@@ -289,11 +307,14 @@ public class project{
         }
     }
     
+    //function to force the drawing to redraw itself with all valid information
     public void forceRepaint(){
         TransPanel tp=(TransPanel)TransPanel.oClass;
         tp.repaint();
         
     }
+    
+    //checking and setting visibility of objects
     public boolean isStageVisible() { return bStageVisible;}
     public void setStageVisible(boolean b) { bStageVisible = b; }
     
@@ -308,16 +329,16 @@ public class project{
 
     //conversion fucntions to translate world and screen coordinates to each other
     public int WorldXtoScreen(int x){    
-        return ((x/zoom_factor)+scroll_x);
+        return ((x-scroll_x)*zoom_factor);
     }
     public int WorldYtoScreen(int y){
-        return ((y/zoom_factor)+scroll_y);
+        return ((y-scroll_y)*zoom_factor);
     }
     public int ScreenXtoWorld(int x){
-        return ((x*zoom_factor)-scroll_x);
+        return ((x/zoom_factor)+scroll_x);
     } 
     public int ScreenYtoWorld(int y){
-        return ((y*zoom_factor)-scroll_y);
+        return ((y/zoom_factor)+scroll_y);
     }
     
     
