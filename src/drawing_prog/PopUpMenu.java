@@ -95,6 +95,42 @@ public class PopUpMenu extends JPopupMenu implements ActionListener
             cancel.addActionListener(this);
             add(cancel);
         }
+        else if(proj_class.draw_mouse_state==3){
+            confirm=new JMenuItem("Commit");
+            confirm.addActionListener(this);
+            add(confirm);
+            
+            cancel=new JMenuItem("Cancel");
+            cancel.addActionListener(this);
+            add(cancel);
+        }
+        else if(proj_class.draw_mouse_state==4){
+            confirm=new JMenuItem("Commit");
+            confirm.addActionListener(this);
+            add(confirm);
+            
+            cancel=new JMenuItem("Cancel");
+            cancel.addActionListener(this);
+            add(cancel);
+        }
+        else if(proj_class.draw_mouse_state==5){
+            confirm=new JMenuItem("Commit");
+            confirm.addActionListener(this);
+            add(confirm);
+            
+            cancel=new JMenuItem("Cancel");
+            cancel.addActionListener(this);
+            add(cancel);
+        }
+        else if(proj_class.draw_mouse_state==10){
+            confirm=new JMenuItem("Commit");
+            confirm.addActionListener(this);
+            add(confirm);
+            
+            cancel=new JMenuItem("Cancel");
+            cancel.addActionListener(this);
+            add(cancel);
+        }
         else
         {
             cancel=new JMenuItem("Cancel");
@@ -122,17 +158,23 @@ public class PopUpMenu extends JPopupMenu implements ActionListener
     	{
     	    System.out.println("editing the house");
     	    proj_class.draw_mouse_state =4;
-            
+            aScreen.temp_house=new house();
+            aScreen.temp_house.copyHouse((house)(proj_class.houses.get_object(proj_class.selected_index)));
     	}
     	else if (e.getSource() == edit_stage)
     	{
     	    System.out.println("editing the stage");
     	    proj_class.draw_mouse_state =5;
+            aScreen.temp_stage=new stage();
+            aScreen.temp_stage.copyStage((stage)(proj_class.stages.get_object(proj_class.selected_index)));
     	}
     	else if (e.getSource() == edit_bar)
     	{
     	    System.out.println("editing the bar");
     	    proj_class.draw_mouse_state =3;
+            aScreen.temp_bar=new bar();
+            aScreen.temp_bar.copyBar((bar)(proj_class.bars.get_object(proj_class.selected_index)));
+            
     	}
         else if(e.getSource()==add_bar)
         {
@@ -179,24 +221,49 @@ public class PopUpMenu extends JPopupMenu implements ActionListener
             aScreen.temp_set = new setobject();    
             
         }
+        else if (e.getSource() == edit_set)
+    	{
+    	    System.out.println("editing a set object");
+    	    proj_class.draw_mouse_state =10;
+            aScreen.temp_set=new setobject();
+            aScreen.temp_set.copySetObject((setobject)(proj_class.sets.get_object(proj_class.selected_index)));
+    	}
         else if(e.getSource() == zoom_in)
         {
-            
-            proj_class.zoom_factor+=1;
-            aScreen.horiz.setMaximum(600*proj_class.zoom_factor);
-            aScreen.vert.setMaximum(600*proj_class.zoom_factor);
-            aScreen.repaint();
+            if(proj_class.zoom_factor<100){
+                proj_class.zoom_factor+=1;
+                aScreen.horiz.setMaximum(600*proj_class.zoom_factor);
+                aScreen.vert.setMaximum(600*proj_class.zoom_factor);
+                aScreen.repaint();
+            }
         }
         else if(e.getSource() == zoom_out)
         {
-            proj_class.zoom_factor-=.5; 
-            aScreen.horiz.setMaximum(600*proj_class.zoom_factor);
-            aScreen.vert.setMaximum(600*proj_class.zoom_factor);
-            aScreen.repaint();
-        
+            if(proj_class.zoom_factor>1){
+                proj_class.zoom_factor-=.5; 
+                aScreen.horiz.setMaximum(600*proj_class.zoom_factor);
+                aScreen.vert.setMaximum(600*proj_class.zoom_factor);
+                aScreen.repaint();
+            }
         }
         else if(e.getSource() == cancel)
         {
+            if(aScreen.temp_bar!=null){
+                aScreen.temp_bar=null;
+            }
+            if(aScreen.temp_stage!=null){
+                aScreen.temp_stage=null;
+            }
+            if(aScreen.temp_instrument!=null){
+                aScreen.temp_instrument=null;
+            }
+            if(aScreen.temp_set!=null){
+                aScreen.temp_set=null;
+            }
+            if(aScreen.temp_house!=null){
+                aScreen.temp_house=null;
+            }
+            
             proj_class.draw_mouse_state=0;
         }
         else if(e.getSource()==confirm){
@@ -207,6 +274,27 @@ public class PopUpMenu extends JPopupMenu implements ActionListener
                 proj_class.draw_mouse_state=0;
             }else if(proj_class.draw_mouse_state==9){
                 proj_class.addSet(aScreen.temp_set);
+                aScreen.temp_set=null;
+                proj_class.draw_mouse_state=0;
+            }else if(proj_class.draw_mouse_state==3){
+                //editing a bar
+                proj_class.SetBar(aScreen.temp_bar,proj_class.selected_index); 
+                aScreen.temp_bar=null;
+                proj_class.draw_mouse_state=0;
+            
+            }else if(proj_class.draw_mouse_state==4){
+                //editing a house
+                proj_class.SetHouse(aScreen.temp_house,proj_class.selected_index);  
+                aScreen.temp_house=null; 
+                proj_class.draw_mouse_state=0;
+            }else if(proj_class.draw_mouse_state==5){
+                //editing a stage
+                proj_class.SetStage(aScreen.temp_stage,proj_class.selected_index); 
+                aScreen.temp_stage=null;
+                proj_class.draw_mouse_state=0;
+            }else if(proj_class.draw_mouse_state==10){
+                //editing a set object
+                proj_class.SetSetObject(aScreen.temp_set,proj_class.selected_index); 
                 aScreen.temp_set=null;
                 proj_class.draw_mouse_state=0;
             }
