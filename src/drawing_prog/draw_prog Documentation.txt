@@ -1,0 +1,118 @@
+Created: 1-14-05
+By Joshua Zawislak
+Last Modified: 1-30-05
+
+
+
+
+Class General_Object:
+Properties:
+public int worldx;		- x position in the world for the first node
+public int worldy;		- y posiiton in the world for the first node
+public int x[]; 		- list of x positions for nodes in reference to world variables
+public int y[]; 		- list of y positions for nodes in reference to world variables
+public int num_nodes;		- list the amoutn of nodes
+public int index;		- lists the index of an object if grouped
+public boolean grouped;		- toggled value to see if an object is included in a group
+public int color_index;		- index to what color the object should be
+
+private Vector colors;		- color palette
+private int topleftx;		- value to hold a quick reference to objects area in reference to world variables
+private int toplefty;		- value to hold a quick reference to objects area in reference to world variables
+private int bottomrightx;	- value to hold a quick reference to objects area in reference to world variables
+private int bottomrighty;	- value to hold a quick reference to objects area in reference to world variables
+private int linestyle;
+
+Functions:
+public General_Object() 	- Default Constructor
+public General_Object(int wx, int wy, int[] xs, int[] ys, int n,int in, boolean grp) - constructor with parameters
+public boolean draw(Graphics2D screen) - draw the object to a given screen
+public boolean draw(Graphics2D screen,double scale) - draw the object to a given screen at a set scale
+
+
+
+
+imports:
+java.lang.Integer;
+java.awt.*;
+java.awt.event.*;
+java.awt.font.*;
+java.awt.geom.*;
+java.awt.image.*;
+java.awt.event.ItemListener;
+java.awt.event.ItemEvent;
+java.awt.event.ActionListener;
+java.awt.event.ActionEvent;
+javax.swing.*;
+java.util.*;
+
+
+Class Object_Drawer:
+Properties:
+ private Graphics2D global_screen;    - screen object that will be 
+drawn to
+     Vector object_list;      - list of objects that can be drawn
+     private int num_objects;     - number of objects in the list
+     private boolean screen_set;     - keeps track if there is a screen 
+to draw to
+
+Functions:
+public Object_Drawer()       -default constructor
+public void set_screen(Graphics2D screen)    - set the screen to draw to
+public boolean is_screen_set()      - checks if the screen is set
+public int get_num_objects()      - returns the amount of objects in 
+list
+public int add_object(General_Object obj)    - adds an object to the 
+list
+(Not implemented)public boolean remove_object(int index)  - removes an 
+object from the list by position
+public boolean draw_general_object(General_Object obj)   - general 
+drawing function that takes an object
+public boolean draw_random_object(int xlist[] ,int ylist[],int num) - 
+general drawing function that takes raw data
+(Not implemented)public boolean draw_object(int index)   - draws an 
+object in the list by index
+(Not implemented)public boolean draw_objet(int index, int scale) - 
+draws a scaled object in the list by index 
+(Not implemented)public boolean draw_object(int index, int xoffset, int 
+yoffset) - draws an object in the list by index offset
+(Not implemented)public boolean draw_object(int index, int scale, xint 
+offset, int yoffset) - draws an object in the list by index scaled and 
+offset
+(Not implemented)public boolean draw_list()    - draws all the items in 
+the list
+(Not implemented)public boolean draw_list(int scale)   - draws all the 
+items in the list scaled
+(Not implemented)public boolean draw_list(int xoffset, int yoffset) - 
+draws all the items in the list offset
+(Not implemented)public boolean draw_list(int scale, xint offset, int 
+yoffset) - draws all the items in the list scaled and offset
+(Not implemented)public boolean draw_list(int topx, int topy, int 
+bottomx, int bottomy) - draws all the items in the list in a given area
+(Not implemented)public boolean draw_list(int topx, int topy, int 
+bottomx, int bottomy, int scale) - draws all the items in the list ina 
+given area then scaled
+(Not implemented)public boolean draw_list(int topx, int topy, int 
+bottomx, int bottomy, int offsetx, int offsety) - draws all the items 
+in the list in a given area then offset
+(Not implemented)public boolean draw_list(int topx, int topy, int 
+bottomx, int bottomy, int scale, int offsetx, int offsety) - draws all 
+the items in a given area then scaled and offset
+(Not implemented)public Vector get_objects_in_area(int startx,int 
+starty, int endx, int endy) - returns a vector off all objects within 
+an area
+
+
+imports:
+java.lang.Integer;
+java.awt.*;
+java.awt.event.*;
+java.awt.font.*;
+java.awt.geom.*;
+java.awt.image.*;
+java.awt.event.ItemListener;
+java.awt.event.ItemEvent;
+java.awt.event.ActionListener;
+java.awt.event.ActionEvent;
+javax.swing.*;
+java.util.*;
