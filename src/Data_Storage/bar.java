@@ -112,7 +112,7 @@ public class bar extends General_Object {
     {
         if(num > 1024)
         {
-            System.out.println("ERROR: The entered number exceeds the maximum dimmer size of 200. Please change it.\n");
+            System.out.println("ERROR: The entered number exceeds the maximum dimmer size of 1024. Please change it.\n");
         }
         else
         {
