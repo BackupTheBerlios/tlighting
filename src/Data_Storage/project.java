@@ -28,11 +28,14 @@ public class project{
     public int selected_type;
     //types are defined as follows 0=house 1=stage 2=bar 3=instrument 4=set
     public int selected_index;
+    //keep track of the selected node of the selected item
+    public int selected_node;
+    
     public int zoom_factor;
     public int draw_mouse_state;
    //draw mouse stages are defiend as 0=normal 1=adding a bar 2=adding an instruemnt 3= editing a bar 
     //4=editing a house 5=editing a stage 6=moving a bar 7= moving an instrument 8=adding a stage 
-    //9=adding a set peice
+    //9=adding a set peice 10=editing a set piece
     
     public Object_Drawer stages;
     public Object_Drawer sets;

@@ -121,17 +121,18 @@ public class PopUpMenu extends JPopupMenu implements ActionListener
     	if (e.getSource() == edit_house)
     	{
     	    System.out.println("editing the house");
-    	    //useRightButton.display.setText("Hello!");
+    	    proj_class.draw_mouse_state =4;
+            
     	}
     	else if (e.getSource() == edit_stage)
     	{
     	    System.out.println("editing the stage");
-    	    //useRightButton.display.setText("Hello! Hello!");
+    	    proj_class.draw_mouse_state =5;
     	}
     	else if (e.getSource() == edit_bar)
     	{
     	    System.out.println("editing the bar");
-    	    //useRightButton.display.setText("Bye Bye!");
+    	    proj_class.draw_mouse_state =3;
     	}
         else if(e.getSource()==add_bar)
         {

@@ -485,8 +485,6 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
 
                 int bary2=proj_class.bars.get_object(temp_instrument.Associated_barID).y[1]+proj_class.bars.get_object(temp_instrument.Associated_barID).worldy;
 
-                
-
                 //swap the points to make the math easier because assume point 1 is to the right
 
                 if(barx1>barx2){
@@ -499,68 +497,42 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
 
                     barx2=temp_int;
 
-                    
-
                     temp_int=bary1;
 
                     bary1=bary2;
 
                     bary2=temp_int;
 
-                
-
                 }
-
-                
 
                 if((pot_x>barx1)&&(pot_x<barx2)){
 
                     //the x is valid find the y value for it
-
                     if(barx1-barx2!=0){
 
                         //to find slope y - y1 = m (x - x1)  or m=(y-y1)/(x-x1)
 
                         //double slope = (bary1-bary2)/(barx1-barx2);   
-
-                        
-
                         //to find y with an x use equation y=m(x-x1)+y1
-
                         //pot_y=(int)(slope*(double)(barx1-barx2)+bary2);
-
-                    		
-
                         double slope = (double)(bary1-bary2)/ (double)(barx1-barx2);
 
                         pot_y=(int)(slope*((double)pot_x-(double)barx1)+(double)bary1);
 
                     }
-
-                                
-
                 }
-
-                
 
                 if(pot_y>=0){
 
                     //found a y so place it
-
                     temp_instrument.worldx=pot_x;
-
                     temp_instrument.worldy=pot_y;
 
                     proj_class.instruments.add_object(temp_instrument);
-
                     proj_class.draw_mouse_state=0;
-
                     proj_class.selected_type=3;
-
                     proj_class.selected_index=temp_instrument.index;
-
                     temp_instrument=null;
-
                 }
 
                 
@@ -589,8 +561,6 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
 
                 int ydiff=old_bar_y-e.getY();
 
-                
-
                 for(int iter=0;iter<proj_class.instruments.get_num_objects();iter++){
 
                     if(((instrument)proj_class.instruments.get_object(iter)).getBarID()==proj_class.selected_index){
@@ -602,20 +572,10 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     }
 
                 }
-
-                
-
                 //actually move the bar
 
                 proj_class.bars.get_object(proj_class.selected_index).worldx=e.getX();
-
                 proj_class.bars.get_object(proj_class.selected_index).worldy=e.getY();
-
-                
-
-                
-
-                
 
                 proj_class.draw_mouse_state=0;
 
@@ -630,60 +590,50 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
 
                     temp_stage.add_node(0,0);
 
-                    
-
                 }else{
 
                     temp_stage.add_node(e.getX()-temp_stage.worldx,e.getY()-temp_stage.worldy);
 
-                
-
                     if(temp_stage.num_nodes>=15){
 
                         proj_class.addStage(temp_stage);
-                        
-
                         proj_class.draw_mouse_state=0;
-
                         temp_stage=null;
-
                     }
 
                 }
                 
-            }
-             else if(proj_class.draw_mouse_state==9){
+            }else if(proj_class.draw_mouse_state==9){
                 //adding a stage object
                 if(temp_set.num_nodes==0){
-
                     temp_set.worldx=e.getX();
-
                     temp_set.worldy=e.getY();
-
                     temp_set.add_node(0,0);
-
-                    
 
                 }else{
 
                     temp_set.add_node(e.getX()-temp_set.worldx,e.getY()-temp_set.worldy);
-
-                
-
                     if(temp_set.num_nodes>=15){
-
                         proj_class.addSet(temp_set);
-                        
-
                         proj_class.draw_mouse_state=0;
-
                         temp_set=null;
-
                     }
-
                 }
-                
+            }else if(proj_class.draw_mouse_state==4){
+             //edit nodes of house   
+            
+                proj_class.draw_mouse_state=0;
+            }else if(proj_class.draw_mouse_state==5){
+             //edit node of stage   
+                proj_class.draw_mouse_state=0;
+            }else if(proj_class.draw_mouse_state==3){
+             //edit nodes of bar   
+                proj_class.draw_mouse_state=0;
+            }else if(proj_class.draw_mouse_state==10){
+             //edit nodes of set object   
+                proj_class.draw_mouse_state=0;
             }
+                
 
             repaint();
 
