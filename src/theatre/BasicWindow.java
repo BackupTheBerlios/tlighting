@@ -85,6 +85,14 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
         menuItem.addActionListener(this);
         menu.add(menuItem);
         
+        //add print option to the file menu
+        menuItem = new JMenuItem("Print");
+        menuItem.setMnemonic(KeyEvent.VK_P);
+        menuItem.getAccessibleContext().setAccessibleDescription(
+                "Print the schematic drawing");
+        menuItem.addActionListener(this);
+        menu.add(menuItem);
+        
         //add quit option to the file menu
         menuItem = new JMenuItem("Quit");
         menuItem.setMnemonic(KeyEvent.VK_S);
@@ -249,6 +257,10 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
                 save_XMLFILE.save_project(s_projPath, s_barPath);
             }
             
+        }else if(source.getText()=="Print"){
+            //print the schematic drawing as it is currently seen
+            project proj_class=(project)project.oClass;
+            proj_class.print_schematic();
             
         }else if(source.getText()=="Quit"){
             System.exit(0);
