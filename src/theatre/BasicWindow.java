@@ -6,9 +6,12 @@ package theatre;
  */
 import java.awt.*; 
 import java.awt.event.*; 
+import java.util.*;
 import javax.swing.*;
 import drawing_prog.*;
 import Data_Storage.*;
+import xml_Interface.*;
+import java.io.*;
 
 /**
  *
@@ -26,8 +29,11 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
     JMenu menu, submenu;
     JMenuItem menuItem;
     JRadioButtonMenuItem rbMenuItem;
-    
-    
+    xml_Reader load_XMLFILE;
+    xml_Writer save_XMLFILE;
+    JFileChooser m_fileChooser;
+    String s_barPath, s_projPath;
+    JInternalFrame file_Window,error_Window;
     
     public BasicWindow()
     {
@@ -38,7 +44,6 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
     //this is the initialization for the windows menu
     public JMenuBar initmenu() 
     {
-        
         //Create the menu bar.
         menuBar = new JMenuBar();
         
@@ -174,8 +179,33 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
             proj.addHouse(900,700,"House_Object");
             
         }else if(source.getText()=="Open..."){
-            
-            
+            //Addition Made By Greg Silverstein 3/3
+            //Open Functionality
+            file_Window = new JInternalFrame();
+            file_Window.setLocation(0,0);
+            file_Window.setBounds(0,0, 400,400);
+            file_Window.setVisible(true);
+            m_fileChooser = new JFileChooser();
+            int retval = m_fileChooser.showOpenDialog(file_Window);
+            if (retval == JFileChooser.APPROVE_OPTION) {
+                //... The user selected a file, process it.
+                m_fileChooser.setVisible(true);
+                File file = m_fileChooser.getSelectedFile();
+                //check for that it is a .bar file extension for xml bar files
+                if(file.isFile() == true && file.getAbsolutePath().endsWith(".bar")==true){
+                    s_barPath = file.getAbsolutePath();
+                    s_projPath = file.getParent();
+                    load_XMLFILE.load_project(s_projPath,s_barPath);
+                }
+                else {
+                    //not a valid selection so error and stop
+                    error_Window = new JInternalFrame();
+                    error_Window.setLocation(0,0);
+                    error_Window.setBounds(0,0, 400,400);
+                    error_Window.setVisible(true);
+                    JOptionPane.showMessageDialog(error_Window,"Error Improper File Type");
+                }
+            }
         }else if(source.getText()=="Save.."){
             
         }else if(source.getText()=="Quit"){
