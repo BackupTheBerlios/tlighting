@@ -43,9 +43,28 @@ public class project{
     public int scroll_y;
     //indicates the state the mouse is in
     public int draw_mouse_state;
-   //draw mouse stages are defiend as 0=normal 1=adding a bar 2=adding an instruemnt 3= editing a bar 
+   //draw mouse stages are defiend as 0=normal(object selection) 1=adding a bar 2=adding an instruemnt 3= editing a bar 
     //4=editing a house 5=editing a stage 6=moving a bar 7= moving an instrument 8=adding a stage 
-    //9=adding a set peice 10=editing a set piece
+    //9=adding a set peice 10=editing a set piece 11=moving a stage 12=moving a house 13=moving a set 14=aim a instrument
+    /*normal(selection)=0
+     *adding a stage=8
+     *editing a stage=5
+     *moving a stage=11
+     *adding a bar=1
+     *editing a bar=3
+     *moving a bar=6
+     *adding an instrument=2
+     *moving an instrument=7
+     *aim light = 14
+     adding set=9
+     *editing set=10
+     *moving set=13
+     *editing a house=4
+     *moving a house=12
+     *
+     */
+    
+    
     
     //container objects with drawing functionality for objects
     public Object_Drawer stages;
@@ -340,6 +359,12 @@ public class project{
     public int ScreenYtoWorld(int y){
         return ((y/zoom_factor)+scroll_y);
     }
+    
+    public void print_schematic(){
+        TransPanel drawing=(TransPanel)TransPanel.oClass;
+        PrintUtilities.printComponent(drawing); 
+    }
+
     
     
 }
