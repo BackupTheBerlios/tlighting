@@ -13,6 +13,7 @@ package Data_Storage;
 
 import drawing_prog.*;
 import theatre.*;
+import Data_Storage.*;
 
 
 public class project{
@@ -93,18 +94,32 @@ public class project{
         houseadded=false;
     }
     
-    
     public boolean addBar(bar abar){
-        int tempnum=bars.get_num_objects();
-        abar.setID("Bar"+tempnum);
-        System.out.println("Bar "+abar.getID()+" got added");
-        if(bars.add_object(abar)==tempnum+1){
-            ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
-            ib.insertNewTreeNode();
-            return true;
-        }else{
+        int current=houses.get_num_objects();
+        house curhouse = (house)houses.get_object(current);
+        if(abar.getminx()>curhouse.getminx() && abar.getminy()>curhouse.getminy()){
+            if(abar.getmaxx()<curhouse.getmaxx() && abar.getmaxy()<curhouse.getmaxy()){
+                int tempnum=bars.get_num_objects();
+                abar.setID("Bar"+tempnum);
+                System.out.println("Bar "+abar.getID()+" got added");
+                if(bars.add_object(abar)==tempnum+1){
+                    ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
+                    ib.insertNewTreeNode();
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            else
+            {
+              return false;  
+            }
+        }
+        else{
             return false;
         }
+        
     }
    
     public boolean addHouse(int len, int width, String name){
@@ -125,40 +140,89 @@ public class project{
     }
     
     public boolean addInstrument(instrument aInstrument){
-        int tempnum=instruments.get_num_objects();
-        if(instruments.add_object(aInstrument)==tempnum+1){
-            return true;
-        }else{
+        int current=houses.get_num_objects();
+        house curhouse = (house)houses.get_object(current);
+        if(aInstrument.getX()>curhouse.getminx() && aInstrument.getY()>curhouse.getminy()){
+            if(aInstrument.getX()<curhouse.getmaxx() && aInstrument.getY()<curhouse.getmaxy()){
+                int tempnum=instruments.get_num_objects();
+                if(instruments.add_object(aInstrument)==tempnum+1){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+            else{
+                return false;
+            }
+        }
+        else{
             return false;
         }
     }
     
     public boolean addStage(stage aStage){
-        int tempnum=stages.get_num_objects();
-        if(stages.add_object(aStage)==tempnum+1){
-            stageadded=true;
-            return true;
-        }else{
+        int current=houses.get_num_objects();
+        house curhouse = (house)houses.get_object(current);
+        if(aStage.getminx()>curhouse.getminx() && aStage.getminy()>curhouse.getminy()){
+            if(aStage.getmaxx()<curhouse.getmaxx() && aStage.getmaxy()<curhouse.getmaxy()){
+                int tempnum=stages.get_num_objects();
+                if(stages.add_object(aStage)==tempnum+1){
+                    stageadded=true;
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            else{
+                return false;
+            }
+        }
+        else{
             return false;
         }
-        
     }
     
     public boolean addSet(setobject aSet){
-        int tempnum=sets.get_num_objects();
-        if(sets.add_object(aSet)==tempnum+1){
-            return true;
-        }else{
+        int current=houses.get_num_objects();
+        house curhouse = (house)houses.get_object(current);
+        if(aSet.getminx()>curhouse.getminx() && aSet.getminy()>curhouse.getminy()){
+            if(aSet.getmaxx()<curhouse.getmaxx() && aSet.getmaxy()<curhouse.getmaxy()){
+                int tempnum=sets.get_num_objects();
+                if(sets.add_object(aSet)==tempnum+1){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            else{
+                return false;
+            }
+        }
+        else{
             return false;
         }
     }
     
     public boolean SetBar(bar abar,int index){
-        if(index<bars.get_num_objects()){
-            ((bar)bars.get_object(index)).copyBar(abar);
-            return true;
+        int current=houses.get_num_objects();
+        house curhouse = (house)houses.get_object(current);
+        if(abar.getminx()>curhouse.getminx() && abar.getminy()>curhouse.getminy()){
+            if(abar.getmaxx()<curhouse.getmaxx() && abar.getmaxy()<curhouse.getmaxy()){
+                if(index<bars.get_num_objects()){
+                    ((bar)bars.get_object(index)).copyBar(abar);
+                    return true;
+                }
+                return false;
+            }
+            else{
+                return false;
+            }
         }
-        return false;
+        else{
+            return false;
+        }
     }
     
     public boolean SetHouse(house ahouse,int index){
@@ -169,19 +233,45 @@ public class project{
         return false;
     }
     public boolean SetSetObject(setobject aset,int index){
-        if(index<sets.get_num_objects()){
-            ((setobject)sets.get_object(index)).copySetObject(aset);
-            return true;
+        int current=houses.get_num_objects();
+        house curhouse = (house)houses.get_object(current);
+        if(aset.getminx()>curhouse.getminx() && aset.getminy()>curhouse.getminy()){
+            if(aset.getmaxx()<curhouse.getmaxx() && aset.getmaxy()<curhouse.getmaxy()){
+                if(index<sets.get_num_objects()){
+                    ((setobject)sets.get_object(index)).copySetObject(aset);
+                    return true;
+                }
+                return false;
+            }
+            else{
+                return false;
+            }
         }
-        return false;
+        else{
+            return false;
+        }
     }
+    
     public boolean SetStage(stage astage,int index){
-        if(index<stages.get_num_objects()){
-            ((stage)stages.get_object(index)).copyStage(astage); 
-            return true;
+        int current=houses.get_num_objects();
+        house curhouse = (house)houses.get_object(current);
+        if(astage.getminx()>curhouse.getminx() && astage.getminy()>curhouse.getminy()){
+            if(astage.getmaxx()<curhouse.getmaxx() && astage.getmaxy()<curhouse.getmaxy()){
+                if(index<stages.get_num_objects()){
+                    ((stage)stages.get_object(index)).copyStage(astage);
+                    return true;
+                }
+                return false;
+            }
+            else{
+                return false;
+            }
         }
-        return false;
+        else{
+            return false;
+        }
     }
+    
     public void forceRepaint(){
         TransPanel tp=(TransPanel)TransPanel.oClass;
         tp.repaint();

@@ -276,7 +276,43 @@ public class bar extends General_Object {
         linkProj=abar.linkProj;
         
     }
-    
+    public int getminx(){
+         int temp=1000;
+        for(int i=0; i<2; i++){
+            if(this.x[i]<temp){
+                temp=this.x[i];
+            }
+        }
+        return temp;
+    }
+    public int getminy(){
+        int temp=1000;
+        for(int i=0; i<2; i++){
+            if(this.y[i]<temp){
+                temp=this.y[i];
+            }
+        }
+        return temp;
+    }
+    public int getmaxx(){
+        int temp=0;
+        for(int i=0; i<2; i++){
+            if(this.x[i]>temp){
+                temp=this.x[i];
+            }
+        }
+        return temp;
+    }
+    public int getmaxy(){
+        int temp=0;
+        for(int i=0; i<2; i++){
+            if(this.y[i]>temp){
+                temp=this.y[i];
+            }
+        }
+        return temp;
+    }
+
     public void barOutput()
     {
         System.out.println("The x coordinate of the first point is: "+this.x[0]+" .");
