@@ -47,10 +47,14 @@ public class project{
     public Object oExplorer;
    // public Object_Drawer inventory; //these are not drawn objects so should not be Object Drawer types
     //public Object_Drawer wiring_sheet;
-    
-    
     public static Object oClass = null;
     
+    // visibilty objects
+    boolean bStageVisible = true;
+    boolean bSetItemVisible = true;
+    boolean bBarVisible = true;
+    boolean bInstrumentVisible = true;
+
     
     /** Creates a new instance of hold_project */
     public project() {
@@ -183,4 +187,16 @@ public class project{
         tp.repaint();
         
     }
+    public boolean isStageVisible() { return bStageVisible;}
+    public void setStageVisible(boolean b) { bStageVisible = b; }
+    
+    public boolean isSetItemVisible() { return bSetItemVisible;}
+    public void setSetItemVisible(boolean b) { bSetItemVisible = b; }
+
+    public boolean isBarVisible() { return bBarVisible;}
+    public void setBarVisible(boolean b) { bBarVisible = b; }
+
+    public boolean isInstrumentVisible() { return bInstrumentVisible;}
+    public void setInstrumentVisible(boolean b) { bInstrumentVisible = b; }
+
 }
