@@ -34,6 +34,9 @@ public class xml_Reader {
     public void load_project(String inProjectPath,String inBarPath) {
         s_bPath = inBarPath;
         s_pPath = inProjectPath;
+        
+        //clear all the current project variables
+        
         get_house();
         get_bars();
         get_stage();
@@ -68,6 +71,9 @@ public class xml_Reader {
         }catch(Exception e){
            System.out.println("exception parsing bars");
        }
+        
+        
+        //now set all the variables in the project class
     }
     private void get_set() {
         try{
