@@ -44,47 +44,80 @@ public class xml_Reader {
    
     //individual load functions
     private void get_house() {
-        IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
-        IXMLReader reader = StdXMLReader.fileReader(s_pPath + "house.xml");
-        parser.setReader(reader);
-        IXMLElement xml = (IXMLElement) parser.parse();
-
+     
+        try{
+            IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
+            IXMLReader reader = StdXMLReader.fileReader(s_pPath + "house.xml");
+            parser.setReader(reader);
+            IXMLElement xml = (IXMLElement) parser.parse();
+        }catch(Exception e){
+            System.out.println("exception parsing house");
+        }
+          
+      
+                
+                
+            
     }
     private void get_bars() {
-        IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
-        IXMLReader reader = StdXMLReader.fileReader(s_bPath);
-        parser.setReader(reader);
-        IXMLElement xml = (IXMLElement) parser.parse();
+        try{
+            IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
+            IXMLReader reader = StdXMLReader.fileReader(s_bPath);
+            parser.setReader(reader);
+            IXMLElement xml = (IXMLElement) parser.parse();
+        }catch(Exception e){
+           System.out.println("exception parsing bars");
+       }
     }
     private void get_set() {
-        IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
-        IXMLReader reader = StdXMLReader.fileReader(s_pPath + "set.xml");
-        parser.setReader(reader);
-        IXMLElement xml = (IXMLElement) parser.parse();
+        try{
+            IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
+            IXMLReader reader = StdXMLReader.fileReader(s_pPath + "set.xml");
+            parser.setReader(reader);
+            IXMLElement xml = (IXMLElement) parser.parse();
+        }catch(Exception e){
+            System.out.println("exception parsing set");
+        }
     }
     private void get_stage() {
-        IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
-        IXMLReader reader = StdXMLReader.fileReader(s_pPath + "stage.xml");
-        parser.setReader(reader);
-        IXMLElement xml = (IXMLElement) parser.parse();
+        try{
+            IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
+            IXMLReader reader = StdXMLReader.fileReader(s_pPath + "stage.xml");
+            parser.setReader(reader);
+            IXMLElement xml = (IXMLElement) parser.parse();
+        }catch(Exception e){
+            System.out.println("exception parsing stage");
+        }
     }
     private void get_inventory() {
-        IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
-        IXMLReader reader = StdXMLReader.fileReader(s_pPath + "inventory.xml");
-        parser.setReader(reader);
-        IXMLElement xml = (IXMLElement) parser.parse();
+        try{
+            IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
+            IXMLReader reader = StdXMLReader.fileReader(s_pPath + "inventory.xml");
+            parser.setReader(reader);
+            IXMLElement xml = (IXMLElement) parser.parse();
+        }catch(Exception e){
+            System.out.println("exception parsing inventory");
+        }
     }
     private void get_knowntypes() {
-        IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
-        IXMLReader reader = StdXMLReader.fileReader(s_pPath + "known.xml");
-        parser.setReader(reader);
-        IXMLElement xml = (IXMLElement) parser.parse();
+        try{
+            IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
+            IXMLReader reader = StdXMLReader.fileReader(s_pPath + "known.xml");
+            parser.setReader(reader);
+            IXMLElement xml = (IXMLElement) parser.parse();
+        }catch(Exception e){
+            System.out.println("Exception parsing known types");
+        }
     }
     private void get_instrument() {
-        IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
-        IXMLReader reader = StdXMLReader.fileReader(s_pPath + "instrument.xml");
-        parser.setReader(reader);
-        IXMLElement xml = (IXMLElement) parser.parse();
+        try{
+            IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
+            IXMLReader reader = StdXMLReader.fileReader(s_pPath + "instrument.xml");
+            parser.setReader(reader);
+            IXMLElement xml = (IXMLElement) parser.parse();
+        }catch(Exception e){
+            System.out.println("exception parsing instruments");
+        }
     }
     
     
