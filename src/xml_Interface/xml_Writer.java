@@ -212,22 +212,29 @@ public class xml_Writer {
             bar_obj.setAttribute("description","BAR DESCRIPTION");
             //}
             //if(){
-            bar_obj.setAttribute("x1",String.valueOf(((bar)proj_class.bars.get_object(i)).getX(0)));
+            int x1=((bar)proj_class.bars.get_object(i)).getX(0)+((bar)proj_class.bars.get_object(i)).worldx;
+            bar_obj.setAttribute("x1",String.valueOf(x1));
             //}
             //if(){
-            bar_obj.setAttribute("x2",String.valueOf(((bar)proj_class.bars.get_object(i)).getX(1)));
+            
+            int x2=((bar)proj_class.bars.get_object(i)).getX(1)+((bar)proj_class.bars.get_object(i)).worldx;
+            bar_obj.setAttribute("x2",String.valueOf(x2));
             //}
             //if(){
-            bar_obj.setAttribute("y1",String.valueOf(((bar)proj_class.bars.get_object(i)).getY(0)));
+            int y1=((bar)proj_class.bars.get_object(i)).getY(0)+((bar)proj_class.bars.get_object(i)).worldy;
+            bar_obj.setAttribute("y1",String.valueOf(y1));
             //}
             //if(){
-            bar_obj.setAttribute("y2",String.valueOf(((bar)proj_class.bars.get_object(i)).getY(1)));
+            int y2=((bar)proj_class.bars.get_object(i)).getY(1)+((bar)proj_class.bars.get_object(i)).worldy;
+            bar_obj.setAttribute("y2",String.valueOf(y2));
             //}
             //if(){
-            bar_obj.setAttribute("z1",String.valueOf(((bar)proj_class.bars.get_object(i)).getZ(0)));
+            int z1=((bar)proj_class.bars.get_object(i)).getZ(0);
+            bar_obj.setAttribute("z1",String.valueOf(z1));
             //}
             //if(){
-            bar_obj.setAttribute("z2",String.valueOf(((bar)proj_class.bars.get_object(i)).getZ(1)));
+            int z2=((bar)proj_class.bars.get_object(i)).getZ(1);
+            bar_obj.setAttribute("z2",String.valueOf(z2));
             //}
             if(((house)proj_class.houses.get_object(0)).getid()!=null){
                 bar_obj.setAttribute("house_id",((house)proj_class.houses.get_object(0)).getid());
@@ -248,7 +255,7 @@ public class xml_Writer {
         }
         try{
             if(writer!=null){
-                writer.write(parent_obj);
+                writer.write(parent_obj,true);
             }
         }catch(Exception e){
             System.out.println("Error exporting bar object ot xml");
@@ -323,7 +330,7 @@ public class xml_Writer {
         
         try{
             if(writer!=null){
-                writer.write(parent_obj);
+                writer.write(parent_obj,true);
             }
         }catch(Exception e){
             System.out.println("Error exporting set object ot xml");
@@ -450,7 +457,7 @@ public class xml_Writer {
         }
         try{
             if(writer!=null){
-                writer.write(parent_obj);
+                writer.write(parent_obj,true);
             }
         }catch(Exception e){
             System.out.println("Error exporting inventory object ot xml");
