@@ -34,6 +34,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
     JFileChooser m_fileChooser;
     String s_barPath, s_projPath;
     JInternalFrame file_Window,error_Window;
+    //public project project_class;
     
     public BasicWindow()
     {
@@ -183,7 +184,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
             //Open Functionality
             
             load_XMLFILE= new xml_Reader();
-            
+            boolean result=false;
             file_Window = new JInternalFrame();
             file_Window.setLocation(0,0);
             file_Window.setBounds(0,0, 400,400);
@@ -195,10 +196,10 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
                 m_fileChooser.setVisible(true);
                 File file = m_fileChooser.getSelectedFile();
                 //check for that it is a .bar file extension for xml bar files
-                if(file.isFile() == true && file.getAbsolutePath().endsWith(".bar")==true){
+                if(file.isFile() == true && file.getAbsolutePath().endsWith(".xml")==true){
                     s_barPath = file.getAbsolutePath();
                     s_projPath = file.getParent();
-                    load_XMLFILE.load_project(s_projPath,s_barPath);
+                    result =load_XMLFILE.load_project(s_projPath,s_barPath);
                 }
                 else {
                     //not a valid selection so error and stop
@@ -207,6 +208,22 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
                     error_Window.setBounds(0,0, 400,400);
                     error_Window.setVisible(true);
                     JOptionPane.showMessageDialog(error_Window,"Error Improper File Type");
+                }
+                if(result==true){
+                    //house is loaded properly
+                    error_Window = new JInternalFrame();
+                    error_Window.setLocation(0,0);
+                    error_Window.setBounds(0,0, 400,400);
+                    error_Window.setVisible(true);
+                    JOptionPane.showMessageDialog(error_Window,"File is successfully loaded");
+                    
+                }else{
+                    //house is not loaded properly
+                    error_Window = new JInternalFrame();
+                    error_Window.setLocation(0,0);
+                    error_Window.setBounds(0,0, 400,400);
+                    error_Window.setVisible(true);
+                    JOptionPane.showMessageDialog(error_Window,"File failed loaded");
                 }
             }
             //End Addition For Load
@@ -270,7 +287,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
         frame.setSize(BasicWindow.iScreenWidth, BasicWindow.iScreenHeight-(screenSize.height/20));
 		
         // Create the Drag and Drop Panel
-        ExplorerBrowserPanel dd = new ExplorerBrowserPanel(project_class);
+        ExplorerBrowserPanel dd = new ExplorerBrowserPanel();
         // Create the stage Panel
         DrawScreen stage = new DrawScreen();
         // Create the ControlPanel
