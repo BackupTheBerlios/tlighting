@@ -71,7 +71,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         proj_class=(project)project.oClass;
         proj_class.selected_type= -1;
         proj_class.selected_index=-1;
-        proj_class.zoom_factor=5;
+        proj_class.zoom_factor=1;
         proj_class.scroll_x=0;
         proj_class.scroll_y=0;
         selected_node=-1;
