@@ -167,7 +167,8 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
         group.add(rbMenuItem);
         menu.add(rbMenuItem);
 
-        rbMenuItem = new JRadioButtonMenuItem("Wiring Diagram");   
+        rbMenuItem = new JRadioButtonMenuItem("Wiring Diagram");
+        rbMenuItem.addActionListener(this);   
         group.add(rbMenuItem);
         menu.add(rbMenuItem);
 		      
@@ -265,7 +266,13 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
             project proj_class=(project)project.oClass;
             proj_class.print_schematic();
             
-        }else if(source.getText()== "Inventory Management"){
+        }
+        else if(source.getText()=="Wiring Diagram"){
+            System.out.println("Greg Can Make Test Statements Like Ilya For Wiring"); 
+            WiringPlot wp = new WiringPlot();
+            
+        }
+        else if(source.getText()== "Inventory Management"){
             InventoryManager im = new InventoryManager();
 System.out.println("inventory manager selected");           
         }else if(source.getText()=="Quit"){
