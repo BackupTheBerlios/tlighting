@@ -23,6 +23,8 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
     public static boolean no2D = false;
     public static int iScreenWidth = 0;
     public static int iScreenHeight = 0;
+    
+    public static BasicWindow curWindow;
     //other variables that are used in the window
     //Where the GUI is created:
     JMenuBar menuBar;
@@ -161,6 +163,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
         menu.add(rbMenuItem);
         
         rbMenuItem = new JRadioButtonMenuItem("Inventory Management");   
+        rbMenuItem.addActionListener(this);
         group.add(rbMenuItem);
         menu.add(rbMenuItem);
 
@@ -262,6 +265,9 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
             project proj_class=(project)project.oClass;
             proj_class.print_schematic();
             
+        }else if(source.getText()== "Inventory Management"){
+            InventoryManager im = new InventoryManager();
+System.out.println("inventory manager selected");           
         }else if(source.getText()=="Quit"){
             System.exit(0);
         }
@@ -331,7 +337,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
     { 
         //Schedule a job for the event-dispatching thread: 
         //creating and showing this application's GUI.
-        
+        curWindow = new BasicWindow();
         try{
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {}
