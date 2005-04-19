@@ -223,7 +223,7 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             proj_class.draw_mouse_state =10;
             aScreen.temp_set=new setobject();
             aScreen.temp_set.copySetObject((setobject)(proj_class.sets.get_object(proj_class.selected_index)));
-        }else if(e.getSource()==move_set){
+        }else if(e.getSource()==move_bar){
             //move a set object
             proj_class.draw_mouse_state =6;
         }else if(e.getSource()==move_stage){
@@ -239,7 +239,7 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             //aim an instrument
             proj_class.draw_mouse_state=14;
         }else if(e.getSource() == zoom_in) {   //begin chaplin edit.
-            if(proj_class.zoom_factor<100){
+            if(proj_class.zoom_factor<200){
                 proj_class.zoom_factor+=1;
                 aScreen.vert.setUnitIncrement((int)((1/(double)proj_class.zoom_factor)*(.05 * aScreen.vert.getHeight())));
                 aScreen.horiz.setUnitIncrement((int)((1/(double)proj_class.zoom_factor)*(.05 * aScreen.horiz.getWidth())));
@@ -249,7 +249,7 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             }
         } else if(e.getSource() == zoom_out) {
             if(proj_class.zoom_factor>1){
-                proj_class.zoom_factor-=.5;
+                proj_class.zoom_factor-=1;
                 //aScreen.horiz.setMaximum(600*proj_class.zoom_factor);
                 //aScreen.vert.setMaximum(600*proj_class.zoom_factor);
                 aScreen.vert.setUnitIncrement((int)((double)(proj_class.zoom_factor)*(.05 * aScreen.vert.getHeight())));
