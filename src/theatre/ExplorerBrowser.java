@@ -144,14 +144,14 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
         parent = new DefaultMutableTreeNode(sSubInv);
         
         treeModel.insertNodeInto(parent, root, 0);
-        
-        for (int i = vInventory.size(); i > 0 ; i--) {
+        //add the inventory items
+        for (int i = p.inventories.getNumItems()-1; i >= 0 ; i--) {
             // create inventory leaf node
-            child = new DefaultMutableTreeNode(vInventory.elementAt(i-1).toString());
+            child = new DefaultMutableTreeNode(String.valueOf(p.inventories.getItemID(i)));
             treeModel.insertNodeInto(child, parent, 0);
         }
         
-        System.out.println("size: "+p.bars.object_list.size());
+        //System.out.println("size: "+p.bars.object_list.size());
         
         // needed to add Bar folder only once
         boolean bAddedBar = false;
