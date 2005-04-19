@@ -189,7 +189,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
             project proj=(project)project.oClass;
             //proj=new project();
             
-            proj.addHouse(600,1800,"House_Object");
+            proj.addHouse(300,500,"House_Object");
             
         }else if(source.getText()=="Open..."){
             //Addition Made By Greg Silverstein 3/3
