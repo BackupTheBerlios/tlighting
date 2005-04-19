@@ -354,7 +354,7 @@ public class project{
         
         boolean allset=true;
         int vertics=aset.getvertices();
-        int current=houses.get_num_objects()-1;
+        int current=0;
         house curhouse = (house)houses.get_object(current);
         if(aset.getminx()>curhouse.getminx() && aset.getminy()>curhouse.getminy()){
             if(aset.getmaxx()<curhouse.getmaxx() && aset.getmaxy()<curhouse.getmaxy()){
