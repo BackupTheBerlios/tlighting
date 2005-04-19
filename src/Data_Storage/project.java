@@ -9,6 +9,7 @@ package Data_Storage;
 /**
  *
  * @author Harikrishna Patel
+ * last edited by joshua zawislak 4-18-05
  */
 
 import drawing_prog.*;
@@ -16,6 +17,7 @@ import theatre.*;
 import Data_Storage.*;
 import java.awt.*;
 import java.awt.geom.*;
+import java.util.*;
 
 public class project{
     
@@ -73,6 +75,8 @@ public class project{
     public Object_Drawer bars;
     public Object_Drawer instruments;
     public Object_Drawer houses;
+    public inventory inventories;
+    public Vector types;
     
     //istance of the explorer pane
     public Object oExplorer;
@@ -94,10 +98,11 @@ public class project{
         bars=new Object_Drawer();
         instruments=new Object_Drawer();
         houses = new Object_Drawer();
-        
+        inventories=new inventory();
+        types=new Vector();
         selected_type=-1;
         selected_index=-1;
-        zoom_factor=0;
+        zoom_factor=100;
         scroll_x=0;
         scroll_y=0;
         draw_mouse_state=0;
@@ -116,10 +121,11 @@ public class project{
         bars=new Object_Drawer();
         instruments=new Object_Drawer();
         houses = new Object_Drawer();
-        
+        inventories= new inventory();
+        types= new Vector();
         selected_type=-1;
         selected_index=-1;
-        zoom_factor=1;
+        zoom_factor=100;
         scroll_x=0;
         scroll_y=0;
         draw_mouse_state=0;
@@ -430,7 +436,29 @@ public class project{
     
     public void print_schematic(){
         TransPanel drawing=(TransPanel)TransPanel.oClass;
+        //need to scale the house to a size that fits on 8x11
+        //height needs to be less then 600 pixels
+        //width needs to be less then 400 pixels
+        int oldsx=scroll_x;
+        int oldsy=scroll_y;
+        int oldz=zoom_factor;
+        
+        int housex=houses.get_object(0).getmaxx()+houses.get_object(0).worldx;
+        int housey=houses.get_object(0).getmaxy()+houses.get_object(0).worldy;
+        
+        if(housex>400){
+            zoom_factor=1/(housex/400);
+        }
+        if(housey>600){
+            zoom_factor=1/(housey/600);
+        }
+        forceRepaint();
         PrintUtilities.printComponent(drawing);
+        
+        scroll_x=oldsx;
+        scroll_y=oldsy;
+        zoom_factor=oldz;
+        forceRepaint();
     }
     
     public boolean checkonborder(int x, int y){
@@ -552,4 +580,36 @@ public class project{
         return true;
     }
     
+    
+    //fucntions to handle inventory
+    
+    public void AddInventory(String aType,int aId,String aDesc){
+        inventories.addItem(aType,aId,aDesc);
+    }
+    public void EditInventory(int index, String aType,int aId,String aDesc){
+        if(index<inventories.getNumItems()){
+            inventories.getList(index).setType(aType);
+            inventories.getList(index).setInvId(aId);
+            inventories.getList(index).setDesc(aDesc);
+        }
+    }
+    public void RemoveInventory(int index){
+        inventories.removeItem(index);
+    }
+    
+    //functions to edit types
+    public void AddType(knowntype obj){
+        types.add(obj);
+        
+    }
+    public void EditType(int index, knowntype obj){
+        if(types.size()>index){  
+            ((knowntype)types.get(index)).copy(obj);
+        }
+    }
+    public void RemoveType(int index){
+        if(index<types.size()){
+            types.remove(index);
+        }
+    }
 }
