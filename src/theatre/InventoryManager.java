@@ -53,6 +53,7 @@ public class InventoryManager extends JDialog implements ActionListener {
         //setSize(500,500);
         setResizable(true);
         setVisible(true);
+        
     }
     public void addComponents() {
         JPanel jpMain = new JPanel();
@@ -71,7 +72,10 @@ public class InventoryManager extends JDialog implements ActionListener {
         btnPanel.setVisible(true);
         jpMain.add(tpBulletinBoard);
         jpMain.add(btnPanel);
+        
         getContentPane().add(jpMain);
+        popInstList();
+        popTypeList();
     }
     public void createInstrumentTab() {
         jpInstruments = new JPanel();

@@ -108,6 +108,18 @@ public class inventory
         }
     }
     
+    public boolean getItemUsed(int index){
+        if(index<list.size()){
+            return ((inventory_item)list.get(index)).getUsed();
+        }
+        return false;
+    }
+    public void setItemUsed(int index,boolean used){
+        if(index<list.size()){
+            ((inventory_item)list.get(index)).setUsed(used);
+        }
+    }
+    
     public void inventoryOut()
     {
         System.out.println("The inventory name is: "+this.inv_name);
@@ -137,11 +149,13 @@ class inventory_item
     private String type;
     private int inv_id;
     private String desc;
-
+    private boolean used;
+    
     public inventory_item(){
         type = "NULL";
         inv_id = 0;
         desc = "NULL";
+        used=false;
     }
 
     public int getInvId()
@@ -181,6 +195,14 @@ class inventory_item
         System.out.println("The type is: "+this.type);
         System.out.println("The inventory id is: "+this.inv_id);
         System.out.println("The description is: "+this.desc);
+    }
+    
+    boolean getUsed(){
+        return used;
+    }
+    
+    void setUsed(boolean t){
+        used=t;
     }
 }
 

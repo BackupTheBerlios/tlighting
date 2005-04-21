@@ -188,7 +188,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 g2.draw(new Line2D.Double(proj_class.WorldXtoScreen(x-3), proj_class.WorldYtoScreen(y+3),
                         proj_class.WorldXtoScreen(x+3), proj_class.WorldYtoScreen(y-3)));
                 g2.setColor(Color.YELLOW);
-                */
+                 */
                 Line2D dotted =new Line2D.Double(proj_class.WorldXtoScreen(x), proj_class.WorldYtoScreen(y),
                         proj_class.WorldXtoScreen(lx), proj_class.WorldYtoScreen(ly));
                 g2.draw(dotted);
@@ -567,18 +567,27 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 if(pot_y>=0) {
                     //found a y so place it
                     
-                    temp_instrument.worldx=pot_x;
-                    
-                    temp_instrument.worldy=pot_y;
-                    
-                    proj_class.addInstrument(temp_instrument);
-                    
-                    proj_class.draw_mouse_state=0;
-                    
-                    proj_class.selected_type=3;
-                    
-                    proj_class.selected_index=temp_instrument.index;
-                    
+                    LightsPopUp lp= new LightsPopUp();
+                    if(proj_class.templightid!=-1){
+                        temp_instrument.setInvnetoryID(proj_class.templightid);
+                        
+                        int index=proj_class.getInstrumentByID(proj_class.templightid); 
+                        proj_class.inventories.setItemUsed(index, true);
+                        temp_instrument.setDescription(proj_class.inventories.getItemDesc(index));
+                        temp_instrument.setType(proj_class.inventories.getItemType(index));
+                        
+                        temp_instrument.worldx=pot_x;
+                        
+                        temp_instrument.worldy=pot_y;
+                        
+                        proj_class.addInstrument(temp_instrument);
+                        
+                        proj_class.draw_mouse_state=0;
+                        
+                        proj_class.selected_type=3;
+                        
+                        proj_class.selected_index=temp_instrument.index;
+                    }
                     temp_instrument=null;
                     
                 }

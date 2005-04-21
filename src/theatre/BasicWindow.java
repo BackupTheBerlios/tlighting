@@ -4,8 +4,8 @@ package theatre;
  *
  * Created on December 21, 2004, 11:08 PM
  */
-import java.awt.*; 
-import java.awt.event.*; 
+import java.awt.*;
+import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import drawing_prog.*;
@@ -17,8 +17,7 @@ import java.io.*;
  *
  * @author  jzawisla
  */
-public class BasicWindow extends JFrame implements ItemListener, ActionListener
-{
+public class BasicWindow extends JFrame implements ItemListener, ActionListener {
     //i dont know what this does it was in the code i based this off of
     public static boolean no2D = false;
     public static int iScreenWidth = 0;
@@ -38,15 +37,13 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
     JInternalFrame file_Window,error_Window;
     //public project project_class;
     
-    public BasicWindow()
-    {
-    	super();
-    	setResolution();
+    public BasicWindow() {
+        super();
+        setResolution();
     }
     
     //this is the initialization for the windows menu
-    public JMenuBar initmenu() 
-    {
+    public JMenuBar initmenu() {
         //Create the menu bar.
         menuBar = new JMenuBar();
         
@@ -61,7 +58,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
         
         //A New option to the file menu
         menuItem = new JMenuItem("New",
-                                 KeyEvent.VK_N);
+                KeyEvent.VK_N);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_2, ActionEvent.ALT_MASK));
         menuItem.getAccessibleContext().setAccessibleDescription(
@@ -71,7 +68,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
         
         //a Open option to the file menu
         menuItem = new JMenuItem("Open...",
-                                 KeyEvent.VK_O);
+                KeyEvent.VK_O);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_1, ActionEvent.ALT_MASK));
         menuItem.getAccessibleContext().setAccessibleDescription(
@@ -102,7 +99,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
                 "Save a design");
         menuItem.addActionListener(this);
         menu.add(menuItem);
-
+        
         //Build the Edit menu.
         menu = new JMenu("Edit");
         menu.setMnemonic(KeyEvent.VK_F);
@@ -112,7 +109,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
         
         //add Cut option to the Edit menu
         menuItem = new JMenuItem("Cut",
-                                 KeyEvent.VK_O);
+                KeyEvent.VK_O);
         menuItem.getAccessibleContext().setAccessibleDescription(
                 "Cut the selected object");
         menuItem.addActionListener(this);
@@ -131,7 +128,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
                 "Paste the last item cut or copied");
         menuItem.addActionListener(this);
         menu.add(menuItem);
-
+        
         //Build the Options menu.
         menu = new JMenu("Options");
         menu.setMnemonic(KeyEvent.VK_F);
@@ -142,7 +139,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
         
         //add Cut option to the Edit menu
         menuItem = new JMenuItem("Preferences",
-                                 KeyEvent.VK_O);
+                KeyEvent.VK_O);
         menuItem.getAccessibleContext().setAccessibleDescription(
                 "Change settings for the program");
         menuItem.addActionListener(this);
@@ -162,29 +159,29 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
         group.add(rbMenuItem);
         menu.add(rbMenuItem);
         
-        rbMenuItem = new JRadioButtonMenuItem("Inventory Management");   
+        rbMenuItem = new JRadioButtonMenuItem("Inventory Management");
         rbMenuItem.addActionListener(this);
         group.add(rbMenuItem);
         menu.add(rbMenuItem);
-
+        
         rbMenuItem = new JRadioButtonMenuItem("Wiring Diagram");
-        rbMenuItem.addActionListener(this);   
+        rbMenuItem.addActionListener(this);
         group.add(rbMenuItem);
         menu.add(rbMenuItem);
-		      
+        
         menuBar.add(menu);
         return menuBar;
     }
     public void itemStateChanged(ItemEvent e){
         JMenuItem source = (JMenuItem)(e.getSource());
         System.out.println("Item Event "+source.getText());
-    } 
-    public void actionPerformed(ActionEvent e) { 
+    }
+    public void actionPerformed(ActionEvent e) {
         JMenuItem source = (JMenuItem)(e.getSource());
         System.out.println("Action Event "+source.getText());
         
         if(source.getText()=="New"){
-        //New
+            //New
             //for right now just create a default house that can be edited to be the right size
             project proj=(project)project.oClass;
             //proj=new project();
@@ -212,8 +209,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
                     s_barPath = file.getAbsolutePath();
                     s_projPath = file.getParent();
                     result =load_XMLFILE.load_project(s_projPath,s_barPath);
-                }
-                else {
+                } else {
                     //not a valid selection so error and stop
                     error_Window = new JInternalFrame();
                     error_Window.setLocation(0,0);
@@ -266,41 +262,38 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener
             project proj_class=(project)project.oClass;
             proj_class.print_schematic();
             
-        }
-        else if(source.getText()=="Wiring Diagram"){
-            System.out.println("Greg Can Make Test Statements Like Ilya For Wiring"); 
+        } else if(source.getText()=="Wiring Diagram"){
+            System.out.println("Greg Can Make Test Statements Like Ilya For Wiring");
+            System.out.println("Now only if he could get his code to work like Ilya we would be set");
             WiringPlot wp = new WiringPlot();
             
-        }
-        else if(source.getText()== "Inventory Management"){
+        } else if(source.getText()== "Inventory Management"){
             InventoryManager im = new InventoryManager();
-System.out.println("inventory manager selected");           
+            //System.out.println("inventory manager selected");
         }else if(source.getText()=="Quit"){
             System.exit(0);
         }
         
         
     }
-    public void setResolution()
-    {
-    	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    	iScreenWidth = screenSize.width;
-    	iScreenHeight = (screenSize.height-screenSize.height/250);
+    public void setResolution() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        iScreenWidth = screenSize.width;
+        iScreenHeight = (screenSize.height-screenSize.height/250);
     }
     /** * Create the GUI and show it. For thread safety, * this method should be invoked from the * event-dispatching thread. */
-    public static void createAndShowGUI() 
-    { 
+    public static void createAndShowGUI() {
         
         //create a new project class to hold info
         project project_class=new project();
         
         
-    	BasicWindow bwin = new BasicWindow();
-
-    	// Create a Desktop for the Application
+        BasicWindow bwin = new BasicWindow();
+        
+        // Create a Desktop for the Application
         final JDesktopPane desktop = new JDesktopPane();
-
-        //Create and set up the window. 
+        
+        //Create and set up the window.
         JFrame frame = new JFrame("Lighting Design & Instrument Inventory Managment");
         // close the application when X is clicked
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -310,7 +303,7 @@ System.out.println("inventory manager selected");
         // set the size based on the system resolution
         //frame.setSize(screenSize.width, screenSize.height-(screenSize.height/20));
         frame.setSize(BasicWindow.iScreenWidth, BasicWindow.iScreenHeight-(screenSize.height/20));
-		
+        
         // Create the Drag and Drop Panel
         ExplorerBrowserPanel dd = new ExplorerBrowserPanel();
         // Create the stage Panel
@@ -319,44 +312,42 @@ System.out.println("inventory manager selected");
         ControlPanel cp = new ControlPanel();
         // Create the ItemBrowser
         ItemBrowser ib = new ItemBrowser();
-        desktop.add(dd); 
+        desktop.add(dd);
         desktop.add(stage);
         desktop.add(cp);
         desktop.add(ib);
         Container content = frame.getContentPane();
         content.add(desktop, BorderLayout.CENTER);
-
-         
+        
+        
         frame.setJMenuBar(bwin.initmenu());
         frame.setVisible(true);
-		
+        
         try{
-                //dd.setSelected(true);
-                //stage.setSelected(true);
-                //cp.setSelected(true);
-                //ib.setSelected(true);
-        }catch(Exception e)
-        {
-                System.out.println("setting focus failed for Stage Items panel");
+            //dd.setSelected(true);
+            //stage.setSelected(true);
+            //cp.setSelected(true);
+            //ib.setSelected(true);
+        }catch(Exception e) {
+            System.out.println("setting focus failed for Stage Items panel");
         }
-    } 
-    public static void main(String[] args) 
-    { 
-        //Schedule a job for the event-dispatching thread: 
+    }
+    public static void main(String[] args) {
+        //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         curWindow = new BasicWindow();
         try{
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {}
-
-        javax.swing.SwingUtilities.invokeLater(new Runnable() { 
-            public void run() { 
-            	createAndShowGUI();
-            } 
+        
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                createAndShowGUI();
+            }
         }
-      ); 
+        );
         
         
     }
- 
+    
 }
