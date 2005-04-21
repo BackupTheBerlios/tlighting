@@ -13,30 +13,66 @@ import Data_Storage.*;
 /**
  *
  * @author  Administrator
+ *edited by Joshua Zawislak 4/20/05
  */
 public class ItemBrowser extends Window {
     
     /** Creates new form ItemBrowser */
-    public ItemBrowser() 
-    {
-    	initComponents();
+    public ItemBrowser() {
+        initComponents();
         this.setTitle("Item Browser");
         this.setBounds(BasicWindow.iScreenWidth-(BasicWindow.iScreenWidth/5), 0, BasicWindow.iScreenWidth/5-5, BasicWindow.iScreenHeight/2-20);
         this.setVisible(true);
     }
-    public static void displayInfo(Object o)
-    {
-    	if (o instanceof bar)
-    	{
-    		bar b = (bar)o;
-    		String s = "Bar ID: "+b.getID()+"\n";
-    		s += "Num Nodes: "+b.num_nodes + "\n";
-    		s += "x: "+b.worldx+"\n";
-    		s += "y: "+b.worldy+"\n";
-    		s += "number of dimmers: " + b.getNum_dimmers()+"\n";
-    		jText.setText(s);
-    	}
-    	//jTable1.add
+    public static void displayInfo(Object o) {
+        if (o instanceof bar) {
+            bar b = (bar)o;
+            String s = "Bar ID: "+b.getID()+"\n";
+            s += "Num Nodes: "+b.num_nodes + "\n";
+            s += "x: "+b.worldx+"\n";
+            s += "y: "+b.worldy+"\n";
+            s += "number of dimmers: " + b.getNum_dimmers()+"\n";
+            jText.setText(s);
+        }else if (o instanceof instrument) {
+            instrument i = (instrument)o;
+            String s = "Instrument ID: "+i.getInventoryID()+"\n";
+            s += "Description: "+i.getDescription() + "\n";
+            s += "x: "+i.worldx+"\n";
+            s += "y: "+i.worldy+"\n";
+            s += "Bar: " + i.getBarID()+"\n";
+            s += "Dimmer: " + i.getDimmerId()+"\n";
+            s += "Misc: " + i.getMisc()+"\n";
+            jText.setText(s);
+        }else if (o instanceof setobject) {
+            setobject b = (setobject)o;
+            String s = "Set ID: "+b.getname()+"\n";
+            s += "Description: "+b.getdescription() + "\n";
+            s += "x: "+b.worldx+"\n";
+            s += "y: "+b.worldy+"\n";
+            jText.setText(s);
+        }else if (o instanceof stage) {
+            stage b = (stage)o;
+            String s = "Stage Name: "+b.getdescription()+"\n";
+            s += "width: "+b.getmaxx()+"\n";
+            s += "length: "+b.getmaxy()+"\n";
+            s += "height: " + b.getheight()+"\n";
+            s += "x: " + b.worldx+"\n";
+            s += "y: " + b.worldy+"\n";
+            
+            jText.setText(s);
+        }else if (o instanceof house) {
+            house b = (house)o;
+            String s = "House ID: "+b.getid()+"\n";
+            s += "Description: " + b.getdescription()+"\n";
+            s += "x: "+b.worldx+"\n";
+            s += "y: "+b.worldy+"\n";
+            s += "Width: " + b.getmaxx()+"\n";
+            s += "Length: " + b.getmaxy()+"\n";
+            s += "Height: " + b.getheight()+"\n";
+            
+            jText.setText(s);
+        }
+        //jTable1.add
     }
     /** This method is called from within the constructor to
      * initialize the form.
