@@ -113,7 +113,7 @@ public class General_Object {
         }else if(color_index==1){
             screen.setColor(Color.BLUE);
         }else if(color_index==2){
-            screen.setColor(Color.CYAN);
+            screen.setColor(Color.ORANGE);
         }else if(color_index==3){
             screen.setColor(Color.DARK_GRAY);
         }else if(color_index==4){
@@ -125,7 +125,7 @@ public class General_Object {
         }else if(color_index==7){
             screen.setColor(Color.MAGENTA);
         }else if(color_index==8){
-            screen.setColor(Color.ORANGE);
+            screen.setColor(Color.CYAN);
         }else if(color_index==9){
             screen.setColor(Color.PINK);
         }else if(color_index==10){
@@ -141,8 +141,11 @@ public class General_Object {
         }else if(color_index==15){
             screen.setColor(Color.BLACK);
         }
+        
+        BasicStroke stroke = new BasicStroke(4);
+        //screen.setStroke(stroke);
+        
         for(iter=0;iter<num_nodes-1;iter++){
-            
             
             screen.draw(new Line2D.Double(g_x+(x[iter]*scale), g_y+(y[iter]*scale),
                     g_x+(x[iter+1]*scale), g_y+(y[iter+1]*scale)));
