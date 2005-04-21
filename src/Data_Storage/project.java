@@ -39,7 +39,7 @@ public class project{
     public int selected_node;
     
     //shows how much the window is zoomed in
-    public int zoom_factor;
+    public double zoom_factor;
     //shows how much the screen is scrolled
     public int scroll_x;
     //shows how much the screen is scrolled
@@ -90,6 +90,7 @@ public class project{
     boolean bBarVisible = true;
     boolean bInstrumentVisible = true;
     
+    public int templightid;
     
     /** Creates a new instance of hold_project */
     public project() {
@@ -102,7 +103,7 @@ public class project{
         types=new Vector();
         selected_type=-1;
         selected_index=-1;
-        zoom_factor=100;
+        zoom_factor=1;
         scroll_x=0;
         scroll_y=0;
         draw_mouse_state=0;
@@ -115,7 +116,7 @@ public class project{
     }
     
     
-    private void resetproject(){
+    public void resetproject(){
         stages=new Object_Drawer();
         sets=new Object_Drawer();
         bars=new Object_Drawer();
@@ -125,7 +126,7 @@ public class project{
         types= new Vector();
         selected_type=-1;
         selected_index=-1;
-        zoom_factor=100;
+        zoom_factor=1;
         scroll_x=0;
         scroll_y=0;
         draw_mouse_state=0;
@@ -422,16 +423,16 @@ public class project{
     
     //conversion fucntions to translate world and screen coordinates to each other
     public int WorldXtoScreen(int x){
-        return ((x-scroll_x)*zoom_factor);
+        return (int)((x-scroll_x)*zoom_factor);
     }
     public int WorldYtoScreen(int y){
-        return ((y-scroll_y)*zoom_factor);
+        return (int)((y-scroll_y)*zoom_factor);
     }
     public int ScreenXtoWorld(int x){
-        return ((x/zoom_factor)+scroll_x);
+        return (int)((x/zoom_factor)+scroll_x);
     }
     public int ScreenYtoWorld(int y){
-        return ((y/zoom_factor)+scroll_y);
+        return (int)((y/zoom_factor)+scroll_y);
     }
     
     public void print_schematic(){
@@ -441,7 +442,7 @@ public class project{
         //width needs to be less then 400 pixels
         int oldsx=scroll_x;
         int oldsy=scroll_y;
-        int oldz=zoom_factor;
+        double oldz=zoom_factor;
         
         int housex=houses.get_object(0).getmaxx()+houses.get_object(0).worldx;
         int housey=houses.get_object(0).getmaxy()+houses.get_object(0).worldy;
@@ -611,5 +612,19 @@ public class project{
         if(index<types.size()){
             types.remove(index);
         }
+    }
+    
+    public int getInstrumentByID(int id){
+        boolean found=false;
+        int i=0;
+        while((!found)&&(i<inventories.getNumItems())){
+            if(inventories.getItemID(i)==id){
+                found=true;
+                return i;
+            }
+            
+            i++;
+        }
+        return -1;
     }
 }
