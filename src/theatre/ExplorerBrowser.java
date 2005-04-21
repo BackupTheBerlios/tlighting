@@ -7,7 +7,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 import Data_Storage.*;
-import drawing_prog.General_Object;
+import drawing_prog.*;
 
 public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionListener,KeyListener
 {
@@ -147,8 +147,10 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
         //add the inventory items
         for (int i = p.inventories.getNumItems()-1; i >= 0 ; i--) {
             // create inventory leaf node
-            child = new DefaultMutableTreeNode(String.valueOf(p.inventories.getItemID(i)));
-            treeModel.insertNodeInto(child, parent, 0);
+            if(!p.inventories.getItemUsed(i)){
+                child = new DefaultMutableTreeNode(String.valueOf(p.inventories.getItemID(i)));
+                treeModel.insertNodeInto(child, parent, 0);
+            }
         }
         
         //System.out.println("size: "+p.bars.object_list.size());
@@ -197,9 +199,9 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
                     treeModel.insertNodeInto(parent, root, 0);
                     bAddedIns = true;
                 }
-                instrument ins = (instrument)p.instruments.object_list.elementAt(i-1);
+                instrument ins = ((instrument)p.instruments.get_object(i-1));
                 // create instrument leaf node with bar id
-                child = new DefaultMutableTreeNode(ins.getName());
+                child = new DefaultMutableTreeNode(String.valueOf(ins.getInventoryID()));
                 treeModel.insertNodeInto(child, parent, 0);
             }
         }
@@ -303,7 +305,7 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
                     //figure out what index it is
                     int i;
                     for(i=0;i<p.instruments.get_num_objects();i++){
-                        if(((instrument)p.instruments.get_object(i)).getName().equalsIgnoreCase(child)){
+                        if(((instrument)p.instruments.get_object(i)).getInventoryID()==Integer.parseInt(child)){
                             p.selected_index=i;
                             temp_obj=p.instruments.get_object(i);
                             i=p.instruments.get_num_objects();
@@ -320,7 +322,7 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
                             i=p.sets.get_num_objects();
                         }
                     }
-                
+                    
                 }else if(parent.equalsIgnoreCase("Inventory")){
                     p.selected_type=5;
                     //p.selected_index=p.getIndexbyName()
