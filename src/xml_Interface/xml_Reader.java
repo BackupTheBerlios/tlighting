@@ -307,7 +307,6 @@ public class xml_Reader {
     }
     private boolean get_knowntypes(IXMLElement xml) {
         int num=xml.getChildrenCount();
-        
         //create a temp list of types
         int i;
         for(i=0;i<num;i++){
@@ -316,8 +315,8 @@ public class xml_Reader {
             String name=t_xml.getAttribute("name","default");
             int height=Integer.parseInt(t_xml.getAttribute("height","0"));
             String desc=t_xml.getAttribute("desc","default");
-            boolean aim=Boolean.parseBoolean(t_xml.getAttribute("aim","true"));
-            
+            boolean aim=Boolean.getBoolean(t_xml.getAttribute("aim","true"));
+           
             tempk.setAim(aim);
             tempk.setDesc(desc);
             tempk.setHeight(height);
@@ -408,13 +407,13 @@ public class xml_Reader {
         proj_class.resetproject();
         
         String pname=xml.getAttribute("project_name","default");
-        boolean house=Boolean.valueOf(xml.getAttribute("isHouse","false"));
-        boolean stage=Boolean.valueOf(xml.getAttribute("isStage","false"));
-        boolean set=Boolean.valueOf(xml.getAttribute("isSets","false"));
-        boolean bar=Boolean.valueOf(xml.getAttribute("isBars","false"));
-        boolean ins=Boolean.valueOf(xml.getAttribute("isInstruments","false"));
-        boolean inv=Boolean.valueOf(xml.getAttribute("isInventory","false"));
-        boolean type=Boolean.valueOf(xml.getAttribute("isTypes","false"));
+        boolean house=Boolean.getBoolean(xml.getAttribute("isHouse","false"));
+        boolean stage=Boolean.getBoolean(xml.getAttribute("isStage","false"));
+        boolean set=Boolean.getBoolean(xml.getAttribute("isSets","false"));
+        boolean bar=Boolean.getBoolean(xml.getAttribute("isBars","false"));
+        boolean ins=Boolean.getBoolean(xml.getAttribute("isInstruments","false"));
+        boolean inv=Boolean.getBoolean(xml.getAttribute("isInventory","false"));
+        boolean type=Boolean.getBoolean(xml.getAttribute("isTypes","false"));
         
         //if there is a house open it
         if(house){

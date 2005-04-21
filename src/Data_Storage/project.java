@@ -9,7 +9,7 @@ package Data_Storage;
 /**
  *
  * @author Harikrishna Patel
- * last edited by joshua zawislak 4-18-05
+ * last edited by joshua zawislak 4-21-05
  */
 
 import drawing_prog.*;
@@ -167,7 +167,7 @@ public class project{
     
     //function called to commit adding a house to the project
     public boolean addHouse(int len, int width, String name){
-        //this.resetproject();
+        this.resetproject();
         house newHouse= new house();
         newHouse.index=0;
         newHouse.worldx=10;
