@@ -79,7 +79,8 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         addMouseListener(this);
     }
     
-    public void drawobjects(Graphics2D g2) {
+    public void drawobjects(Graphics2D g2)
+    {
         project proj_class=(project)project.oClass;
         proj_class.houses.set_screen(g2);
         proj_class.bars.set_screen(g2);
@@ -89,21 +90,23 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         proj_class.stages.set_screen(g2);
         
         proj_class.sets.set_screen(g2);
-        
+    
+        System.out.println("inside drawobjects, before any statements execute.");
         //drawing numbered screen grid here.
         //chaplin edit
+        
         g2.setColor(Color.LIGHT_GRAY);
         for(int i = 100; i < (BasicWindow.iScreenWidth-(ExplorerBrowserPanel.iWidth*2) - 24); i+= 100) {
             String temp = ""+i;
             g2.draw(new Line2D.Double(i, 0, i, 1250));
             //maybe change 1250.
-            g2.drawString(temp, i, 10);
+            //g2.drawString(temp, i, 10);  grid numbers here.
         }
         for(int i = 100; i < BasicWindow.iScreenHeight - 149; i+= 100) {
             String temp = ""+i;
             g2.draw(new Line2D.Double(0, i, 1000, i));
             //maybe change 1250.
-            g2.drawString(temp, 0, i);
+            //g2.drawString(temp, 0, i); grid numbers here.
         }
         g2.setColor(Color.BLACK);
         //end chaplin edit
@@ -162,7 +165,12 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         }else if(proj_class.selected_type==2){
             
             //bar
-            General_Object temp_obj=proj_class.bars.get_object(proj_class.selected_index);
+            System.out.println("Size does matter: "+proj_class.bars.object_list.size());
+            System.out.println("num objs:"+proj_class.bars.get_num_objects());
+            System.out.println("selected index: "+proj_class.selected_index);
+            System.out.println("selected type: "+proj_class.selected_type);
+            System.out.println("mouse state: "+proj_class.draw_mouse_state+"\n");
+            General_Object temp_obj=proj_class.bars.get_object(proj_class.selected_index);            
             temp_obj.set_color(1);
             temp_obj.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
             temp_obj.set_color(0);
@@ -170,9 +178,16 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         }else if(proj_class.selected_type==3){
             
             //instrument
+            System.out.println("Trans panel, Size is: "+proj_class.instruments.object_list.size());
+            System.out.println("Trans panel, selected index is: "+proj_class.selected_index);
+            System.out.println("Trans panel, Number of objects: "+proj_class.instruments.get_num_objects()+"\n");
             General_Object temp_obj=proj_class.instruments.get_object(proj_class.selected_index);
             temp_obj.set_color(1);
             temp_obj.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
+            
+            System.out.println("Trans panel, Size is: "+proj_class.instruments.object_list.size());
+            System.out.println("Trans panel, selected index is: "+proj_class.selected_index);
+            System.out.println("Trans panel, Number of objects: "+proj_class.instruments.get_num_objects()+"\n");
             
             //draw teh selected aim poitn also
             
@@ -367,16 +382,19 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         
         if((e.getButton() == MouseEvent.BUTTON3)||((e.getModifiersEx()&MouseEvent.CTRL_DOWN_MASK)!=0)){
             //System.out.println("Mouse 3 Was Clicked with in stage area at "+e.getX()+" "+e.getY());
-            
+            System.out.println("inside mouse pressed. first if statement");
             PopUpMenu menu = new PopUpMenu(this,proj_class.selected_type);
             
             menu.show((Component)this, e.getX(), e.getY());
         } else {
             //System.out.println("Mouse Was Clicked with in stage area at "+e.getX()+" "+e.getY());
             //**************************************************************************
+            System.out.println("inside mouse pressed. first else statement");
             if(proj_class.draw_mouse_state==0) {
                 Vector allList = new Vector();
-                
+                Vector tempList = new Vector();//added this.
+                int selIndex = -1;
+                System.out.println("inside mouse pressed. second if statement");
                 int num_in_list=0;
                 
                 //THE NORMAL STATE
@@ -386,24 +404,34 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 
                 int cury=proj_class.ScreenYtoWorld(e.getY());
                 
-                int search_area=10;
+                int search_area=500;
                 
                 boolean found_item=false;
                 
                 Random ran_obj= new Random();
                 
-                //check if the house was selected
+                //check if the house was selected.  selection algorithm here?
                 
                 Object_Drawer items=proj_class.houses.get_objects_in_area(curx-search_area, cury-search_area, curx+search_area,cury+search_area);
+                
+                for (int i = 0; i< items.get_num_objects(); i++)
+                {
+                   System.out.println("Num objects is: "+items.get_num_objects());
+                   System.out.println("Inside first for loop, items is: "+items.object_list.elementAt(i));
+                }    
+                
+                System.out.println("curx is: "+curx+"cury is: "+cury+"search area is: "+search_area);
+                //
+                //items.object_list
                 
                 if(items.get_num_objects()>0) {
                     allList.add(items.get_object(0));
                     num_in_list++;
-                }
+                }//not sure why this??
                 //check if the stage was selected
                 if(proj_class.isStageVisible()){
                     items=proj_class.stages.get_objects_in_area(curx-search_area, cury-search_area, curx+search_area,cury+search_area);
-                    
+                    //System.out.println("Inside stage if, items is: "+items.object_list.elementAt(0));
                     if(items.get_num_objects()>0) {
                         allList.add(items.get_object(0));
                         num_in_list++;
@@ -417,6 +445,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                         
                         int iter;
                         for(iter=0;iter<items.get_num_objects();iter++) {
+                            System.out.println("Inside bar if, items is: "+items.object_list.elementAt(iter));
                             allList.add(items.get_object(iter));
                             num_in_list++;
                         }
@@ -429,6 +458,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     if(items.get_num_objects()>0) {
                         int iter;
                         for(iter=0;iter<items.get_num_objects();iter++) {
+                            System.out.println("Inside instrument if, items is: "+items.object_list.elementAt(iter));
                             allList.add(items.get_object(iter));
                             num_in_list++;
                         }
@@ -442,20 +472,31 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     if(items.get_num_objects()>0) {
                         int iter;
                         for(iter=0;iter<items.get_num_objects();iter++) {
+                            System.out.println("Inside set if, items is: "+items.object_list.elementAt(iter));
                             allList.add(items.get_object(iter));
                             num_in_list++;
                         }
                     }
                 }
                 
-                if(num_in_list>0){
-                    //select a random number from the created list of objects
+                System.out.println("num_in_list is: "+num_in_list+"");
+                
+                for (int i = 0; i< allList.size(); i++)
+                {
+                   System.out.println("Inside second for loop, allist  is: "+allList.elementAt(i));
+                }    
+                
+                if(num_in_list>0)
+                {
+                    int listSize = -1;
                     
-                    int ran_index=ran_obj.nextInt()%num_in_list;
                     
-                    ran_index=Math.abs(ran_index);
                     
-                    Object temp_obj=allList.get(ran_index);
+                                         
+                }    
+                    //selIndex should be set after previous if/else
+                    System.out.println("the selected index is: " +selIndex);
+                    Object temp_obj=allList.get(selIndex);
                     
                     if(temp_obj instanceof house) {
                         proj_class.selected_type=0;
@@ -468,12 +509,14 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     } else if(temp_obj instanceof setobject) {
                         proj_class.selected_type=4;
                     }
-                    
+                    System.out.println("Selected Type: "+proj_class.selected_type+"\n");
+                    System.out.println("Selected Index: "+proj_class.selected_index+"\n");
                     proj_class.selected_index=((General_Object)temp_obj).index;
+                    System.out.println("Selected Type: "+proj_class.selected_type+"\n");
+                    System.out.println("Selected Index: "+proj_class.selected_index+"\n");
                     ItemBrowser.displayInfo(temp_obj);
                     repaint();
                 }
-            }
             //*********************************************************************************
             else if(proj_class.draw_mouse_state==1) {
                 //creation of a bar
@@ -502,13 +545,14 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 }
                 
                 //**************************************************************
-            } else if(proj_class.draw_mouse_state==2) {
+            } 
+            else if(proj_class.draw_mouse_state==2)
+            {
                 //adding an instrument to the selected bar
                 //since the instrument has to be on the bar that was selected
-                //use the x value of the mouse to find out the y value for the
-                
+                //use the x value of the mouse to find out the y value for the instrument
                 //edit here for instrument on bar problem.
-                
+               
                 //placement on the bar
                 
                 int pot_x;
@@ -528,43 +572,49 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 //begin chaplin edit reediting by JoshZ
                 pot_x = proj_class.ScreenXtoWorld(e.getX());
                 //end chaplin edit reedited by JoshZ
-                if(barx1>barx2) {
-                    int temp_int;
-                    
+                
+                //this is done wrong. this assumes bar is either slanted or horizontal.
+                
+                
+                if(barx1>barx2)
+                {
+                    int temp_int;        
                     temp_int=barx1;
-                    
                     barx1=barx2;
-                    
                     barx2=temp_int;
-                    
                     temp_int=bary1;
-                    
                     bary1=bary2;
-                    
                     bary2=temp_int;
-                    
                 }
-                if((pot_x>barx1)&&(pot_x<barx2)) {
-                    //the x is valid find the y value for it
-                    
-                    //fix here. what if slope undefined or 0? i.e. vertical/horizontal line
-                    
-                    if(barx1-barx2!=0) {
-                        //to find slope y - y1 = m (x - x1)  or m=(y-y1)/(x-x1)
+                //this for mouse cursor pos. need another if here. OR if y(e.gety()) is in the range.
+                
+                if((pot_x>barx1)&&(pot_x<barx2) || ((e.getY() > bary1)&&(e.getY() < bary2)))
+                {
+                    //the x is valid find the y value for it                    
+
+                       double slope = 0;
                         
-                        //double slope = (bary1-bary2)/(barx1-barx2);
+                       slope = ((double)(bary1-bary2))/ ((double)(barx1-barx2));                      
                         
-                        //to find y with an x use equation y=m(x-x1)+y1
-                        
-                        //pot_y=(int)(slope*(double)(barx1-barx2)+bary2);
-                        
-                        double slope = (double)(bary1-bary2)/ (double)(barx1-barx2);
-                        
-                        pot_y=(int)(slope*((double)pot_x-(double)barx1)+(double)bary1);
-                    }
+                       if( (slope == Double.NEGATIVE_INFINITY) || (slope == Double.POSITIVE_INFINITY) )
+                        {
+                           pot_y =  e.getY();
+                           pot_x = (int)((pot_y-bary1)/slope) + barx1;
+                           //pot_x off bar slightly. use point slope to get x point on line. subtract mouse cursor from poit on line and set as pot x.
+                           System.out.println("Inside if. bary1 is: "+bary1+"barx1 "+barx1+" slope is:"+slope+". pot_x is: "+pot_x+".");
+                        }                        
+                        else if(slope == 0)
+                        {
+                           pot_y = bary1;               
+                        }
+                        else
+                        {
+                           pot_y=(int)(slope*((double)pot_x-(double)barx1)+(double)bary1);                        
+                        }
                 }
                 
-                if(pot_y>=0) {
+                if(pot_y>=0)
+                {
                     //found a y so place it
                     
                     LightsPopUp lp= new LightsPopUp();
@@ -593,7 +643,8 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 }
                 
                 //*******************************************************************
-            } else if(proj_class.draw_mouse_state==6) {
+            }
+            else if(proj_class.draw_mouse_state==6) {
                 //moving a bar
                 bar selected_bar=(bar)proj_class.bars.get_object(proj_class.selected_index);
                 
@@ -836,6 +887,11 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 //to reaim the light redo this function
                 ((instrument)proj_class.instruments.get_object(proj_class.selected_index)).aimx=proj_class.ScreenXtoWorld(e.getX());
                 ((instrument)proj_class.instruments.get_object(proj_class.selected_index)).aimy=proj_class.ScreenYtoWorld(e.getY());
+                proj_class.draw_mouse_state=0;
+            }
+            else if(proj_class.draw_mouse_state==17)
+            {
+                System.out.println("Project class item selected index is: "+proj_class.selected_index+"\n");
                 proj_class.draw_mouse_state=0;
             }
             //******************************************

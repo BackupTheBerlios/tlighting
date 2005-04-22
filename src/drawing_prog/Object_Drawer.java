@@ -52,6 +52,10 @@ public class Object_Drawer {
     public int get_num_objects(){
         return num_objects;
     }
+    
+     public void set_num_objects(int val){
+        this.num_objects = val;
+    }
 
 	//- adds an object to the list
     public  int add_object(General_Object obj){
@@ -211,7 +215,9 @@ public class Object_Drawer {
 		return tempv;
 	}
 
-        public General_Object get_object(int index){
+        public General_Object get_object(int index)
+        {
+            System.out.println("num objects is: "+this.num_objects+"\n");
             if(index<num_objects){
                 return (General_Object)object_list.get(index);
             }else{
