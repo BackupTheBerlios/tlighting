@@ -64,7 +64,7 @@ public class project{
      *moving set=13
      *editing a house=4
      *moving a house=12
-     *
+     * 15 = remove stage, 16 = remove set, 17 = remove bar, 18 = remove instrument, 19 = remove house //chaplin edit.
      */
     
     
