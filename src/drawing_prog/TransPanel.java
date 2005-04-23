@@ -39,7 +39,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
     public TransPanel() {
         setBackground(Color.white);
         setLayout(null);
-        
+      
         horiz = new JScrollBar();
         horiz.setOrientation(Adjustable.HORIZONTAL);
         horiz.addAdjustmentListener(this);
@@ -165,11 +165,11 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         }else if(proj_class.selected_type==2){
             
             //bar
-            System.out.println("Size does matter: "+proj_class.bars.object_list.size());
-            System.out.println("num objs:"+proj_class.bars.get_num_objects());
-            System.out.println("selected index: "+proj_class.selected_index);
-            System.out.println("selected type: "+proj_class.selected_type);
-            System.out.println("mouse state: "+proj_class.draw_mouse_state+"\n");
+            //System.out.println("Size does matter: "+proj_class.bars.object_list.size());
+            //System.out.println("num objs:"+proj_class.bars.get_num_objects());
+            ///System.out.println("selected index: "+proj_class.selected_index);
+            //System.out.println("selected type: "+proj_class.selected_type);
+            //System.out.println("mouse state: "+proj_class.draw_mouse_state+"\n");
             General_Object temp_obj=proj_class.bars.get_object(proj_class.selected_index);            
             temp_obj.set_color(1);
             temp_obj.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
@@ -178,16 +178,16 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         }else if(proj_class.selected_type==3){
             
             //instrument
-            System.out.println("Trans panel, Size is: "+proj_class.instruments.object_list.size());
-            System.out.println("Trans panel, selected index is: "+proj_class.selected_index);
-            System.out.println("Trans panel, Number of objects: "+proj_class.instruments.get_num_objects()+"\n");
+            //System.out.println("Trans panel, Size is: "+proj_class.instruments.object_list.size());
+            //System.out.println("Trans panel, selected index is: "+proj_class.selected_index);
+            //System.out.println("Trans panel, Number of objects: "+proj_class.instruments.get_num_objects()+"\n");
             General_Object temp_obj=proj_class.instruments.get_object(proj_class.selected_index);
             temp_obj.set_color(1);
             temp_obj.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
             
-            System.out.println("Trans panel, Size is: "+proj_class.instruments.object_list.size());
-            System.out.println("Trans panel, selected index is: "+proj_class.selected_index);
-            System.out.println("Trans panel, Number of objects: "+proj_class.instruments.get_num_objects()+"\n");
+            //System.out.println("Trans panel, Size is: "+proj_class.instruments.object_list.size());
+            //System.out.println("Trans panel, selected index is: "+proj_class.selected_index);
+            //System.out.println("Trans panel, Number of objects: "+proj_class.instruments.get_num_objects()+"\n");
             
             //draw teh selected aim poitn also
             
@@ -488,11 +488,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 
                 if(num_in_list>0)
                 {
-                    int listSize = -1;
-                    
-                    
-                    
-                                         
+                    int listSize = -1;   
                 }    
                     //selIndex should be set after previous if/else
                     System.out.println("the selected index is: " +selIndex);

@@ -10,6 +10,9 @@ import javax.swing.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.*;
+import java.awt.image.*;
+
 
 import Data_Storage.*;
 /**
@@ -18,19 +21,24 @@ import Data_Storage.*;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class InventoryManager extends JDialog implements ActionListener {
+public class InventoryManager extends JDialog implements MouseListener, ActionListener {
     protected JPanel jpInstruments = new JPanel();
     protected JPanel jpInstrumentType = new JPanel();
     protected JTabbedPane tpBulletinBoard;
     protected JPanel btnPanel = new JPanel();
-    
+    protected DrawingPanel jpDrawing=new DrawingPanel();
     
     
     protected int iScreenHeight =BasicWindow.iScreenWidth-50;
     protected int iScreenWidth = BasicWindow.iScreenHeight-100;
     
     protected project proj_class;
-    
+    public int[] x;
+    public int[] y;
+    public int numNodes;
+    public boolean hasPoints;
+    public int pointSelected;
+    public boolean addNode;
     //components
     private JList instList;
     private JTextField name;
@@ -43,6 +51,8 @@ public class InventoryManager extends JDialog implements ActionListener {
     private JTextArea typeNotes;
     private JScrollPane jsNotes;
     private JScrollPane jsNotesType;
+    
+    
     public InventoryManager() {
         super(BasicWindow.curWindow,"Inventory Manager", true);
         //setTitle("Inventory Manager");
@@ -53,7 +63,12 @@ public class InventoryManager extends JDialog implements ActionListener {
         //setSize(500,500);
         setResizable(true);
         setVisible(true);
-        
+        x=new int[30];
+        y=new int[30];
+        hasPoints=false;
+        pointSelected=-1;
+        addNode=false;
+        numNodes=0;
     }
     public void addComponents() {
         JPanel jpMain = new JPanel();
@@ -170,6 +185,29 @@ public class InventoryManager extends JDialog implements ActionListener {
         
         //btnPanel.setVisible(true);
         //jpInstrumentType.add( btnPanel);
+        
+        jpDrawing= new DrawingPanel();
+        jpDrawing.setBackground(Color.WHITE);
+        jpDrawing.setBounds(375,220,100,100);
+        jpDrawing.addMouseListener(this);
+        jpInstrumentType.add(jpDrawing);
+        
+        
+        JButton jbAddNode = new JButton("Add Node");
+        jbAddNode.setBounds(500,230,200,20);
+        jbAddNode.setActionCommand("addNode");
+        jpInstrumentType.add(jbAddNode);
+        
+        JButton jbRemoveNode = new JButton("Remove Node");
+        jbRemoveNode.setBounds(500,260,200,20);
+        jbRemoveNode.setActionCommand("removeNode");
+        jpInstrumentType.add(jbRemoveNode);
+        
+        JButton jbClearNode = new JButton("Clear Nodes");
+        jbClearNode.setBounds(500,290,200,20);
+        jbClearNode.setActionCommand("clearNodes");
+        jpInstrumentType.add(jbClearNode);
+        
     }
     
     
@@ -291,6 +329,8 @@ public class InventoryManager extends JDialog implements ActionListener {
         }else{
             //the second tab is selected working with instrument types
             System.out.println("Event while sconde tab is selected");
+            
+            
             if (e.getActionCommand().equals("save")) {
                 System.out.println("SAVE BUTTON HIT");
                 
@@ -329,7 +369,7 @@ public class InventoryManager extends JDialog implements ActionListener {
                 //check if there is a type with the same name
                 //if there is then remove it and all instruments
                 //with the same type
-                 int i;
+                int i;
                 String n=typeName.getText();
                 String aDesc=typeDesc.getText();
                 String aNote=jsNotesType.toString();
@@ -352,8 +392,148 @@ public class InventoryManager extends JDialog implements ActionListener {
                 System.out.println("CANCEL BUTON HIT)");
                 //quits
                 this.dispose();
+            }else if(e.getActionCommand().equals("addNode")){
+                addNode=true;
+                
+            }else if(e.getActionCommand().equals("removeNode")){
+                if(pointSelected!=-1){
+                    if(pointSelected<numNodes){
+                        int[] tx=new  int[30];
+                        int[] ty=new int[30];
+                        int i,j;
+                        j=0;
+                        for(i=0;i<numNodes;i++){
+                            if(i!=pointSelected){
+                                tx[j]=x[i];
+                                ty[j]=y[i];
+                                x[i]=-1;
+                                y[i]=-1;
+                                j++;
+                            }
+                        }
+                        numNodes--;
+                        for(i=0;i<numNodes;i++){
+                            x[i]=tx[i];
+                            y[i]=ty[i];
+                        }
+                        
+                    }
+                }
+            }else if(e.getActionCommand().equals("clearNodes")){
+                int i;
+                for(i=0;i<30;i++){
+                    x[i]=-1;
+                    y[i]=-1;
+                    numNodes=0;
+                }
             }
+            
+            
             loadItems();
         }
+    }
+    
+    public void mouseClicked(MouseEvent event) {}
+    public void mouseEntered(MouseEvent event) {}
+    public void mouseExited(MouseEvent event) {}
+    public void mouseReleased(MouseEvent event) {}
+    
+    public void mousePressed(MouseEvent e){
+        System.out.println("X is:"+e.getX()+" Y is:"+e.getY());
+        if(addNode){
+            //add a node
+            
+            //if a node is selected add it next to that one
+            if(pointSelected!=-1){
+                if(pointSelected<numNodes){
+                    int[] tx=new  int[30];
+                    int[] ty=new int[30];
+                    int i,j;
+                    j=0;
+                    for(i=0;i<numNodes;i++){
+                        if(i!=pointSelected){
+                            tx[j]=x[i];
+                            ty[j]=y[i];
+                            x[i]=-1;
+                            y[i]=-1;
+                            j++;
+                        }else{
+                            //i is pointSelected
+                            tx[j]=x[i];
+                            ty[j]=y[i];
+                            j++;
+                            tx[j]=e.getX();
+                            ty[j]=e.getY();
+                            j++;
+                        }
+                    }
+                    numNodes++;
+                    for(i=0;i<numNodes;i++){
+                        x[i]=tx[i];
+                        y[i]=ty[i];
+                    }
+                }
+                
+            }else{
+                //if not add it to the end of the list
+                x[numNodes]=e.getX();
+                y[numNodes]=e.getY();
+                numNodes++;
+            }
+        }else if(pointSelected!=-1){
+            //move a node
+            if(pointSelected<numNodes){
+                x[pointSelected]=e.getX();
+                y[pointSelected]=e.getY();
+            }
+            
+        }else{
+            //select a node
+            boolean nodeNotFound=true;
+            int i=0;
+            int tx=e.getX();
+            int ty=e.getY();
+            while((i<numNodes)&&(nodeNotFound)){
+                if((x[i]<tx+5)&&(x[i]>tx-5)&&(y[i]<ty+5)&&(y[i]>ty-5)){
+                    //found a node
+                    nodeNotFound=false;
+                    pointSelected=i;
+                }
+                i++;
+            }
+        }
+        
+        jpDrawing.repaint();
+    }
+    
+    
+    
+    
+    class DrawingPanel extends JPanel
+    {
+    public DrawingPanel(){
+        
+        
+    }
+    public void paintComponent(Graphics g) {
+        //super.paintComponent(g);
+        Graphics2D g2=(Graphics2D)g;
+        drawPoints(g2);   
+    }
+    
+    
+    public void drawPoints(Graphics2D g){
+        if(numNodes>0){
+            int iter;
+            for(iter=0;iter<numNodes-1;iter++){
+                g.draw(new Line2D.Double(x[iter],y[iter],
+                        x[iter+1], y[iter+1]));
+            }
+            g.draw(new Line2D.Double(x[0], y[0],
+                    x[numNodes-1], y[numNodes-1]));
+        }
+        
+    }    
+        
     }
 }
