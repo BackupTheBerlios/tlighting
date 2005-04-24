@@ -90,6 +90,9 @@ public class project{
     boolean bBarVisible = true;
     boolean bInstrumentVisible = true;
     
+    public int selectedArraySize = -1;  //the size of the array in the selected area.
+    public int selectedListIndex = -1;
+    
     public int templightid;
     
     /** Creates a new instance of hold_project */
