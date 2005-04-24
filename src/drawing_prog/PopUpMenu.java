@@ -403,7 +403,14 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
         }
         else if(e.getSource() == zoom_in)
         {   //begin chaplin edit.
-            if(proj_class.zoom_factor<100){
+            if(proj_class.zoom_factor<1){
+                proj_class.zoom_factor+=.1;
+                aScreen.vert.setUnitIncrement((int)((1/(double)proj_class.zoom_factor)*(.05 * aScreen.vert.getHeight())));
+                aScreen.horiz.setUnitIncrement((int)((1/(double)proj_class.zoom_factor)*(.05 * aScreen.horiz.getWidth())));
+                aScreen.vert.setBlockIncrement((int)((1/(double)proj_class.zoom_factor)*(.25 * aScreen.vert.getHeight())));
+                aScreen.horiz.setBlockIncrement((int)((1/(double)proj_class.zoom_factor)*(.25 * aScreen.horiz.getWidth())));
+                aScreen.repaint();
+            }else if(proj_class.zoom_factor<100){
                 proj_class.zoom_factor+=1;
                 aScreen.vert.setUnitIncrement((int)((1/(double)proj_class.zoom_factor)*(.05 * aScreen.vert.getHeight())));
                 aScreen.horiz.setUnitIncrement((int)((1/(double)proj_class.zoom_factor)*(.05 * aScreen.horiz.getWidth())));

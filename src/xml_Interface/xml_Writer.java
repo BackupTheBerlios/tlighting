@@ -535,7 +535,24 @@ public class xml_Writer {
             type_obj.setAttribute("desc",((knowntype)proj_class.types.get(i)).getDesc());
             type_obj.setAttribute("aim",String.valueOf(((knowntype)proj_class.types.get(i)).getAim()));
             
+         
+        int j;
+        int num_nodes=((knowntype)proj_class.types.get(i)).getNumNodes();
+        int val;
+        for(j=0;j<num_nodes;j++){
+            XMLElement node_obj=new XMLElement();
+            node_obj.setName("node");
             
+            val=((knowntype)proj_class.types.get(i)).getX(j);
+            node_obj.setAttribute("x",String.valueOf(val));
+            
+            val=((knowntype)proj_class.types.get(i)).getY(j);
+            node_obj.setAttribute("y",String.valueOf(val));
+            
+            val=((knowntype)proj_class.types.get(i)).getHeight();
+            node_obj.setAttribute("z",String.valueOf(val));
+            type_obj.addChild(node_obj);
+        }   
             
             parent_obj.addChild(type_obj);
             

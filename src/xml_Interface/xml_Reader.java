@@ -407,13 +407,15 @@ public class xml_Reader {
         proj_class.resetproject();
         
         String pname=xml.getAttribute("project_name","default");
-        boolean house=Boolean.getBoolean(xml.getAttribute("isHouse","false"));
-        boolean stage=Boolean.getBoolean(xml.getAttribute("isStage","false"));
-        boolean set=Boolean.getBoolean(xml.getAttribute("isSets","false"));
-        boolean bar=Boolean.getBoolean(xml.getAttribute("isBars","false"));
-        boolean ins=Boolean.getBoolean(xml.getAttribute("isInstruments","false"));
-        boolean inv=Boolean.getBoolean(xml.getAttribute("isInventory","false"));
-        boolean type=Boolean.getBoolean(xml.getAttribute("isTypes","false"));
+        String h=xml.getAttribute("isHouse","false");
+        
+        boolean house=convertBool(h);
+        boolean stage=convertBool(xml.getAttribute("isStage","false"));
+        boolean set=convertBool(xml.getAttribute("isSets","false"));
+        boolean bar=convertBool(xml.getAttribute("isBars","false"));
+        boolean ins=convertBool(xml.getAttribute("isInstruments","false"));
+        boolean inv=convertBool(xml.getAttribute("isInventory","false"));
+        boolean type=convertBool(xml.getAttribute("isTypes","false"));
         
         //if there is a house open it
         if(house){
@@ -519,5 +521,14 @@ public class xml_Reader {
         
         
         return true;
+    }
+    
+    
+    public boolean convertBool(String b){
+        if(b.equalsIgnoreCase("true")){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

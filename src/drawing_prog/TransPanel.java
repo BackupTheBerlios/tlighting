@@ -847,10 +847,6 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 int old_y;
                 old_y=selected_set.worldy;
                 
-                
-                
-                
-                
                 int xdiff;
                 int ydiff;
                 

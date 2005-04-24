@@ -218,7 +218,7 @@ public class Object_Drawer {
     
     public General_Object get_object(int index) {
         //System.out.println("num objects is: "+this.num_objects+"\n");
-        if(index<num_objects){
+        if((index<num_objects)&&(index>=0)){
             return (General_Object)object_list.get(index);
         }else{
             return null;
