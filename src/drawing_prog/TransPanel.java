@@ -39,7 +39,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
     public TransPanel() {
         setBackground(Color.white);
         setLayout(null);
-      
+        
         horiz = new JScrollBar();
         horiz.setOrientation(Adjustable.HORIZONTAL);
         horiz.addAdjustmentListener(this);
@@ -79,8 +79,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         addMouseListener(this);
     }
     
-    public void drawobjects(Graphics2D g2)
-    {
+    public void drawobjects(Graphics2D g2) {
         project proj_class=(project)project.oClass;
         proj_class.houses.set_screen(g2);
         proj_class.bars.set_screen(g2);
@@ -90,7 +89,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         proj_class.stages.set_screen(g2);
         
         proj_class.sets.set_screen(g2);
-    
+        
         System.out.println("inside drawobjects, before any statements execute.");
         //drawing numbered screen grid here.
         //chaplin edit
@@ -165,7 +164,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         }else if(proj_class.selected_type==2){
             
             //bar
-            General_Object temp_obj=proj_class.bars.get_object(proj_class.selected_index);            
+            General_Object temp_obj=proj_class.bars.get_object(proj_class.selected_index);
             temp_obj.set_color(1);
             temp_obj.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
             temp_obj.set_color(0);
@@ -185,7 +184,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
             int ly=((instrument)proj_class.instruments.get_object(proj_class.selected_index)).worldy;
             
             if((x>=0)&&(y>=0)){
-               
+                
                 Line2D dotted =new Line2D.Double(proj_class.WorldXtoScreen(x), proj_class.WorldYtoScreen(y),
                         proj_class.WorldXtoScreen(lx), proj_class.WorldYtoScreen(ly));
                 g2.draw(dotted);
@@ -218,7 +217,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
             
             temp_instrument.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
             //proj_class.zoom_factor
-
+            
             temp_instrument.set_color(0);
         }
         
@@ -353,7 +352,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         
         if((e.getButton() == MouseEvent.BUTTON3)||((e.getModifiersEx()&MouseEvent.CTRL_DOWN_MASK)!=0)){
             //System.out.println("Mouse 3 Was Clicked with in stage area at "+e.getX()+" "+e.getY());
-            System.out.println("inside mouse pressed. first if statement");
+            //System.out.println("inside mouse pressed. first if statement");
             PopUpMenu menu = new PopUpMenu(this,proj_class.selected_type);
             
             menu.show((Component)this, e.getX(), e.getY());
@@ -371,7 +370,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 
                 int cury=proj_class.ScreenYtoWorld(e.getY());
                 
-                int search_area=500;
+                int search_area=10;
                 
                 boolean found_item=false;
                 
@@ -381,14 +380,14 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 
                 Object_Drawer items=proj_class.houses.get_objects_in_area(curx-search_area, cury-search_area, curx+search_area,cury+search_area);
                 
-                for (int i = 0; i< items.get_num_objects(); i++)
+                /*for (int i = 0; i< items.get_num_objects(); i++)
                 {
                    System.out.println("Num objects is: "+items.get_num_objects());
                    System.out.println("Inside first for loop, items is: "+items.object_list.elementAt(i));
-                }    
-                
+                }
+                 
                 System.out.println("curx is: "+curx+"cury is: "+cury+"search area is: "+search_area);
-                //
+                 *///
                 //items.object_list
                 
                 if(items.get_num_objects()>0) {
@@ -412,7 +411,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                         
                         int iter;
                         for(iter=0;iter<items.get_num_objects();iter++) {
-                            System.out.println("Inside bar if, items is: "+items.object_list.elementAt(iter));
+                            //System.out.println("Inside bar if, items is: "+items.object_list.elementAt(iter));
                             allList.add(items.get_object(iter));
                             num_in_list++;
                         }
@@ -425,7 +424,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     if(items.get_num_objects()>0) {
                         int iter;
                         for(iter=0;iter<items.get_num_objects();iter++) {
-                            System.out.println("Inside instrument if, items is: "+items.object_list.elementAt(iter));
+                            //System.out.println("Inside instrument if, items is: "+items.object_list.elementAt(iter));
                             allList.add(items.get_object(iter));
                             num_in_list++;
                         }
@@ -439,81 +438,77 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     if(items.get_num_objects()>0) {
                         int iter;
                         for(iter=0;iter<items.get_num_objects();iter++) {
-                            System.out.println("Inside set if, items is: "+items.object_list.elementAt(iter));
+                            //System.out.println("Inside set if, items is: "+items.object_list.elementAt(iter));
                             allList.add(items.get_object(iter));
                             num_in_list++;
                         }
                     }
                 }
                 
-                System.out.println("num_in_list is: "+num_in_list+"");              
-                if(num_in_list>0)
-                {
-                                    
+                System.out.println("num_in_list is: "+num_in_list+"");
+                Object temp_obj=new Object();
+                if(num_in_list>0) {
+                    
                     System.out.println("Within select_index decrement block. Index is: "+this.proj_class.selected_index);
                     System.out.println("At Beginning the selected index is: "+this.proj_class.selected_index);
                     for(int j = 0; j < allList.size(); j++)
                         System.out.println("allList element "+j+" is: "+allList.elementAt(j));
                     if(this.proj_class.selectedArraySize == allList.size())//then decrement selected index.
                     {
-                       if(this.proj_class.selectedListIndex == -1)//then we've decremented all the way through the array.
-                       {
-                           this.proj_class.selected_index = allList.size() - 1;
-                           this.proj_class.selectedListIndex = allList.size()-1;
-                       }    
-                       else
-                       {   
-                              this.proj_class.selectedListIndex--;
-                              if(this.proj_class.selectedListIndex > 0)
-                              {    
-                                General_Object temp = (General_Object)allList.elementAt(this.proj_class.selectedListIndex);
-                                this.proj_class.selected_index = temp.index; //Edit this line for selection algorithm
+                        if(this.proj_class.selectedListIndex == -1)//then we've decremented all the way through the array.
+                        {
+                            this.proj_class.selected_index = allList.size() - 1;
+                            this.proj_class.selectedListIndex = allList.size()-1;
+                        } else {
+                            
+                            if(this.proj_class.selectedListIndex > 0) {
+                                
+                                this.proj_class.selectedListIndex--;
+                                temp_obj = (General_Object)allList.elementAt(this.proj_class.selectedListIndex);
+                                //this.proj_class.selected_index = temp_obj.index; //Edit this line for selection algorithm
                                 System.out.println("Within select_index decrement block. Decrementing index to: "+this.proj_class.selected_index);
-                              }
-                       }     
-                    }
-                    else//they're not equal so set index to be first index of new array and mod size.
+                            }else//they're not equal so set index to be first index of new array and mod size.
+                            {
+                                //this.proj_class.selected_index = allList.size() - 1;
+                                this.proj_class.selectedListIndex = allList.size() - 1;
+                                this.proj_class.selectedArraySize = allList.size();
+                                temp_obj= (General_Object)allList.elementAt(this.proj_class.selectedListIndex);
+                            }
+                        }
+                    } else//they're not equal so set index to be first index of new array and mod size.
                     {
-                       this.proj_class.selected_index = allList.size() - 1;
-                       this.proj_class.selectedListIndex = allList.size() - 1;
-                       this.proj_class.selectedArraySize = allList.size();
+                        //this.proj_class.selected_index = allList.size() - 1;
+                        this.proj_class.selectedListIndex = allList.size() - 1;
+                        this.proj_class.selectedArraySize = allList.size();
+                        temp_obj= (General_Object)allList.elementAt(this.proj_class.selectedListIndex);
+                    }
+                    
+                }
+                
+                if(this.proj_class.selectedListIndex<allList.size() && (this.proj_class.selectedListIndex > -1)) {
+                    //=allList.get(this.proj_class.selected_index);
+                    
+                    if(temp_obj instanceof house) {
+                        proj_class.selected_type=0;
+                    } else if(temp_obj instanceof stage) {
+                        proj_class.selected_type=1;
+                    } else if(temp_obj instanceof bar) {
+                        proj_class.selected_type=2;
+                    } else if(temp_obj instanceof instrument) {
+                        proj_class.selected_type=3;
+                    } else if(temp_obj instanceof setobject) {
+                        proj_class.selected_type=4;
+                    } else
+                        proj_class.selected_type=5;
+                    if(proj_class.selected_type<5){
+                        proj_class.selected_index=((General_Object)temp_obj).index;
                     }
                     System.out.println("At end the selected index is: "+this.proj_class.selected_index);
-                }    
-
-                if(this.proj_class.selected_index<allList.size() && (this.proj_class.selected_index > -1))
-                {    
-                    Object temp_obj=allList.get(this.proj_class.selected_index);
-                
-                    if(temp_obj instanceof house)
-                    {    
-                        proj_class.selected_type=0;
-                    }
-                    else if(temp_obj instanceof stage)
-                    {
-                        proj_class.selected_type=1;
-                    }
-                    else if(temp_obj instanceof bar)
-                    {
-                        proj_class.selected_type=2;
-                    }
-                    else if(temp_obj instanceof instrument)
-                    {
-                        proj_class.selected_type=3;
-                    }
-                    else if(temp_obj instanceof setobject)
-                    {
-                        proj_class.selected_type=4;
-                    }
-                    else
-                        proj_class.selected_type=5;
-                    
-                    proj_class.selected_index=((General_Object)temp_obj).index;
-                    
+                    System.out.println("At end the selected type is: "+this.proj_class.selected_type);
                     ItemBrowser.displayInfo(temp_obj);
                     repaint();
                 }
-           }
+            }
             //*********************************************************************************
             else if(proj_class.draw_mouse_state==1) {
                 //creation of a bar
@@ -542,14 +537,12 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 }
                 
                 //**************************************************************
-            } 
-            else if(proj_class.draw_mouse_state==2)
-            {
+            } else if(proj_class.draw_mouse_state==2) {
                 //adding an instrument to the selected bar
                 //since the instrument has to be on the bar that was selected
                 //use the x value of the mouse to find out the y value for the instrument
                 //edit here for instrument on bar problem.
-               
+                
                 //placement on the bar
                 
                 int pot_x;
@@ -573,9 +566,8 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 //this is done wrong. this assumes bar is either slanted or horizontal.
                 
                 
-                if(barx1>barx2)
-                {
-                    int temp_int;        
+                if(barx1>barx2) {
+                    int temp_int;
                     temp_int=barx1;
                     barx1=barx2;
                     barx2=temp_int;
@@ -585,40 +577,33 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 }
                 //this for mouse cursor pos. need another if here. OR if y(e.gety()) is in the range.
                 
-                if((pot_x>barx1)&&(pot_x<barx2) || ((e.getY() > bary1)&&(e.getY() < bary2)))
-                {
-                    //the x is valid find the y value for it                    
-
-                       double slope = 0;
-                        
-                       slope = ((double)(bary1-bary2))/ ((double)(barx1-barx2));                      
-                        
-                       if( (slope == Double.NEGATIVE_INFINITY) || (slope == Double.POSITIVE_INFINITY) )
-                        {
-                           pot_y =  e.getY();
-                           pot_x = (int)((pot_y-bary1)/slope) + barx1;
-                           //pot_x off bar slightly. use point slope to get x point on line. subtract mouse cursor from poit on line and set as pot x.
-                           System.out.println("Inside if. bary1 is: "+bary1+"barx1 "+barx1+" slope is:"+slope+". pot_x is: "+pot_x+".");
-                        }                        
-                        else if(slope == 0)
-                        {
-                           pot_y = bary1;               
-                        }
-                        else
-                        {
-                           pot_y=(int)(slope*((double)pot_x-(double)barx1)+(double)bary1);                        
-                        }
+                if((pot_x>barx1)&&(pot_x<barx2) || ((e.getY() > bary1)&&(e.getY() < bary2))) {
+                    //the x is valid find the y value for it
+                    
+                    double slope = 0;
+                    
+                    slope = ((double)(bary1-bary2))/ ((double)(barx1-barx2));
+                    
+                    if( (slope == Double.NEGATIVE_INFINITY) || (slope == Double.POSITIVE_INFINITY) ) {
+                        pot_y =  e.getY();
+                        pot_x = (int)((pot_y-bary1)/slope) + barx1;
+                        //pot_x off bar slightly. use point slope to get x point on line. subtract mouse cursor from poit on line and set as pot x.
+                        System.out.println("Inside if. bary1 is: "+bary1+"barx1 "+barx1+" slope is:"+slope+". pot_x is: "+pot_x+".");
+                    } else if(slope == 0) {
+                        pot_y = bary1;
+                    } else {
+                        pot_y=(int)(slope*((double)pot_x-(double)barx1)+(double)bary1);
+                    }
                 }
                 
-                if(pot_y>=0)
-                {
+                if(pot_y>=0) {
                     //found a y so place it
                     
                     LightsPopUp lp= new LightsPopUp();
                     if(proj_class.templightid!=-1){
                         temp_instrument.setInvnetoryID(proj_class.templightid);
                         
-                        int index=proj_class.getInstrumentByID(proj_class.templightid); 
+                        int index=proj_class.getInstrumentByID(proj_class.templightid);
                         proj_class.inventories.setItemUsed(index, true);
                         temp_instrument.setDescription(proj_class.inventories.getItemDesc(index));
                         temp_instrument.setType(proj_class.inventories.getItemType(index));
@@ -626,11 +611,11 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                         //no that there is a type find the type and assign the nodes to show
                         int tindex=proj_class.getTypeByName(temp_instrument.getType());
                         if(tindex!= -1){
-                        temp_instrument.num_nodes=0;
-                        int i;
-                        for(i=0;i<((knowntype)proj_class.types.get(tindex)).getNumNodes();i++){   
-                            temp_instrument.add_node(((knowntype)proj_class.types.get(tindex)).getX(i), ((knowntype)proj_class.types.get(tindex)).getY(i));
-                        }
+                            temp_instrument.num_nodes=0;
+                            int i;
+                            for(i=0;i<((knowntype)proj_class.types.get(tindex)).getNumNodes();i++){
+                                temp_instrument.add_node(((knowntype)proj_class.types.get(tindex)).getX(i), ((knowntype)proj_class.types.get(tindex)).getY(i));
+                            }
                         }
                         temp_instrument.worldx=pot_x;
                         
@@ -649,8 +634,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 }
                 
                 //*******************************************************************
-            }
-            else if(proj_class.draw_mouse_state==6) {
+            } else if(proj_class.draw_mouse_state==6) {
                 //moving a bar
                 bar selected_bar=(bar)proj_class.bars.get_object(proj_class.selected_index);
                 
@@ -894,9 +878,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 ((instrument)proj_class.instruments.get_object(proj_class.selected_index)).aimx=proj_class.ScreenXtoWorld(e.getX());
                 ((instrument)proj_class.instruments.get_object(proj_class.selected_index)).aimy=proj_class.ScreenYtoWorld(e.getY());
                 proj_class.draw_mouse_state=0;
-            }
-            else if(proj_class.draw_mouse_state==17)
-            {
+            } else if(proj_class.draw_mouse_state==17) {
                 System.out.println("Project class item selected index is: "+proj_class.selected_index+"\n");
                 proj_class.draw_mouse_state=0;
             }
