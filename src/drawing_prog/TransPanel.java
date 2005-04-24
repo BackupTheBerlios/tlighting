@@ -165,11 +165,6 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         }else if(proj_class.selected_type==2){
             
             //bar
-            //System.out.println("Size does matter: "+proj_class.bars.object_list.size());
-            //System.out.println("num objs:"+proj_class.bars.get_num_objects());
-            ///System.out.println("selected index: "+proj_class.selected_index);
-            //System.out.println("selected type: "+proj_class.selected_type);
-            //System.out.println("mouse state: "+proj_class.draw_mouse_state+"\n");
             General_Object temp_obj=proj_class.bars.get_object(proj_class.selected_index);            
             temp_obj.set_color(1);
             temp_obj.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
@@ -178,16 +173,9 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         }else if(proj_class.selected_type==3){
             
             //instrument
-            //System.out.println("Trans panel, Size is: "+proj_class.instruments.object_list.size());
-            //System.out.println("Trans panel, selected index is: "+proj_class.selected_index);
-            //System.out.println("Trans panel, Number of objects: "+proj_class.instruments.get_num_objects()+"\n");
             General_Object temp_obj=proj_class.instruments.get_object(proj_class.selected_index);
             temp_obj.set_color(1);
             temp_obj.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
-            
-            //System.out.println("Trans panel, Size is: "+proj_class.instruments.object_list.size());
-            //System.out.println("Trans panel, selected index is: "+proj_class.selected_index);
-            //System.out.println("Trans panel, Number of objects: "+proj_class.instruments.get_num_objects()+"\n");
             
             //draw teh selected aim poitn also
             
@@ -197,13 +185,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
             int ly=((instrument)proj_class.instruments.get_object(proj_class.selected_index)).worldy;
             
             if((x>=0)&&(y>=0)){
-                
-                /*g2.draw(new Line2D.Double(proj_class.WorldXtoScreen(x-3), proj_class.WorldYtoScreen(y-3),
-                        proj_class.WorldXtoScreen(x+3),proj_class.WorldYtoScreen(y+3)));
-                g2.draw(new Line2D.Double(proj_class.WorldXtoScreen(x-3), proj_class.WorldYtoScreen(y+3),
-                        proj_class.WorldXtoScreen(x+3), proj_class.WorldYtoScreen(y-3)));
-                g2.setColor(Color.YELLOW);
-                 */
+               
                 Line2D dotted =new Line2D.Double(proj_class.WorldXtoScreen(x), proj_class.WorldYtoScreen(y),
                         proj_class.WorldXtoScreen(lx), proj_class.WorldYtoScreen(ly));
                 g2.draw(dotted);
@@ -236,9 +218,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
             
             temp_instrument.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
             //proj_class.zoom_factor
-            //1/proj_class.zoom_factor
-            //System.out.println("heyooooo drawing instrument!");
-            //System.out.println("the zoom factor is: "+proj_class.zoom_factor+" scroll x is: "+proj_class.scroll_x+"scroll y is: "+proj_class.scroll_y);
+
             temp_instrument.set_color(0);
         }
         
@@ -264,15 +244,6 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
             temp_house.set_color(0);
             
         }
-        
-        // if(proj_class.selected_type==2){
-        
-        
-        //    proj_class.bars.draw_object(proj_class.selected_index,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
-        
-        
-        // }
-        
         
         // code for displaying the current node being edited
         if(selected_node>=0){
@@ -389,12 +360,8 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         } else {
             //System.out.println("Mouse Was Clicked with in stage area at "+e.getX()+" "+e.getY());
             //**************************************************************************
-            System.out.println("inside mouse pressed. first else statement");
             if(proj_class.draw_mouse_state==0) {
                 Vector allList = new Vector();
-                Vector tempList = new Vector();//added this.
-                int selIndex = -1;
-                System.out.println("inside mouse pressed. second if statement");
                 int num_in_list=0;
                 
                 //THE NORMAL STATE
@@ -479,42 +446,74 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     }
                 }
                 
-                System.out.println("num_in_list is: "+num_in_list+"");
-                
-                for (int i = 0; i< allList.size(); i++)
-                {
-                   System.out.println("Inside second for loop, allist  is: "+allList.elementAt(i));
-                }    
-                
+                System.out.println("num_in_list is: "+num_in_list+"");              
                 if(num_in_list>0)
                 {
-                    int listSize = -1;   
+                                    
+                    System.out.println("Within select_index decrement block. Index is: "+this.proj_class.selected_index);
+                    System.out.println("At Beginning the selected index is: "+this.proj_class.selected_index);
+                    for(int j = 0; j < allList.size(); j++)
+                        System.out.println("allList element "+j+" is: "+allList.elementAt(j));
+                    if(this.proj_class.selectedArraySize == allList.size())//then decrement selected index.
+                    {
+                       if(this.proj_class.selectedListIndex == -1)//then we've decremented all the way through the array.
+                       {
+                           this.proj_class.selected_index = allList.size() - 1;
+                           this.proj_class.selectedListIndex = allList.size()-1;
+                       }    
+                       else
+                       {   
+                              this.proj_class.selectedListIndex--;
+                              if(this.proj_class.selectedListIndex > 0)
+                              {    
+                                General_Object temp = (General_Object)allList.elementAt(this.proj_class.selectedListIndex);
+                                this.proj_class.selected_index = temp.index; //Edit this line for selection algorithm
+                                System.out.println("Within select_index decrement block. Decrementing index to: "+this.proj_class.selected_index);
+                              }
+                       }     
+                    }
+                    else//they're not equal so set index to be first index of new array and mod size.
+                    {
+                       this.proj_class.selected_index = allList.size() - 1;
+                       this.proj_class.selectedListIndex = allList.size() - 1;
+                       this.proj_class.selectedArraySize = allList.size();
+                    }
+                    System.out.println("At end the selected index is: "+this.proj_class.selected_index);
                 }    
-                    //selIndex should be set after previous if/else
-                    //System.out.println("the selected index is: " +selIndex);
-                if(selIndex<allList.size()){    
-                    Object temp_obj=allList.get(selIndex);
+
+                if(this.proj_class.selected_index<allList.size() && (this.proj_class.selected_index > -1))
+                {    
+                    Object temp_obj=allList.get(this.proj_class.selected_index);
                 
-                    if(temp_obj instanceof house) {
+                    if(temp_obj instanceof house)
+                    {    
                         proj_class.selected_type=0;
-                    } else if(temp_obj instanceof stage) {
+                    }
+                    else if(temp_obj instanceof stage)
+                    {
                         proj_class.selected_type=1;
-                    } else if(temp_obj instanceof bar) {
+                    }
+                    else if(temp_obj instanceof bar)
+                    {
                         proj_class.selected_type=2;
-                    } else if(temp_obj instanceof instrument) {
+                    }
+                    else if(temp_obj instanceof instrument)
+                    {
                         proj_class.selected_type=3;
-                    } else if(temp_obj instanceof setobject) {
+                    }
+                    else if(temp_obj instanceof setobject)
+                    {
                         proj_class.selected_type=4;
                     }
-                    //System.out.println("Selected Type: "+proj_class.selected_type+"\n");
-                    //System.out.println("Selected Index: "+proj_class.selected_index+"\n");
+                    else
+                        proj_class.selected_type=5;
+                    
                     proj_class.selected_index=((General_Object)temp_obj).index;
-                    //System.out.println("Selected Type: "+proj_class.selected_type+"\n");
-                    //System.out.println("Selected Index: "+proj_class.selected_index+"\n");
+                    
                     ItemBrowser.displayInfo(temp_obj);
                     repaint();
                 }
-                }
+           }
             //*********************************************************************************
             else if(proj_class.draw_mouse_state==1) {
                 //creation of a bar
