@@ -622,6 +622,15 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                         temp_instrument.setDescription(proj_class.inventories.getItemDesc(index));
                         temp_instrument.setType(proj_class.inventories.getItemType(index));
                         
+                        //no that there is a type find the type and assign the nodes to show
+                        int tindex=proj_class.getTypeByName(temp_instrument.getType());
+                        if(tindex!= -1){
+                        temp_instrument.num_nodes=0;
+                        int i;
+                        for(i=0;i<((knowntype)proj_class.types.get(tindex)).getNumNodes();i++){   
+                            temp_instrument.add_node(((knowntype)proj_class.types.get(tindex)).getX(i), ((knowntype)proj_class.types.get(tindex)).getY(i));
+                        }
+                        }
                         temp_instrument.worldx=pot_x;
                         
                         temp_instrument.worldy=pot_y;

@@ -600,8 +600,7 @@ public class project{
     
     //functions to edit types
     public void AddType(knowntype obj){
-        types.add(obj);
-        
+        types.add(obj);   
     }
     public void EditType(int index, knowntype obj){
         if(types.size()>index){  
@@ -624,6 +623,16 @@ public class project{
             }
             
             i++;
+        }
+        return -1;
+    }
+    
+    public int getTypeByName(String name){
+        int i=0;
+        for(i=0;i<types.size();i++){
+            if(((knowntype)types.get(i)).getName().equals(name)){
+                return i;
+            }
         }
         return -1;
     }

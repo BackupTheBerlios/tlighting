@@ -54,21 +54,23 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
     
     
     public InventoryManager() {
+        
+        
         super(BasicWindow.curWindow,"Inventory Manager", true);
         //setTitle("Inventory Manager");
         proj_class=(project)project.oClass;
-        
-        addComponents();
-        setBounds(10,50, iScreenHeight,iScreenWidth);
-        //setSize(500,500);
-        setResizable(true);
-        setVisible(true);
         x=new int[30];
         y=new int[30];
         hasPoints=false;
         pointSelected=-1;
         addNode=false;
         numNodes=0;
+        addComponents();
+        setBounds(10,50, iScreenHeight,iScreenWidth);
+        //setSize(500,500);
+        setResizable(true);
+        setVisible(true);
+        
     }
     public void addComponents() {
         JPanel jpMain = new JPanel();
@@ -187,24 +189,27 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
         //jpInstrumentType.add( btnPanel);
         
         jpDrawing= new DrawingPanel();
-        jpDrawing.setBackground(Color.WHITE);
         jpDrawing.setBounds(375,220,100,100);
+        jpDrawing.setBackground(Color.WHITE);
         jpDrawing.addMouseListener(this);
         jpInstrumentType.add(jpDrawing);
         
         
         JButton jbAddNode = new JButton("Add Node");
         jbAddNode.setBounds(500,230,200,20);
+        jbAddNode.addActionListener(this);
         jbAddNode.setActionCommand("addNode");
         jpInstrumentType.add(jbAddNode);
         
         JButton jbRemoveNode = new JButton("Remove Node");
         jbRemoveNode.setBounds(500,260,200,20);
+        jbRemoveNode.addActionListener(this);
         jbRemoveNode.setActionCommand("removeNode");
         jpInstrumentType.add(jbRemoveNode);
         
         JButton jbClearNode = new JButton("Clear Nodes");
         jbClearNode.setBounds(500,290,200,20);
+        jbClearNode.addActionListener(this);
         jbClearNode.setActionCommand("clearNodes");
         jpInstrumentType.add(jbClearNode);
         
@@ -356,6 +361,30 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
                 tempType.setDesc(aDesc);
                 tempType.setHeight(2);
                 tempType.setName(n);
+                int minx,miny;
+                minx=-1;
+                miny=-1;
+                
+                for(i=0;i<numNodes;i++){
+                    if(minx==-1){
+                        minx=x[i];
+                    }
+                    if(miny==-1){
+                        miny=y[i];
+                    }
+                    if(minx>x[i]){
+                        minx=x[i];
+                        
+                    }
+                    if(miny>y[i]){
+                        miny=y[i];
+                    }
+                }
+                
+                for(i=0;i<numNodes;i++){
+                    tempType.add_node(x[i]-minx,y[i]-miny);
+                }
+                
                 if(itemfound){
                     
                     proj_class.EditType(foundindex,tempType);
@@ -428,7 +457,8 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
                 }
             }
             
-            
+            jpDrawing.Update(numNodes,x,y,pointSelected);
+            jpDrawing.repaint();
             loadItems();
         }
     }
@@ -439,7 +469,7 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
     public void mouseReleased(MouseEvent event) {}
     
     public void mousePressed(MouseEvent e){
-        System.out.println("X is:"+e.getX()+" Y is:"+e.getY());
+        //System.out.println("X is:"+e.getX()+" Y is:"+e.getY());
         if(addNode){
             //add a node
             
@@ -473,12 +503,13 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
                         y[i]=ty[i];
                     }
                 }
-                
+                addNode=false;
             }else{
                 //if not add it to the end of the list
                 x[numNodes]=e.getX();
                 y[numNodes]=e.getY();
                 numNodes++;
+                addNode=false;
             }
         }else if(pointSelected!=-1){
             //move a node
@@ -486,7 +517,7 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
                 x[pointSelected]=e.getX();
                 y[pointSelected]=e.getY();
             }
-            
+            pointSelected=-1;
         }else{
             //select a node
             boolean nodeNotFound=true;
@@ -502,38 +533,68 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
                 i++;
             }
         }
-        
+        jpDrawing.Update(numNodes,x,y,pointSelected);
         jpDrawing.repaint();
     }
     
     
     
     
-    class DrawingPanel extends JPanel
-    {
-    public DrawingPanel(){
+    class DrawingPanel extends JPanel {
+        public int[] xn;
+        public int[] yn;
+        public int numNodes;
+        public int selected;
         
-        
-    }
-    public void paintComponent(Graphics g) {
-        //super.paintComponent(g);
-        Graphics2D g2=(Graphics2D)g;
-        drawPoints(g2);   
-    }
-    
-    
-    public void drawPoints(Graphics2D g){
-        if(numNodes>0){
-            int iter;
-            for(iter=0;iter<numNodes-1;iter++){
-                g.draw(new Line2D.Double(x[iter],y[iter],
-                        x[iter+1], y[iter+1]));
-            }
-            g.draw(new Line2D.Double(x[0], y[0],
-                    x[numNodes-1], y[numNodes-1]));
+        public DrawingPanel(){
+            //setBackground(Color.BLUE);
+            //setLayout(null);
+            numNodes=0;
+            xn=new int[30];
+            yn=new int[30];
+            selected=-1;
+        }
+        public void paintComponent(Graphics g) {
+            //super.paintComponent(g);
+            Graphics2D g2=(Graphics2D)g;
+            drawPoints(g2);
         }
         
-    }    
+        
+        public void drawPoints(Graphics2D g){
+            if(numNodes>0){
+                g.setColor(Color.BLACK);
+                int iter;
+                for(iter=0;iter<numNodes-1;iter++){
+                    g.draw(new Line2D.Double(xn[iter],yn[iter],
+                            xn[iter+1], yn[iter+1]));
+                }
+                g.draw(new Line2D.Double(xn[0], yn[0],
+                        xn[numNodes-1], yn[numNodes-1]));
+                for(iter=0;iter<numNodes;iter++){
+                    
+                    Ellipse2D.Double node_circ= new Ellipse2D.Double(xn[iter],yn[iter],6,6);
+                    g.fill(node_circ);
+                }
+                if(selected>-1){
+                    g.setColor(Color.ORANGE);
+                    Ellipse2D.Double node_circ= new Ellipse2D.Double(xn[selected],yn[selected],6,6);
+                    g.fill(node_circ);
+                }
+                
+            }
+            
+        }
+        
+        public void Update(int n, int[] xs, int[] ys, int sel){
+            numNodes=n;
+            int i;
+            for(i=0;i<numNodes;i++){
+                xn[i]=xs[i];
+                yn[i]=ys[i];
+            }
+            selected=sel;
+        }
         
     }
 }
