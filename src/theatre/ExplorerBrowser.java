@@ -293,7 +293,7 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
                 String parent=(String)((DefaultMutableTreeNode)path.getParentPath().getLastPathComponent()).getUserObject();
                 String child=(String)((DefaultMutableTreeNode)path.getLastPathComponent()).getUserObject();
                 
-                General_Object temp_obj=null;
+                Object temp_obj=null;
                 //run through the parents to see if a valid object type was selected
                 //types are defined as follows 0=house 1=stage 2=bar 3=instrument 4=set 5=inventory
                 if(parent.equalsIgnoreCase("House")){
@@ -341,9 +341,16 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
                     
                 }else if(parent.equalsIgnoreCase("Inventory")){
                     p.selected_type=5;
+                    int i;
+                    for(i=0;i<p.inventories.getNumItems();i++){
+                        if((String.valueOf(p.inventories.getItemID(i))).equalsIgnoreCase(child)){
+                            p.selected_index=i;
+                            temp_obj=(inventory_item)p.inventories.getList(i);
+                            i=p.inventories.getNumItems();
+                        }
+                    }
                     //p.selected_index=p.getIndexbyName()
                 }
-                
                 if(temp_obj!=null){
                     ItemBrowser.displayInfo(temp_obj);
                 }

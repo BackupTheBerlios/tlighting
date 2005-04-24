@@ -71,6 +71,13 @@ public class ItemBrowser extends Window {
             s += "Height: " + b.getheight()+"\n";
             
             jText.setText(s);
+        }else if (o instanceof inventory_item) {
+            inventory_item b = (inventory_item)o;
+            String s = "Inventory ID: "+b.getInvId()+"\n";
+            s += "Description: " + b.getDesc()+"\n";
+            s += "Type: "+b.getType()+"\n";
+            
+            jText.setText(s);
         }
         //jTable1.add
     }

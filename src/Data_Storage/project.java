@@ -750,6 +750,28 @@ public class project{
             
         }
         
+        //make sure all the indexes are correct for the objects in lists
+        
+        //house
+        for(i=0;i<houses.get_num_objects();i++){
+            houses.get_object(i).index=i;
+        }
+        //stage
+        for(i=0;i<stages.get_num_objects();i++){
+            stages.get_object(i).index=i;
+        }
+        //set
+        for(i=0;i<sets.get_num_objects();i++){
+            sets.get_object(i).index=i;
+        }
+        //bar
+        for(i=0;i<bars.get_num_objects();i++){
+            bars.get_object(i).index=i;
+        }
+        //instrument
+        for(i=0;i<instruments.get_num_objects();i++){
+            instruments.get_object(i).index=i;
+        }
         //refresh all the displays
         forceRepaint();
         ExplorerBrowser b=(ExplorerBrowser)ExplorerBrowser.oClass;

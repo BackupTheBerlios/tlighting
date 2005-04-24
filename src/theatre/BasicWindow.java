@@ -269,6 +269,8 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener 
             
         } else if(source.getText()== "Inventory Management"){
             InventoryManager im = new InventoryManager();
+            ExplorerBrowser eb= (ExplorerBrowser)ExplorerBrowser.oClass;
+            eb.reloadChildren();
             //System.out.println("inventory manager selected");
         }else if(source.getText()=="Quit"){
             System.exit(0);
