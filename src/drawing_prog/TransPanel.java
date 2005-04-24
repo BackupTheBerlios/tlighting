@@ -491,9 +491,10 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     int listSize = -1;   
                 }    
                     //selIndex should be set after previous if/else
-                    System.out.println("the selected index is: " +selIndex);
+                    //System.out.println("the selected index is: " +selIndex);
+                if(selIndex<allList.size()){    
                     Object temp_obj=allList.get(selIndex);
-                    
+                
                     if(temp_obj instanceof house) {
                         proj_class.selected_type=0;
                     } else if(temp_obj instanceof stage) {
@@ -505,13 +506,14 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     } else if(temp_obj instanceof setobject) {
                         proj_class.selected_type=4;
                     }
-                    System.out.println("Selected Type: "+proj_class.selected_type+"\n");
-                    System.out.println("Selected Index: "+proj_class.selected_index+"\n");
+                    //System.out.println("Selected Type: "+proj_class.selected_type+"\n");
+                    //System.out.println("Selected Index: "+proj_class.selected_index+"\n");
                     proj_class.selected_index=((General_Object)temp_obj).index;
-                    System.out.println("Selected Type: "+proj_class.selected_type+"\n");
-                    System.out.println("Selected Index: "+proj_class.selected_index+"\n");
+                    //System.out.println("Selected Type: "+proj_class.selected_type+"\n");
+                    //System.out.println("Selected Index: "+proj_class.selected_index+"\n");
                     ItemBrowser.displayInfo(temp_obj);
                     repaint();
+                }
                 }
             //*********************************************************************************
             else if(proj_class.draw_mouse_state==1) {
@@ -901,6 +903,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
             }
             //******************************************
             repaint();
+            proj_class.verifyData();
         }
     }
     
