@@ -122,8 +122,8 @@ public class project{
         bars=new Object_Drawer();
         instruments=new Object_Drawer();
         houses = new Object_Drawer();
-        inventories= new inventory();
-        types= new Vector();
+        //inventories= new inventory();
+        //types= new Vector();
         selected_type=-1;
         selected_index=-1;
         zoom_factor=1;
@@ -600,10 +600,10 @@ public class project{
     
     //functions to edit types
     public void AddType(knowntype obj){
-        types.add(obj);   
+        types.add(obj);
     }
     public void EditType(int index, knowntype obj){
-        if(types.size()>index){  
+        if(types.size()>index){
             ((knowntype)types.get(index)).copy(obj);
         }
     }
@@ -631,9 +631,126 @@ public class project{
         int i=0;
         for(i=0;i<types.size();i++){
             if(((knowntype)types.get(i)).getName().equals(name)){
+                return i;       
+            }
+        }
+        return -1;
+    }
+    
+    public int getInstrumentIndex(int invID){
+        int i;
+        for(i=0;i<instruments.get_num_objects();i++){
+            if(((instrument)instruments.get_object(i)).getInventoryID()==invID){
                 return i;
             }
         }
         return -1;
     }
+    
+    public int getBarByName(String bname){
+        int i;
+        for(i=0;i<bars.get_num_objects();i++){
+            if(((bar)bars.get_object(i)).getID().equals(bname)){
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    public void verifyData(){
+        //check if all instruments are in the house
+        int i;
+        if(houses.get_num_objects()>0){
+            //there is a house
+            
+            //check the stage
+            if(stages.get_num_objects()>0){
+                //there is a stage
+                if(!ObjectInside(houses.get_object(0),stages.get_object(0))){
+                    stages.set_num_objects(0);
+                }
+            }
+            //check the sets
+            for(i=0;i<sets.get_num_objects();i++){
+                if(!ObjectInside(houses.get_object(0),sets.get_object(i))){
+                    sets.remove_object(i);
+                }
+            }
+            //check the bars
+            for(i=0;i<bars.get_num_objects();i++){
+                if(!ObjectInside(houses.get_object(0),bars.get_object(i))){
+                    bars.remove_object(i);
+                }
+            }
+            //checks the instruments
+            for(i=0;i<instruments.get_num_objects();i++){
+                if(!ObjectInside(houses.get_object(0),instruments.get_object(i))){
+                    instruments.remove_object(i);
+                }
+            }
+        }
+        
+        
+        //make sure there is a type for all instruments in inventory
+        for(i=0;i<instruments.get_num_objects();i++){
+            int type=getTypeByName(((instrument)instruments.get_object(i)).getType());
+            if(type==-1){
+                instruments.remove_object(i);
+            }else{
+                //make sure all instruments have the correct nodes for their type
+                ((instrument)instruments.get_object(i)).num_nodes=0;
+                int j;
+                for(j=0;j<((knowntype)types.get(type)).getNumNodes();j++){
+                    ((instrument)instruments.get_object(i)).add_node(((knowntype)types.get(type)).getX(j),((knowntype)types.get(type)).getY(j));
+                    
+                }
+            }
+        }
+        
+        
+        //make sure all the instruments are marked as used
+        
+        for(i=0;i<inventories.getNumItems();i++){
+            int inst_index=getInstrumentIndex(inventories.getItemID(i));
+            if(inst_index!=-1){
+                //make sure it is set to used
+                inventories.setItemUsed(i,true);
+                
+            }else{
+                //make sure it is not set to used
+                
+                inventories.setItemUsed(i,false);
+            }
+        }
+        for(i=0;i<instruments.get_num_objects();i++){
+            int inv_index=getInstrumentByID(((instrument)instruments.get_object(i)).getInventoryID());
+            if(inv_index!=-1){
+                inventories.setItemUsed(inv_index, true);
+            }else{
+                //remove it because instrument is not in inventory
+                instruments.remove_object(i);
+            }
+        }
+        
+        //make sure all the instruemnts have a bar that exists
+        for(i=0;i<instruments.get_num_objects();i++){
+            if(((instrument)instruments.get_object(i)).getBarID()<bars.get_num_objects()){
+                //make sure all the instruments are on a valid point in a bar
+                bar tbar=(bar)bars.get_object(((instrument)instruments.get_object(i)).getBarID());
+                if(!instruments.get_object(i).in_area(tbar.getminx(),tbar.getminy(),tbar.getmaxx(),tbar.getmaxy())){
+                    instruments.remove_object(i);
+                }
+            }else{
+                //remove the instrument
+                instruments.remove_object(i);
+            }
+            
+        }
+        
+        //refresh all the displays
+        forceRepaint();
+        ExplorerBrowser b=(ExplorerBrowser)ExplorerBrowser.oClass;
+        b.reloadChildren();
+    }
+    
 }
