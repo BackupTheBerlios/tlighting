@@ -100,6 +100,21 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
         
     }
     
+    public void expandAll(){
+        DefaultMutableTreeNode  r;
+        r = (DefaultMutableTreeNode) trStructure.getModel().getRoot();
+        TreePath aPath=new TreePath(r.getLastLeaf().getPath());
+        trStructure.scrollPathToVisible(aPath);
+        //int i;
+        //DefaultMutableJTreeNode n=r.getFirstLeaf();
+        
+        //for(i=0;i<r.getChildCount();i++){
+        //aPath=new TreePath();
+        //trStructure.scrollPathToVisible(aPath);
+            
+        //}
+        
+    }
     
     
     public void mouseClicked(java.awt.event.MouseEvent event) {
@@ -153,8 +168,6 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
             }
         }
         
-        //System.out.println("size: "+p.bars.object_list.size());
-        
         // needed to add Bar folder only once
         boolean bAddedBar = false;
         
@@ -185,6 +198,7 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
                 // create bar leaf node with bar id
                 child = new DefaultMutableTreeNode(b.getID().toString());
                 treeModel.insertNodeInto(child, parent, 0);
+                
             }
         }
         
@@ -261,9 +275,11 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
         }
         
         // set the new model
+        expandAll();
         trStructure.setModel(treeModel);
         trStructure.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         trStructure.setRootVisible(true);
+        
     }
     
     void trStructure_mouseClicked(java.awt.event.MouseEvent event) {
