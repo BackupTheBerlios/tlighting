@@ -349,42 +349,42 @@ public class General_Object {
         int br_x = maxx;
         int br_y = maxy;
         
-        if((tl_x<endx)&&(tl_x>startx)){
+        if((tl_x<=endx)&&(tl_x>=startx)){
             //check if y is in
-            if((tl_y<endy)&&(tl_y>starty)){
+            if((tl_y<=endy)&&(tl_y>=starty)){
                 return true;
             }
-            if((br_y<endy)&&(br_y>startx)){
+            if((br_y<=endy)&&(br_y>=startx)){
                 return true;
             }
         }
-        if((br_x<endx)&&(br_x>startx)){
+        if((br_x<=endx)&&(br_x>=startx)){
             //check if y is in area
-            if((tl_y<endy)&&(tl_y>startx)){
+            if((tl_y<=endy)&&(tl_y>=startx)){
                 return true;
             }
-            if((br_y<endy)&&(br_y>startx)){
+            if((br_y<=endy)&&(br_y>=startx)){
                 return true;
             }
         }
         
         //none of corners of the object were in the area so check if the area was inside the object
         
-        if((endx<br_x)&&(endx>tl_x)){
+        if((endx<=br_x)&&(endx>=tl_x)){
             //check if y is in
-            if((endy<br_y)&&(endy>tl_y)){
+            if((endy<=br_y)&&(endy>=tl_y)){
                 return true;
             }
-            if((starty<br_y)&&(starty>tl_y)){
+            if((starty<=br_y)&&(starty>=tl_y)){
                 return true;
             }
         }
-        if((startx<br_x)&&(startx>tl_x)){
+        if((startx<=br_x)&&(startx>=tl_x)){
             //check if y is in
-            if((endy<br_y)&&(endy>tl_y)){
+            if((endy<=br_y)&&(endy>=tl_y)){
                 return true;
             }
-            if((starty<br_y)&&(starty>tl_y)){
+            if((starty<=br_y)&&(starty>=tl_y)){
                 return true;
             }
         }
@@ -406,9 +406,9 @@ public class General_Object {
             int cur_x = worldx + x[iter];
             int cur_y = worldy + y[iter];
             
-            if((cur_x<endx)&&(cur_x>startx)){
+            if((cur_x<=endx)&&(cur_x>=startx)){
                 //check if y is in
-                if((cur_y<endy)&&(cur_y>starty)){
+                if((cur_y<=endy)&&(cur_y>=starty)){
                     return true;
                 }
             }
