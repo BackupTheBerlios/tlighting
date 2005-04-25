@@ -27,7 +27,7 @@ public class DrawScreen extends theatre.Window implements ItemListener, ActionLi
     public static Object oClass = null;
     public DrawScreen()
     {
-    	this.setTitle("Object_Drawer_Class_Demonstration"); 
+    	this.setTitle("Schematic Drawing"); 
         this.setBounds(ExplorerBrowserPanel.iWidth, 0, BasicWindow.iScreenWidth-(ExplorerBrowserPanel.iWidth*2), BasicWindow.iScreenHeight);
         
         //Dimension d= new Dimension();
