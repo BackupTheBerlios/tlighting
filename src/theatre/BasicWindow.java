@@ -223,6 +223,8 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener 
                     error_Window.setLocation(0,0);
                     error_Window.setBounds(0,0, 400,400);
                     error_Window.setVisible(true);
+                    project proj=(project)project.oClass;
+                    proj.verifyData();
                     JOptionPane.showMessageDialog(error_Window,"File is successfully loaded");
                     
                 }else{
@@ -263,8 +265,8 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener 
             proj_class.print_schematic();
             
         } else if(source.getText()=="Wiring Diagram"){
-            System.out.println("Greg Can Make Test Statements Like Ilya For Wiring");
-            System.out.println("Now only if he could get his code to work like Ilya we would be set");
+            //System.out.println("Greg Can Make Test Statements Like Ilya For Wiring");
+            //System.out.println("Now only if he could get his code to work like Ilya we would be set");
             WiringPlot wp = new WiringPlot();
             
         } else if(source.getText()== "Inventory Management"){
