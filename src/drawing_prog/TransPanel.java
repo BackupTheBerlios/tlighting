@@ -632,12 +632,15 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                         
                         proj_class.addInstrument(temp_instrument);
                         
-                        proj_class.draw_mouse_state=0;
+                        //proj_class.draw_mouse_state=0;
                         
                         //proj_class.selected_type=3;
                         
                         //proj_class.selected_index=temp_instrument.index;
+                        proj_class.templightid=-1;
                     }
+                    proj_class.draw_mouse_state=0;
+                        
                     temp_instrument=null;
                     
                 }
