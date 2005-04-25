@@ -556,12 +556,13 @@ public class xml_Writer {
             
             parent_obj.addChild(type_obj);
             
-            try{
+            
+        }
+        try{
                 writer.write(parent_obj,true);
             }catch(Exception e){
                 System.out.println("Error exporting types to xml");
             }
-        }
     }
     
     //*****************************************************************************
@@ -658,12 +659,12 @@ public class xml_Writer {
         
         parent_obj.setAttribute("project_name",proj_class.open_project_name);
         parent_obj.setAttribute("isHouse",String.valueOf(house));
-        parent_obj.setAttribute("isStage",String.valueOf(house));
-        parent_obj.setAttribute("isSets",String.valueOf(house));
-        parent_obj.setAttribute("isBars",String.valueOf(house));
-        parent_obj.setAttribute("isInstruments",String.valueOf(house));
-        parent_obj.setAttribute("isInventory",String.valueOf(house));
-        parent_obj.setAttribute("isTypes",String.valueOf(house));
+        parent_obj.setAttribute("isStage",String.valueOf(stage));
+        parent_obj.setAttribute("isSets",String.valueOf(set));
+        parent_obj.setAttribute("isBars",String.valueOf(bar));
+        parent_obj.setAttribute("isInstruments",String.valueOf(instrument));
+        parent_obj.setAttribute("isInventory",String.valueOf(inventory));
+        parent_obj.setAttribute("isTypes",String.valueOf(types));
         //can put the preferences into here also but that can be done later
         try{
             if(writer!=null){
