@@ -104,15 +104,17 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
         DefaultMutableTreeNode  r;
         r = (DefaultMutableTreeNode) trStructure.getModel().getRoot();
         TreePath aPath=new TreePath(r.getLastLeaf().getPath());
-        trStructure.scrollPathToVisible(aPath);
+        //trStructure.scrollPathToVisible(aPath);
         //int i;
-        //DefaultMutableJTreeNode n=r.getFirstLeaf();
+        DefaultMutableTreeNode n=r.getNextNode();
         
         //for(i=0;i<r.getChildCount();i++){
-        //aPath=new TreePath();
-        //trStructure.scrollPathToVisible(aPath);
-            
-        //}
+        while(n!=null){
+            aPath=new TreePath(n.getLastLeaf().getPath());
+            trStructure.scrollPathToVisible(aPath);
+            n=n.getNextSibling();
+        }
+        
         
     }
     
@@ -156,12 +158,21 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
         
         DefaultMutableTreeNode child;
         
+        boolean invAdded=false;
+        
         parent = new DefaultMutableTreeNode(sSubInv);
         
-        treeModel.insertNodeInto(parent, root, 0);
+        //treeModel.insertNodeInto(parent, root, 0);
         //add the inventory items
         for (int i = p.inventories.getNumItems()-1; i >= 0 ; i--) {
+             if (!invAdded) {
+                    // create bar folder
+                    treeModel.insertNodeInto(parent, root, 0);
+                    invAdded = true;
+                }
+            
             // create inventory leaf node
+            
             if(!p.inventories.getItemUsed(i)){
                 child = new DefaultMutableTreeNode(String.valueOf(p.inventories.getItemID(i)));
                 treeModel.insertNodeInto(child, parent, 0);
@@ -275,11 +286,50 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
         }
         
         // set the new model
-        expandAll();
+        
         trStructure.setModel(treeModel);
         trStructure.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        trStructure.setRootVisible(true);
+        /*if(p.selected_type!=-1){
         
+        TreePath path = new TreePath(sRootName);
+            
+        if(p.selected_type==0){
+            //house
+            path=path.pathByAddingChild(sSubHouse);
+            path=path.pathByAddingChild(((house)p.houses.get_object(0)).getid());
+            
+        }else if(p.selected_type==1){
+            //stage
+            path=path.pathByAddingChild(sSubStage);
+            path=path.pathByAddingChild(((stage)p.stages.get_object(0)).getdescription());
+        }else if(p.selected_type==2){
+            //bar
+            path=path.pathByAddingChild(sSubBar);
+            path=path.pathByAddingChild(((bar)p.bars.get_object(p.selected_index)).getID());
+        }else if(p.selected_type==3){
+            //instrument
+            path=path.pathByAddingChild(sSubInstr);
+            path=path.pathByAddingChild(String.valueOf(((instrument)p.instruments.get_object(p.selected_index)).getInventoryID()));
+        }else if(p.selected_type==4){
+            //set
+            path=path.pathByAddingChild(sSubSet);
+            path=path.pathByAddingChild(((setobject)p.sets.get_object(p.selected_index)).getname());
+        
+        }else if(p.selected_type==5){
+            //inventory
+            path=path.pathByAddingChild(sSubInv);
+            path=path.pathByAddingChild(String.valueOf(p.inventories.getItemID(p.selected_index)));
+        
+        }
+        trStructure.get
+            
+            
+            
+            trStructure.setSelectionPath(path);
+
+        }*/
+        trStructure.setRootVisible(true);
+        expandAll();
     }
     
     void trStructure_mouseClicked(java.awt.event.MouseEvent event) {
