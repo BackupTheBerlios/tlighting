@@ -316,7 +316,7 @@ public class xml_Reader {
             int height=Integer.parseInt(t_xml.getAttribute("height","0"));
             String desc=t_xml.getAttribute("desc","default");
             boolean aim=Boolean.getBoolean(t_xml.getAttribute("aim","true"));
-           
+            
             tempk.setAim(aim);
             tempk.setDesc(desc);
             tempk.setHeight(height);
@@ -325,27 +325,32 @@ public class xml_Reader {
             
             //get nodes
             int i2;
-        int num2=t_xml.getChildrenCount();
-        for(i2=0;i2<num2;i2++){
-            IXMLElement n_xml=t_xml.getChildAtIndex(i2);
-            int x,y,z;
-            x=Integer.parseInt(n_xml.getAttribute("x","0"));
-            y=Integer.parseInt(n_xml.getAttribute("y","0"));
-            z=Integer.parseInt(n_xml.getAttribute("z","0"));
-            
-            tempk.add_node(x,y);
-        }
-            proj_class.AddType(tempk);
-        }
-        //check if any types are duplicated
+            int num2=t_xml.getChildrenCount();
+            for(i2=0;i2<num2;i2++){
+                IXMLElement n_xml=t_xml.getChildAtIndex(i2);
+                int x,y,z;
+                x=Integer.parseInt(n_xml.getAttribute("x","0"));
+                y=Integer.parseInt(n_xml.getAttribute("y","0"));
+                z=Integer.parseInt(n_xml.getAttribute("z","0"));
+                
+                tempk.add_node(x,y);
+            }
+            //check if any types are duplicated
         
-        //remove any duplicated types
+            if(proj_class.getTypeByName(tempk.getName())==-1){
+                //add the type to the known list
         
-        //add teh types to the known list
+                proj_class.AddType(tempk);
+            }
+        }
+        
+        
         return true;
     }
+    
+    
     private boolean get_instrument(IXMLElement xml) {
-         int num=xml.getChildrenCount();
+        int num=xml.getChildrenCount();
         //create a temp list of instruments
         int i;
         for(i=0;i<num;i++){
@@ -366,8 +371,8 @@ public class xml_Reader {
             tempi.aimy=Integer.parseInt(i_xml.getAttribute("aimY","-1"));
             
             
-        //check to see if the bars exists for teh bars to go on and if they are in the right positions
-        //check to see if the instruments are in inventory
+            //check to see if the bars exists for teh bars to go on and if they are in the right positions
+            //check to see if the instruments are in inventory
             int i2;
             int num2=i_xml.getChildrenCount();
             for(i2=0;i2<num2;i2++){
@@ -379,9 +384,9 @@ public class xml_Reader {
                 
                 tempi.add_node(x,y);
             }
-        //if the lisntruemnts are valid add them
-        proj_class.addInstrument(tempi);
-        //if the are not valid then remvoe tem
+            //if the lisntruemnts are valid add them
+            proj_class.addInstrument(tempi);
+            //if the are not valid then remvoe tem
         }
         return true;
     }
