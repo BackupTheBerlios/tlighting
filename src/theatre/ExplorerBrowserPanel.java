@@ -142,7 +142,7 @@ public class ExplorerBrowserPanel extends Window
         
 
 
-        this.setTitle("Stage Items");
+        this.setTitle("Item Explorer ");
 
 
         
