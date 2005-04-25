@@ -18,6 +18,7 @@ import Data_Storage.*;
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.*;
+import javax.swing.*;
 
 public class project{
     
@@ -146,7 +147,23 @@ public class project{
             if(abar.getmaxx()<curhouse.getmaxx() && abar.getmaxy()<curhouse.getmaxy()){
                 if(ObjectInside(curhouse,abar)){
                     int tempnum=bars.get_num_objects();
-                    abar.setID("Bar"+tempnum);
+                    boolean nameused=true;
+                    String tempname="Bar"+tempnum;
+                    
+                    while(nameused){
+                        nameused=false;
+                        int iter;
+                        for(iter=0;iter<bars.get_num_objects();iter++){
+                            if(tempname.equalsIgnoreCase(((bar)bars.get_object(iter)).getID())){
+                                nameused=true;
+                            }
+                        }
+                        if(nameused){
+                            tempnum++;
+                            tempname="Bar"+tempnum;
+                        }
+                    }
+                    abar.setID(tempname);
                     //System.out.println("Bar "+abar.getID()+" got added");
                     if(bars.add_object(abar)==tempnum+1){
                         ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
@@ -408,7 +425,8 @@ public class project{
     public void forceRepaint(){
         TransPanel tp=(TransPanel)TransPanel.oClass;
         tp.repaint();
-        
+        //ExplorerBrowser b=(ExplorerBrowser)ExplorerBrowser.oClass;
+        //b.reloadChildren();
     }
     
     //checking and setting visibility of objects
@@ -634,7 +652,7 @@ public class project{
         int i=0;
         for(i=0;i<types.size();i++){
             if(((knowntype)types.get(i)).getName().equals(name)){
-                return i;       
+                return i;
             }
         }
         return -1;
@@ -662,6 +680,8 @@ public class project{
     
     public void verifyData(){
         //check if all instruments are in the house
+        boolean somethingRemoved=false;
+        
         int i;
         if(houses.get_num_objects()>0){
             //there is a house
@@ -677,19 +697,30 @@ public class project{
             for(i=0;i<sets.get_num_objects();i++){
                 if(!ObjectInside(houses.get_object(0),sets.get_object(i))){
                     sets.remove_object(i);
+                    somethingRemoved=true;
                 }
             }
             //check the bars
             for(i=0;i<bars.get_num_objects();i++){
                 if(!ObjectInside(houses.get_object(0),bars.get_object(i))){
                     bars.remove_object(i);
+                    somethingRemoved=true;
                 }
             }
             //checks the instruments
             for(i=0;i<instruments.get_num_objects();i++){
                 if(!ObjectInside(houses.get_object(0),instruments.get_object(i))){
                     instruments.remove_object(i);
+                    somethingRemoved=true;
                 }
+            }
+        }
+        
+        //make sure all types have at least two node to represent it
+        for(i=0;i< types.size();i++){
+            if(((knowntype)types.get(i)).getNumNodes()<=1){
+                types.remove(i);
+                somethingRemoved=true;
             }
         }
         
@@ -699,6 +730,7 @@ public class project{
             int type=getTypeByName(((instrument)instruments.get_object(i)).getType());
             if(type==-1){
                 instruments.remove_object(i);
+                somethingRemoved=true;
             }else{
                 //make sure all instruments have the correct nodes for their type
                 ((instrument)instruments.get_object(i)).num_nodes=0;
@@ -710,6 +742,47 @@ public class project{
             }
         }
         
+        //make sure all the instruemnts have a bar that exists
+        for(i=0;i<instruments.get_num_objects();i++){
+            if(((instrument)instruments.get_object(i)).getBarID()<bars.get_num_objects()){
+                //make sure all the instruments are on a valid point in a bar
+                bar tbar=(bar)bars.get_object(((instrument)instruments.get_object(i)).getBarID());
+                boolean vert=false;
+                boolean hori=false;
+                if((tbar.getmaxx()==tbar.getminx())){
+                    vert=true;
+                }
+                if(tbar.getmaxy()==tbar.getminy()){
+                    hori=true;
+                }
+                if((!vert)&&(!hori)){
+                    if(!instruments.get_object(i).in_area(tbar.getminx(),tbar.getminy(),tbar.getmaxx(),tbar.getmaxy())){
+                        instruments.remove_object(i);
+                        somethingRemoved=true;
+                    }
+                }
+                if(vert){
+                    //just make sure the y's are in range
+                    if(!instruments.get_object(i).in_area(tbar.getminx()-1,tbar.getminy(),tbar.getmaxx()+1,tbar.getmaxy())){
+                        instruments.remove_object(i);
+                        somethingRemoved=true;
+                    }
+                }
+                if(hori){
+                    //just make sure the x's are in range
+                    if(!instruments.get_object(i).in_area(tbar.getminx(),tbar.getminy()-1,tbar.getmaxx(),tbar.getmaxy()+1)){
+                        instruments.remove_object(i);
+                        somethingRemoved=true;
+                    }
+                }
+            }else{
+                //remove the instrument
+                instruments.remove_object(i);
+                
+                somethingRemoved=true;
+            }
+            
+        }
         
         //make sure all the instruments are marked as used
         
@@ -732,23 +805,11 @@ public class project{
             }else{
                 //remove it because instrument is not in inventory
                 instruments.remove_object(i);
+                somethingRemoved=true;
             }
         }
         
-        //make sure all the instruemnts have a bar that exists
-        for(i=0;i<instruments.get_num_objects();i++){
-            if(((instrument)instruments.get_object(i)).getBarID()<bars.get_num_objects()){
-                //make sure all the instruments are on a valid point in a bar
-                bar tbar=(bar)bars.get_object(((instrument)instruments.get_object(i)).getBarID());
-                if(!instruments.get_object(i).in_area(tbar.getminx(),tbar.getminy(),tbar.getmaxx(),tbar.getmaxy())){
-                    instruments.remove_object(i);
-                }
-            }else{
-                //remove the instrument
-                instruments.remove_object(i);
-            }
-            
-        }
+        
         
         //make sure all the indexes are correct for the objects in lists
         
@@ -772,10 +833,23 @@ public class project{
         for(i=0;i<instruments.get_num_objects();i++){
             instruments.get_object(i).index=i;
         }
+        
+        if(somethingRemoved==true){
+            JInternalFrame error_Window;
+            error_Window = new JInternalFrame();
+            error_Window.setLocation(0,0);
+            error_Window.setBounds(0,0, 400,400);
+            error_Window.setVisible(true);
+            JOptionPane.showMessageDialog(error_Window,"There was a Data Error and some objects have been removed");
+        }
         //refresh all the displays
         forceRepaint();
         ExplorerBrowser b=(ExplorerBrowser)ExplorerBrowser.oClass;
+        //ItemBrowser ib = (ItemBroswer)ItemBrowser.oClass;
         b.reloadChildren();
+        
+        //ib.displayInfo();
+        
     }
     
 }
