@@ -149,56 +149,63 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
             
             //house
             General_Object temp_obj=proj_class.houses.get_object(proj_class.selected_index);
-            temp_obj.set_color(1);
+            if(temp_obj!=null){
+                temp_obj.set_color(1);
             temp_obj.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
             temp_obj.set_color(0);
-            
+            }
         }else if(proj_class.selected_type==1){
             
             //stage
             General_Object temp_obj=proj_class.stages.get_object(proj_class.selected_index);
-            temp_obj.set_color(1);
+            if(temp_obj!=null){
+                temp_obj.set_color(1);
             temp_obj.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
             temp_obj.set_color(0);
-            
+            }
         }else if(proj_class.selected_type==2){
             
             //bar
             General_Object temp_obj=proj_class.bars.get_object(proj_class.selected_index);
-            temp_obj.set_color(1);
+            if(temp_obj!=null){
+                temp_obj.set_color(1);
             temp_obj.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
             temp_obj.set_color(0);
-            
+            }
         }else if(proj_class.selected_type==3){
             
             //instrument
             General_Object temp_obj=proj_class.instruments.get_object(proj_class.selected_index);
-            temp_obj.set_color(1);
-            temp_obj.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
-            
-            //draw teh selected aim poitn also
-            
-            int x=((instrument)proj_class.instruments.get_object(proj_class.selected_index)).aimx;
-            int y=((instrument)proj_class.instruments.get_object(proj_class.selected_index)).aimy;
-            int lx=((instrument)proj_class.instruments.get_object(proj_class.selected_index)).worldx;
-            int ly=((instrument)proj_class.instruments.get_object(proj_class.selected_index)).worldy;
-            
-            if((x>=0)&&(y>=0)){
+            if(temp_obj!=null){
+                temp_obj.set_color(1);
+                temp_obj.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
                 
-                Line2D dotted =new Line2D.Double(proj_class.WorldXtoScreen(x), proj_class.WorldYtoScreen(y),
-                        proj_class.WorldXtoScreen(lx), proj_class.WorldYtoScreen(ly));
-                g2.draw(dotted);
+                //draw teh selected aim poitn also
                 
-                g2.setColor(Color.BLACK);
+                int x=((instrument)proj_class.instruments.get_object(proj_class.selected_index)).aimx;
+                int y=((instrument)proj_class.instruments.get_object(proj_class.selected_index)).aimy;
+                int lx=((instrument)proj_class.instruments.get_object(proj_class.selected_index)).worldx;
+                int ly=((instrument)proj_class.instruments.get_object(proj_class.selected_index)).worldy;
+                
+                if((x>=0)&&(y>=0)){
+                    
+                    Line2D dotted =new Line2D.Double(proj_class.WorldXtoScreen(x), proj_class.WorldYtoScreen(y),
+                            proj_class.WorldXtoScreen(lx), proj_class.WorldYtoScreen(ly));
+                    g2.draw(dotted);
+                    
+                    g2.setColor(Color.BLACK);
+                }
+                temp_obj.set_color(0);
             }
-            temp_obj.set_color(0);
         }else if(proj_class.selected_type==4){
             
             //set
             General_Object temp_obj=proj_class.sets.get_object(proj_class.selected_index);
-            temp_obj.set_color(1);
-            temp_obj.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
-            temp_obj.set_color(0);
+            if(temp_obj!=null){
+                temp_obj.set_color(1);
+                temp_obj.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
+                temp_obj.set_color(0);
+            }
         }
         
         
@@ -545,6 +552,8 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 
                 //placement on the bar
                 
+                //if the differnce in x is larger then
+                
                 int pot_x;
                 
                 int pot_y=-1;
@@ -625,9 +634,9 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                         
                         proj_class.draw_mouse_state=0;
                         
-                        proj_class.selected_type=3;
+                        //proj_class.selected_type=3;
                         
-                        proj_class.selected_index=temp_instrument.index;
+                        //proj_class.selected_index=temp_instrument.index;
                     }
                     temp_instrument=null;
                     
