@@ -23,7 +23,7 @@ public class LightsPopUp extends JDialog implements ActionListener{
     protected int iScreenWidth = BasicWindow.iScreenHeight-100;
     //components
     private JComboBox jcInst = new JComboBox();
-    
+    private JTextArea jText= new JTextArea();
     /** Creates a new instance of LightsPopUp */
     public LightsPopUp() {
         super(BasicWindow.curWindow,"Instrument Selector", true);
@@ -41,8 +41,14 @@ public class LightsPopUp extends JDialog implements ActionListener{
         JPanel jpMain = new JPanel();
         jpMain.setLayout(null);
         
+        jText = new JTextArea();
+        jText.setBounds(250, 100, 230, 210);
+        jpMain.add(jText);
+        
         loadItems();
         jcInst.setBounds(250, 15, 150, 20 );
+        jcInst.addActionListener(this);
+        jcInst.setActionCommand("listaction");
         jpMain.add( jcInst );
         
         
@@ -58,6 +64,9 @@ public class LightsPopUp extends JDialog implements ActionListener{
         jbCancel.setBounds(375, 70, 250, 20);
         jpMain.add(jbCancel);
         
+        
+        
+        
         getContentPane().add(jpMain);
     }
     
@@ -65,11 +74,22 @@ public class LightsPopUp extends JDialog implements ActionListener{
         jcInst.removeAllItems();
         int i;
         for(i=0;i<proj_class.inventories.getNumItems();i++){
-            if(!proj_class.inventories.getItemUsed(i)){ 
+            if(!proj_class.inventories.getItemUsed(i)){
                 jcInst.addItem(String.valueOf(proj_class.inventories.getItemID(i)));
             }
         }
         jcInst.validate();
+        jcInst.setSelectedIndex(0);
+        //find out which item was selected 
+            int inv_id = Integer.parseInt((String)jcInst.getSelectedItem());
+            int index=proj_class.getInstrumentByID(inv_id);
+        
+            //populate the text area
+            String s = "Inventory ID: "+proj_class.inventories.getItemID(index)+"\n";
+            s += "Description: " + proj_class.inventories.getItemDesc(index)+"\n";
+            s += "Type: "+proj_class.inventories.getItemType(index)+"\n";
+            
+            jText.setText(s);
     }
     
     public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -79,6 +99,19 @@ public class LightsPopUp extends JDialog implements ActionListener{
         }else if (e.getActionCommand().equals("cancel")) {
             proj_class.templightid=-1;
             this.dispose();
+        }else if(e.getActionCommand().equals("listaction")){
+            
+            //find out which item was selected 
+            int inv_id = Integer.parseInt((String)jcInst.getSelectedItem());
+            int index=proj_class.getInstrumentByID(inv_id);
+        
+            //populate the text area
+            String s = "Inventory ID: "+proj_class.inventories.getItemID(index)+"\n";
+            s += "Description: " + proj_class.inventories.getItemDesc(index)+"\n";
+            s += "Type: "+proj_class.inventories.getItemType(index)+"\n";
+            
+            jText.setText(s);
+        
         }
     }
 }
