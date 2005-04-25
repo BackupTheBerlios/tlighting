@@ -17,7 +17,7 @@ import java.awt.image.*;
 import Data_Storage.*;
 /**
  * @author Ilya Buzharsky
- *edited by Josh Zawislak 4-18-05
+ *edited by Josh Zawislak 4-18-05 last edited 4-25-05
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
@@ -39,6 +39,8 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
     public boolean hasPoints;
     public int pointSelected;
     public boolean addNode;
+    public int instStartIndex;
+    public int typeStartIndex;
     //components
     private JList instList;
     private JTextField name;
@@ -65,6 +67,8 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
         pointSelected=-1;
         addNode=false;
         numNodes=0;
+        instStartIndex=0;
+        typeStartIndex=0;
         addComponents();
         setBounds(10,50, iScreenHeight,iScreenWidth);
         //setSize(500,500);
@@ -85,7 +89,7 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
         tpBulletinBoard.addTab("Instrument Type", jpInstrumentType);
         
         tpBulletinBoard.setBounds(0,0,800,430);
-        btnPanel.setBounds(200, 410, 250,75);
+        btnPanel.setBounds(10, 410, 500,75);
         btnPanel.setVisible(true);
         jpMain.add(tpBulletinBoard);
         jpMain.add(btnPanel);
@@ -100,6 +104,7 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
         
         instList = new JList();
         instList.setBounds(0,0,200, iScreenHeight-20);
+        instList.addMouseListener(this);
         jpInstruments.add(instList);
         
         JLabel label1 = new JLabel( "Name (integer):" );
@@ -149,6 +154,7 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
         
         typeList = new JList();
         typeList.setBounds(0,0,200, iScreenHeight-20);
+        typeList.addMouseListener(this);
         jpInstrumentType.add( typeList );
         
         JLabel label1 = new JLabel( "Name:" );
@@ -221,6 +227,27 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
         //btnPanel.setLayout( null );
         btnPanel.setLayout(new BoxLayout(btnPanel, BoxLayout.X_AXIS));
         btnPanel.setAlignmentX((float).5);
+        JButton jbTop = new JButton("Top");
+        JButton jbUp = new JButton("<");
+        JButton jbDown = new JButton(">");
+        
+        jbTop.addActionListener(this);
+        jbUp.addActionListener(this);
+        jbDown.addActionListener(this);
+        
+        jbTop.setActionCommand("top");
+        jbUp.setActionCommand("up");
+        jbDown.setActionCommand("down");
+        btnPanel.add(jbTop);
+        btnPanel.add(Box.createHorizontalStrut(5));
+        btnPanel.add(jbUp);
+        btnPanel.add(Box.createHorizontalStrut(5));
+        btnPanel.add(jbDown);
+        
+        btnPanel.add(Box.createHorizontalStrut(50));
+        
+        
+        
         JButton jbSave = new JButton("Save");
         jbSave.addActionListener(this);
         jbSave.setActionCommand("save");
@@ -250,7 +277,7 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
         instList.removeAll();
         int i;
         Vector data=new Vector();
-        for(i=0;i<proj_class.inventories.getNumItems();i++){
+        for(i=instStartIndex;i<proj_class.inventories.getNumItems();i++){
             
             data.add(String.valueOf(proj_class.inventories.getItemID(i)));
         }
@@ -261,7 +288,7 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
         typeList.removeAll();
         int i;
         Vector data=new Vector();
-        for(i=0;i<proj_class.types.size();i++){
+        for(i=typeStartIndex;i<proj_class.types.size();i++){
             
             data.add(String.valueOf(((knowntype)proj_class.types.get(i)).getName()));
         }
@@ -329,6 +356,19 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
                 
                 //quits
                 this.dispose();
+            }else if(e.getActionCommand().equals("up")){
+                if(instStartIndex>0){
+                    instStartIndex--;
+                }
+                popInstList();
+            }else if(e.getActionCommand().equals("down")){
+                if(instStartIndex<proj_class.inventories.getNumItems()){
+                    instStartIndex++;
+                }
+                popInstList();
+            }else if(e.getActionCommand().equals("top")){
+                instStartIndex=0;
+                popInstList();
             }
             
         }else{
@@ -340,57 +380,59 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
                 System.out.println("SAVE BUTTON HIT");
                 
                 //check if a instrument type with the same name exists, if it does then edit the entry if not then add it
-                
-                int i;
-                String n=typeName.getText();
-                String aDesc=typeDesc.getText();
-                String aNote=jsNotesType.toString();
-                boolean itemfound=false;
-                int foundindex=-1;
-                
-                for(i=0;i<proj_class.types.size();i++){
-                    if(((knowntype)proj_class.types.get(i)).getName().compareTo(n)==0){
-                        itemfound=true;
-                        foundindex=i;
-                    }
-                }
-                
-                //if the instrument type exists edit the entry
-                knowntype tempType=new knowntype();
-                tempType.setAim(true);
-                tempType.setDesc(aDesc);
-                tempType.setHeight(2);
-                tempType.setName(n);
-                int minx,miny;
-                minx=-1;
-                miny=-1;
-                
-                for(i=0;i<numNodes;i++){
-                    if(minx==-1){
-                        minx=x[i];
-                    }
-                    if(miny==-1){
-                        miny=y[i];
-                    }
-                    if(minx>x[i]){
-                        minx=x[i];
-                        
-                    }
-                    if(miny>y[i]){
-                        miny=y[i];
-                    }
-                }
-                
-                for(i=0;i<numNodes;i++){
-                    tempType.add_node(x[i]-minx,y[i]-miny);
-                }
-                
-                if(itemfound){
+                if(numNodes>1){
+                    //ok there is more then 1 node to represent this instrument
+                    int i;
+                    String n=typeName.getText();
+                    String aDesc=typeDesc.getText();
+                    String aNote=jsNotesType.toString();
+                    boolean itemfound=false;
+                    int foundindex=-1;
                     
-                    proj_class.EditType(foundindex,tempType);
-                } else{
-                    //else add a new instrument type
-                    proj_class.AddType(tempType);
+                    for(i=0;i<proj_class.types.size();i++){
+                        if(((knowntype)proj_class.types.get(i)).getName().compareTo(n)==0){
+                            itemfound=true;
+                            foundindex=i;
+                        }
+                    }
+                    
+                    //if the instrument type exists edit the entry
+                    knowntype tempType=new knowntype();
+                    tempType.setAim(true);
+                    tempType.setDesc(aDesc);
+                    tempType.setHeight(2);
+                    tempType.setName(n);
+                    int minx,miny;
+                    minx=-1;
+                    miny=-1;
+                    
+                    for(i=0;i<numNodes;i++){
+                        if(minx==-1){
+                            minx=x[i];
+                        }
+                        if(miny==-1){
+                            miny=y[i];
+                        }
+                        if(minx>x[i]){
+                            minx=x[i];
+                            
+                        }
+                        if(miny>y[i]){
+                            miny=y[i];
+                        }
+                    }
+                    
+                    for(i=0;i<numNodes;i++){
+                        tempType.add_node(x[i]-minx,y[i]-miny);
+                    }
+                    
+                    if(itemfound){
+                        
+                        proj_class.EditType(foundindex,tempType);
+                    } else{
+                        //else add a new instrument type
+                        proj_class.AddType(tempType);
+                    }
                 }
                 popTypeList();
             }else if(e.getActionCommand().equals("remove")){
@@ -455,7 +497,21 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
                     y[i]=-1;
                     numNodes=0;
                 }
+            }else if(e.getActionCommand().equals("up")){
+                if(typeStartIndex>0){
+                    typeStartIndex--;
+                }
+                popTypeList();
+            }else if(e.getActionCommand().equals("down")){
+                if(typeStartIndex<proj_class.types.size()){
+                    typeStartIndex++;
+                }
+                popTypeList();
+            }else if(e.getActionCommand().equals("top")){
+                typeStartIndex=0;
+                popTypeList();
             }
+            
             
             jpDrawing.Update(numNodes,x,y,pointSelected);
             jpDrawing.repaint();
@@ -470,7 +526,42 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
     
     public void mousePressed(MouseEvent e){
         //System.out.println("X is:"+e.getX()+" Y is:"+e.getY());
-        if(addNode){
+        if(e.getSource() instanceof JList){
+            //clicked in one of the lists
+            JList list=(JList)e.getSource();
+            if(list==instList){
+                //clicked on the instrument list
+                
+                //find out which instrument was selected
+                int index=instList.getSelectedIndex()+instStartIndex;
+                
+                //populate the fields with the info for it
+                
+                name.setText(String.valueOf(proj_class.inventories.getItemID(index)));
+                desc.setText(proj_class.inventories.getItemDesc(index));
+                
+                
+                jcType.setSelectedItem(proj_class.inventories.getItemType(index));
+                
+                
+            }else if(list==typeList){
+                //clicked on the type list
+                //find out which type was selected
+                int index = typeList.getSelectedIndex()+typeStartIndex;
+                //populate the info for it
+                typeName.setText(((knowntype)proj_class.types.get(index)).getName());
+                typeDesc.setText(((knowntype)proj_class.types.get(index)).getDesc());
+                
+                numNodes=0;
+                int i;
+                for(i=0;i<((knowntype)proj_class.types.get(index)).num_nodes;i++){
+                    x[i]=((knowntype)proj_class.types.get(index)).x[i];
+                    y[i]=((knowntype)proj_class.types.get(index)).y[i];
+                }
+                numNodes=((knowntype)proj_class.types.get(index)).num_nodes;
+                
+            }
+        }else if(addNode){
             //add a node
             
             //if a node is selected add it next to that one
@@ -555,7 +646,7 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
             selected=-1;
         }
         public void paintComponent(Graphics g) {
-            //super.paintComponent(g);
+            super.paintComponent(g);
             Graphics2D g2=(Graphics2D)g;
             drawPoints(g2);
         }
@@ -573,12 +664,12 @@ public class InventoryManager extends JDialog implements MouseListener, ActionLi
                         xn[numNodes-1], yn[numNodes-1]));
                 for(iter=0;iter<numNodes;iter++){
                     
-                    Ellipse2D.Double node_circ= new Ellipse2D.Double(xn[iter],yn[iter],6,6);
+                    Ellipse2D.Double node_circ= new Ellipse2D.Double(xn[iter]-2,yn[iter]-2,4,4);
                     g.fill(node_circ);
                 }
                 if(selected>-1){
                     g.setColor(Color.ORANGE);
-                    Ellipse2D.Double node_circ= new Ellipse2D.Double(xn[selected],yn[selected],6,6);
+                    Ellipse2D.Double node_circ= new Ellipse2D.Double(xn[selected]-2,yn[selected]-2,4,4);
                     g.fill(node_circ);
                 }
                 
