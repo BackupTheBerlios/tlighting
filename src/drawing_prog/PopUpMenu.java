@@ -284,8 +284,11 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
         }
         else if (e.getSource() == remove_stage)
         {//begin chaplin edit.
-             proj_class.stages.object_list.removeElementAt(proj_class.stages.object_list.indexOf(proj_class.stages.object_list.get(proj_class.selected_index)));
-            proj_class.stages.set_num_objects(proj_class.stages.object_list.size());
+             //proj_class.stages.object_list.removeElementAt(proj_class.stages.object_list.indexOf(proj_class.stages.object_list.get(proj_class.selected_index)));
+            //proj_class.stages.set_num_objects(proj_class.stages.object_list.size());
+            
+            proj_class.stages.remove_object(proj_class.selected_index);
+            
             proj_class.selected_index = -1;
             proj_class.selected_type = -1;
             proj_class.draw_mouse_state = 0;
@@ -294,8 +297,11 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
         }
         else if (e.getSource() == remove_set)
         {
-            proj_class.sets.object_list.removeElementAt(proj_class.sets.object_list.indexOf(proj_class.sets.object_list.get(proj_class.selected_index)));
-            proj_class.sets.set_num_objects(proj_class.sets.object_list.size());
+            //proj_class.sets.object_list.removeElementAt(proj_class.sets.object_list.indexOf(proj_class.sets.object_list.get(proj_class.selected_index)));
+            //proj_class.sets.set_num_objects(proj_class.sets.object_list.size());
+            
+            proj_class.sets.remove_object(proj_class.selected_index);
+            
             proj_class.selected_index = -1;
             proj_class.selected_type = -1;
             proj_class.draw_mouse_state = 0;
@@ -316,9 +322,10 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
                     {             
                          if(barId==barIndex)
                          {
-                            proj_class.instruments.object_list.removeElementAt(proj_class.instruments.object_list.indexOf(proj_class.instruments.object_list.get(i)));
-                            proj_class.instruments.set_num_objects(proj_class.instruments.object_list.size()-1);
-                            size -= 1;                                                                                  
+                            //proj_class.instruments.object_list.removeElementAt(proj_class.instruments.object_list.indexOf(proj_class.instruments.object_list.get(i)));
+                            //proj_class.instruments.set_num_objects(proj_class.instruments.object_list.size()-1);
+                                proj_class.instruments.remove_object(i);
+                             size -= 1;                                                                                  
                          }    
                          else
                          {
@@ -328,12 +335,12 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
                  }                              
             }            
             proj_class.bars.remove_object(proj_class.selected_index);
-            proj_class.bars.set_num_objects(proj_class.bars.get_num_objects()-1);
+            //proj_class.bars.set_num_objects(proj_class.bars.get_num_objects()-1);
             //remove the bar itself
             for(int j = 0; j < proj_class.instruments.object_list.size(); j++)
             {
                //need the start point.
-               instrument tempInst = (instrument)proj_class.instruments.object_list.get(j);  
+               instrument tempInst = (instrument)proj_class.instruments.get_object(j);  
                if(tempInst.Associated_barID > barIndex)
                    tempInst.Associated_barID -= 1;
             }
@@ -354,12 +361,17 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
         }
         else if (e.getSource() == remove_instr)
         {
-            System.out.println("Size is: "+proj_class.instruments.object_list.size());
-            System.out.println("Number of objects: "+proj_class.instruments.get_num_objects()+"\n");
-            proj_class.instruments.object_list.removeElementAt(proj_class.instruments.object_list.indexOf(proj_class.instruments.object_list.get(proj_class.selected_index)));
-            proj_class.instruments.set_num_objects(proj_class.instruments.object_list.size());
-            System.out.println("Size is: "+proj_class.instruments.object_list.size());
-            System.out.println("Number of objects: "+proj_class.instruments.get_num_objects()+"\n");
+            //System.out.println("Size is: "+proj_class.instruments.object_list.size());
+            //System.out.println("Number of objects: "+proj_class.instruments.get_num_objects()+"\n");
+            //proj_class.instruments.object_list.removeElementAt(proj_class.instruments.object_list.indexOf(proj_class.instruments.object_list.get(proj_class.selected_index)));
+            //proj_class.instruments.set_num_objects(proj_class.instruments.object_list.size());
+            
+            //System.out.println("Size is: "+proj_class.instruments.object_list.size());
+            //System.out.println("Number of objects: "+proj_class.instruments.get_num_objects()+"\n");
+            int index=proj_class.getInstrumentByID(((instrument)proj_class.instruments.get_object(proj_class.selected_index)).getInventoryID());
+            proj_class.inventories.setItemUsed(index,false);
+            proj_class.instruments.remove_object(proj_class.selected_index);
+            
             proj_class.selected_index = -1;
             proj_class.selected_type = -1;
             proj_class.draw_mouse_state = 0;
@@ -371,30 +383,34 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             System.out.println("*Before* Instr size is: "+proj_class.instruments.object_list.size());
             while(proj_class.instruments.object_list.size() > 0)
             {    
-                proj_class.instruments.object_list.remove(0);
-                proj_class.instruments.set_num_objects(proj_class.instruments.object_list.size());
-            }
+                //proj_class.instruments.object_list.remove(0);
+                //proj_class.instruments.set_num_objects(proj_class.instruments.object_list.size());
+                int inv_index=proj_class.getInstrumentByID(((instrument)proj_class.instruments.get_object(0)).getInventoryID());
+                proj_class.inventories.setItemUsed(inv_index,false);
+                proj_class.instruments.remove_object(0);
+            }   
+            
             System.out.println("*After* Instr size is: "+proj_class.instruments.object_list.size());
             while(proj_class.bars.object_list.size() > 0)
             {    
-                proj_class.bars.object_list.remove(0);
-                proj_class.bars.set_num_objects(proj_class.bars.object_list.size());
+                proj_class.bars.remove_object(0);
+                //proj_class.bars.set_num_objects(proj_class.bars.object_list.size());
             } 
             while(proj_class.sets.object_list.size() > 0)
             {
-                proj_class.sets.object_list.remove(0);
-                proj_class.sets.set_num_objects(proj_class.sets.object_list.size());
+                proj_class.sets.remove_object(0);
+                //proj_class.sets.set_num_objects(proj_class.sets.object_list.size());
             }    
             while(proj_class.stages.object_list.size() > 0)
              {    
-                proj_class.stages.object_list.remove(0);
-                proj_class.stages.set_num_objects(proj_class.stages.object_list.size());
+                proj_class.stages.remove_object(0);
+                //proj_class.stages.set_num_objects(proj_class.stages.object_list.size());
              }
             proj_class.stageadded = false;
             while(proj_class.houses.object_list.size() > 0)
             {
-                proj_class.houses.object_list.remove(0);
-                proj_class.houses.set_num_objects(proj_class.houses.object_list.size());
+                proj_class.houses.remove_object(0);
+                //proj_class.houses.set_num_objects(proj_class.houses.object_list.size());
             }
             proj_class.selected_type = -1;
             proj_class.selected_index = -1;
