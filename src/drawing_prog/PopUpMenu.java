@@ -527,6 +527,8 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             }    
         }
         aScreen.repaint();
+        ExplorerBrowser eb=(ExplorerBrowser)ExplorerBrowser.oClass;
+        eb.reloadChildren();
     }
 }
 
