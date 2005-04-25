@@ -105,8 +105,8 @@ public class General_Object {
             return false;
         }
         
-        int g_x = (int)(worldx+xoffset)*(int)scale;
-        int g_y = (int)(worldy+yoffset)*(int)scale;
+        int g_x = (int)((worldx+xoffset)*scale);
+        int g_y = (int)((worldy+yoffset)*scale);
         Color oc=screen.getColor();
         if(color_index==0){
             screen.setColor(Color.BLACK);
