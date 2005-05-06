@@ -27,6 +27,12 @@ public class instrument extends drawing_prog.General_Object {
     public String misc;
     public int aimx;
     public int aimy;
+    public int aimz;
+    public float R;
+    public float G;
+    public float B;
+    public float radius;
+    
     /** Creates a new instance of instrument */
     public instrument() {
         InventoryID = 0;
@@ -40,6 +46,11 @@ public class instrument extends drawing_prog.General_Object {
         oClass=this;
         aimx=-1;
         aimy=-1;
+        aimz=-1;
+        R=0;
+        G=0;
+        B=0;
+        radius=0;
     }
     
     public instrument(int InvID, int worldzs, String names, String link_types, String Desc, int barID,int dimerID, String miscs){

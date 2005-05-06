@@ -79,6 +79,8 @@ public class project{
     public inventory inventories;
     public Vector types;
     
+    public PhotonMap photonmap; 
+    
     //istance of the explorer pane
     public Object oExplorer;
     // public Object_Drawer inventory; //these are not drawn objects so should not be Object Drawer types
@@ -90,11 +92,16 @@ public class project{
     boolean bSetItemVisible = true;
     boolean bBarVisible = true;
     boolean bInstrumentVisible = true;
+    public boolean bPhotonsVisible;
     
+    public boolean hasPhotons;
+    public boolean photonsRendered;
     public int selectedArraySize = -1;  //the size of the array in the selected area.
     public int selectedListIndex = -1;
     
     public int templightid;
+    
+    public double[] lightpowers; 
     
     /** Creates a new instance of hold_project */
     public project() {
@@ -105,6 +112,9 @@ public class project{
         houses = new Object_Drawer();
         inventories=new inventory();
         types=new Vector();
+        
+        photonmap=new PhotonMap(500000,50,1e10); 
+        
         selected_type=-1;
         selected_index=-1;
         zoom_factor=1;
@@ -115,7 +125,9 @@ public class project{
         project_open=false;
         houseadded=false;
         stageadded=false;
-        
+        hasPhotons=false;
+        photonsRendered=false;
+        bPhotonsVisible=false;
         oClass=this;
     }
     
@@ -137,6 +149,8 @@ public class project{
         open_project_name="";
         project_open=false;
         houseadded=false;
+        hasPhotons=false;
+        photonsRendered=false;
     }
     
     //function that is called to commit a bar being added to the list of bars
@@ -850,6 +864,39 @@ public class project{
         
         //ib.displayInfo();
         
+    }
+    
+    public boolean addPhoton(double x,double y, double z,double nx, double ny, double nz, double dx, double dy, double dz, float R, float G, float B, int light){
+        if(photonmap!=null){
+            if(photonmap.isFull()){
+                return false;
+            }
+            
+            Point3 p=new Point3(x,y,z);
+            Vector3 dir=new Vector3(dx,dy,dz);
+            Color power = new Color((float)R,(float)G,(float)B);
+            
+            
+            Photon pho= new Photon(p, dir, power); 
+            pho.setN(nx,ny, nz);
+            photonmap.storePhoton(pho);
+
+            return true;
+        }
+        
+        
+        return false;
+    }
+    
+    public void setLightPower(int index,double power){
+        
+    }
+    
+    
+    public double getLightPower(int index){
+        
+        
+        return 0;
     }
     
 }
