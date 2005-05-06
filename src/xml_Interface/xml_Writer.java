@@ -612,7 +612,13 @@ public class xml_Writer {
             ins_obj.setAttribute("dimmer_id",String.valueOf(((instrument)proj_class.instruments.get_object(i)).getDimmerId()));
             ins_obj.setAttribute("aimX",String.valueOf(((instrument)proj_class.instruments.get_object(i)).aimx));
             ins_obj.setAttribute("aimY",String.valueOf(((instrument)proj_class.instruments.get_object(i)).aimy));
-            //ins_obj.setAttribute("aimatz",String.valueOf(((instrument)proj_class.instruments.get_object(i)).aimx));
+            ins_obj.setAttribute("aimZ",String.valueOf(((instrument)proj_class.instruments.get_object(i)).aimz));
+            
+            ins_obj.setAttribute("colorR",String.valueOf(((instrument)proj_class.instruments.get_object(i)).R));
+            ins_obj.setAttribute("colorG",String.valueOf(((instrument)proj_class.instruments.get_object(i)).G));
+            ins_obj.setAttribute("colorB",String.valueOf(((instrument)proj_class.instruments.get_object(i)).B));
+            ins_obj.setAttribute("radius",String.valueOf(((instrument)proj_class.instruments.get_object(i)).radius));
+            
             
             parent_obj.addChild(ins_obj);
         }

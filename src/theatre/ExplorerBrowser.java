@@ -437,7 +437,7 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
         public Component getTreeCellRendererComponent(JTree tree,Object value,boolean sel,
                 boolean expanded,boolean leaf,int row,boolean hasFocus) {
             super.getTreeCellRendererComponent(tree, value, sel,expanded, leaf, row,hasFocus);
-            
+            try{
             if (value.toString().substring(value.toString().length()-1).equalsIgnoreCase("D")) {
                 setIcon(leafIcon);
             } else {
@@ -446,6 +446,10 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
                 else
                     setIcon(closedIcon);
             }
+            }catch(Exception e){
+                System.out.println("Exception within Explorer Browser hopefully it can recover");
+            }
+            
             String node = (String)((DefaultMutableTreeNode)value).getUserObject();
             if (_existingNode.contains(node))
                 setForeground(Color.red);

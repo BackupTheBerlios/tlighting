@@ -59,22 +59,25 @@ public class xml_Reader {
             result=get_house(xml);
         }else if(xml.getName().equalsIgnoreCase("bar_list")){
             //if it was a bar list
-            get_bars(xml);
+            result=get_bars(xml);
         }else if(xml.getName().equalsIgnoreCase("stage_info")){
             //if it was a stage object
             get_stage(xml);
         }else if(xml.getName().equalsIgnoreCase("set_list")){
             //if it was a set list
-            get_set(xml);
+            result=get_set(xml);
         }else if(xml.getName().equalsIgnoreCase("inventory_list")){
             //if it was an inventory list
-            get_inventory(xml);
+            result=get_inventory(xml);
         }else if(xml.getName().equalsIgnoreCase("type_list")){
             //if it was a type list
-            get_knowntypes(xml);
+            result=get_knowntypes(xml);
         }else if(xml.getName().equalsIgnoreCase("instrument_list")){
             //if it was an instrument list
-            get_instrument(xml);
+            result=get_instrument(xml);
+        }else if(xml.getName().equalsIgnoreCase("photon_info")){
+            //if it was an instrument list
+            result=get_photons(xml);
         }
         return result;
     }
@@ -153,7 +156,7 @@ public class xml_Reader {
         
         
     }
-    private void get_bars(IXMLElement xml) {
+    private boolean get_bars(IXMLElement xml) {
         
         //create a temp bar object list
         //for each bar in the list
@@ -212,6 +215,7 @@ public class xml_Reader {
             
             proj_class.addBar(temp_b);
         }
+        return true;
     }
     private boolean get_set(IXMLElement xml) {
         
@@ -369,7 +373,13 @@ public class xml_Reader {
             tempi.setDimmerID(Integer.parseInt(i_xml.getAttribute("dimmer_id","0")));
             tempi.aimx=Integer.parseInt(i_xml.getAttribute("aimX","-1"));
             tempi.aimy=Integer.parseInt(i_xml.getAttribute("aimY","-1"));
+            tempi.aimz=Integer.parseInt(i_xml.getAttribute("aimZ","-1"));
             
+            tempi.R=Integer.parseInt(i_xml.getAttribute("colorR","0"));
+            tempi.G=Integer.parseInt(i_xml.getAttribute("colorG","0"));
+            tempi.B=Integer.parseInt(i_xml.getAttribute("colorB","0"));
+            
+            tempi.radius=Integer.parseInt(i_xml.getAttribute("radius","0"));
             
             //check to see if the bars exists for teh bars to go on and if they are in the right positions
             //check to see if the instruments are in inventory
@@ -526,6 +536,40 @@ public class xml_Reader {
         
         
         return true;
+    }
+    
+    
+    public boolean get_photons(IXMLElement xml){
+         //loading information about photons
+            
+            int num=xml.getChildrenCount();
+            //add photons
+            int i,j;
+            for(i=0;i<num;i++){
+                IXMLElement n_xml=xml.getChildAtIndex(i);
+                //n_xml is a photon
+                
+                double x=Double.parseDouble(n_xml.getAttribute("x","0"));
+                double y=Double.parseDouble(n_xml.getAttribute("y","0"));;
+                double z=Double.parseDouble(n_xml.getAttribute("z","0"));;
+                double nx=Double.parseDouble(n_xml.getAttribute("nx","0"));;
+                double ny=Double.parseDouble(n_xml.getAttribute("ny","0"));;
+                double nz=Double.parseDouble(n_xml.getAttribute("nz","0"));;
+                double dx=Double.parseDouble(n_xml.getAttribute("dx","0"));;
+                double dy=Double.parseDouble(n_xml.getAttribute("dy","0"));;
+                double dz=Double.parseDouble(n_xml.getAttribute("dz","0"));;
+                int light=Integer.parseInt(n_xml.getAttribute("light","0"));;
+                float R=Float.parseFloat(n_xml.getAttribute("r","0"));;
+                float G=Float.parseFloat(n_xml.getAttribute("g","0"));;
+                float B=Float.parseFloat(n_xml.getAttribute("b","0"));;
+                
+                 proj_class.addPhoton(x,y,z,nx,ny,nz, dx,dy,dz,R,G,B,light); 
+                
+                
+            }
+            proj_class.hasPhotons=true;
+            proj_class.photonsRendered=true;
+            return true;
     }
     
     

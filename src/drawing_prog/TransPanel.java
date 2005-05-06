@@ -141,6 +141,25 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
             
         }
         
+        //draw all photons available
+        
+        if(proj_class!=null){
+        if(proj_class.photonsRendered){
+            
+            if(proj_class.hasPhotons){
+                if(proj_class.bPhotonsVisible){
+                    proj_class.photonmap.draw(g2,proj_class.zoom_factor,0-proj_class.scroll_x,0-proj_class.scroll_y);
+            
+                    
+                }
+            }
+        
+        }
+            
+        }
+        
+        
+        
         
         //redraw the item that is selected
         //types are defined as follows 0=house 1=stage 2=bar 3=instrument 4=set

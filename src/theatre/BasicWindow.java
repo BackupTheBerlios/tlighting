@@ -11,6 +11,7 @@ import javax.swing.*;
 import drawing_prog.*;
 import Data_Storage.*;
 import xml_Interface.*;
+import PhotonRenderer.*;
 import java.io.*;
 
 /**
@@ -92,11 +93,21 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener 
         menuItem.addActionListener(this);
         menu.add(menuItem);
         
+        //Redner a photon map from the current design
+        menuItem = new JMenuItem("Render Photons");
+        menuItem.setMnemonic(KeyEvent.VK_R);
+        menuItem.getAccessibleContext().setAccessibleDescription(
+                "Render Photons from the Current Design");
+        menuItem.addActionListener(this);
+        menu.add(menuItem);
+        
+        
+        
         //add quit option to the file menu
         menuItem = new JMenuItem("Quit");
         menuItem.setMnemonic(KeyEvent.VK_S);
         menuItem.getAccessibleContext().setAccessibleDescription(
-                "Save a design");
+                "Quit");
         menuItem.addActionListener(this);
         menu.add(menuItem);
         
@@ -165,6 +176,11 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener 
         menu.add(rbMenuItem);
         
         rbMenuItem = new JRadioButtonMenuItem("Wiring Diagram");
+        rbMenuItem.addActionListener(this);
+        group.add(rbMenuItem);
+        menu.add(rbMenuItem);
+        
+        rbMenuItem = new JRadioButtonMenuItem("Cue Editor");
         rbMenuItem.addActionListener(this);
         group.add(rbMenuItem);
         menu.add(rbMenuItem);
@@ -276,7 +292,16 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener 
             //System.out.println("inventory manager selected");
         }else if(source.getText()=="Quit"){
             System.exit(0);
-        }
+         } else if(source.getText()=="Cue Editor"){
+            //launch the controls for the lgiht levels
+            
+         }else if(source.getText()=="Render Photons"){
+            //execute the rendering and saving of photons
+            PhotonRenderer phoren = new PhotonRenderer();
+            phoren.setOptions();
+            phoren.setScene();
+            phoren.renderScene();
+         }
         
         
     }

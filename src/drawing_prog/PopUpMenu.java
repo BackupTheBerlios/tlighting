@@ -25,6 +25,7 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
     JMenuItem remove_house, remove_bar, remove_set, remove_instr, remove_stage;//check these against object list.
     JMenuItem zoom_in,zoom_out;
     JMenuItem cancel,confirm;
+    JMenuItem setStageInfo,setLightInfo,setSetInfo;
     TransPanel aScreen;
     
     //create the menu depending on the item type that is selected
@@ -52,17 +53,20 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
                 //stage selected
                 edit_stage = new JMenuItem("Edit Stage Nodes");
                 move_stage = new JMenuItem("Move Stage");
-                
+                setStageInfo = new JMenuItem("Edit Stage Info");
                 remove_stage = new JMenuItem("Remove Stage");
                 
                 edit_stage.addActionListener(this);
                 move_stage.addActionListener(this);
+                
+                setStageInfo.addActionListener(this);
                 
                 remove_stage.addActionListener(this);
                 
                 add(edit_stage);
                 add(move_stage);
                 add(remove_stage);
+                add(setStageInfo);
                 
             }else if(item==2){
                 //bar selected
@@ -90,26 +94,35 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
                 
                 remove_instr = new JMenuItem("Remove Instrument");
                 
+                setLightInfo = new JMenuItem("Edit Instrument Info");
+                
                 aim_instrument.addActionListener(this);
                 
                 remove_instr.addActionListener(this);
+                setLightInfo.addActionListener(this);
+                
                 
                 add(aim_instrument);
                 
                 add(remove_instr);
+                add(setLightInfo);
             }else if(item==4){
                 //set selected
                 edit_set = new JMenuItem("Edit Set");
                 move_set = new JMenuItem("Move Set");
                 remove_set = new JMenuItem("Remove Set");
+                setSetInfo = new JMenuItem("Edit Set Info");
                 
                 edit_set.addActionListener(this);
                 move_set.addActionListener(this);
                 remove_set.addActionListener(this);
+                setSetInfo.addActionListener(this);
+                
                 
                 add(edit_set);
                 add(move_set);
                 add(remove_set);
+                add(setSetInfo);
             }
             
             addSeparator();
@@ -128,7 +141,7 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
                 add(add_set);
             }
         } else if(proj_class.draw_mouse_state==8){
-           //adding a stage
+            //adding a stage
             confirm=new JMenuItem("Commit");
             confirm.addActionListener(this);
             add(confirm);
@@ -155,7 +168,7 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             cancel.addActionListener(this);
             add(cancel);
         } else if(proj_class.draw_mouse_state==4){
-          //editing a house
+            //editing a house
             confirm=new JMenuItem("Commit");
             confirm.addActionListener(this);
             add(confirm);
@@ -164,7 +177,7 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             cancel.addActionListener(this);
             add(cancel);
         } else if(proj_class.draw_mouse_state==5){
-           //editing a stage
+            //editing a stage
             confirm=new JMenuItem("Commit");
             confirm.addActionListener(this);
             add(confirm);
@@ -180,7 +193,7 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             
             cancel=new JMenuItem("Cancel");
             cancel.addActionListener(this);
-            add(cancel); 
+            add(cancel);
         } else {
             //what ever state was are in we want to be able to get back to state=0
             cancel=new JMenuItem("Cancel");
@@ -200,46 +213,34 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
         
         
     }
-    //draw mouse stages are defiend as 0=normal 1=adding a bar 2=adding an instruemnt 3= editing a bar 
-    //4=editing a house 5=editing a stage 6=moving a bar 7= moving an instrument 8=adding a stage 
+    //draw mouse stages are defiend as 0=normal 1=adding a bar 2=adding an instruemnt 3= editing a bar
+    //4=editing a house 5=editing a stage 6=moving a bar 7= moving an instrument 8=adding a stage
     //9=adding a set peice 10=editing a set piece 11=moving a stage 12=moving a house 13=moving a set
-    public void actionPerformed(ActionEvent e)
-    {
+    public void actionPerformed(ActionEvent e) {
         project proj_class=(project)project.oClass;
-        if (e.getSource() == edit_house)
-        {
+        if (e.getSource() == edit_house) {
             //System.out.println("editing the house");
             proj_class.draw_mouse_state =4;
             aScreen.temp_house=new house();
             aScreen.temp_house.copyHouse((house)(proj_class.houses.get_object(proj_class.selected_index)));
-        }
-        else if (e.getSource() == edit_stage)
-        {
+        } else if (e.getSource() == edit_stage) {
             //System.out.println("editing the stage");
             proj_class.draw_mouse_state =5;
             aScreen.temp_stage=new stage();
             aScreen.temp_stage.copyStage((stage)(proj_class.stages.get_object(proj_class.selected_index)));
-        }
-        else if (e.getSource() == edit_bar)
-        {
+        } else if (e.getSource() == edit_bar) {
             //System.out.println("editing the bar");
             proj_class.draw_mouse_state =3;
             aScreen.temp_bar=new bar();
             aScreen.temp_bar.copyBar((bar)(proj_class.bars.get_object(proj_class.selected_index)));
-        }
-        else if(e.getSource()==add_bar)
-        {
+        } else if(e.getSource()==add_bar) {
             //System.out.println("adding a bar");
             proj_class.draw_mouse_state =1;
             aScreen.temp_bar = new bar();
-        }
-        else if(e.getSource()==move_bar)
-        {
+        } else if(e.getSource()==move_bar) {
             //System.out.println("moving a bar");
             proj_class.draw_mouse_state =6;
-        }
-        else if(e.getSource()==add_instrument)
-        {
+        } else if(e.getSource()==add_instrument) {
             //System.out.println("Adding an instrument");
             proj_class.draw_mouse_state =2;
             aScreen.temp_instrument = new instrument();
@@ -255,7 +256,7 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             //ADD STAGE
             //System.out.println("adding a stage");
             proj_class.draw_mouse_state =8;
-            aScreen.temp_stage = new stage();     
+            aScreen.temp_stage = new stage();
         } else if(e.getSource()==add_set) {
             //ADD SET PIECE
             //System.out.println("adding a stage");
@@ -281,10 +282,8 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
         }else if(e.getSource()==aim_instrument){
             //aim an instrument
             proj_class.draw_mouse_state=14;
-        }
-        else if (e.getSource() == remove_stage)
-        {//begin chaplin edit.
-             //proj_class.stages.object_list.removeElementAt(proj_class.stages.object_list.indexOf(proj_class.stages.object_list.get(proj_class.selected_index)));
+        } else if (e.getSource() == remove_stage) {//begin chaplin edit.
+            //proj_class.stages.object_list.removeElementAt(proj_class.stages.object_list.indexOf(proj_class.stages.object_list.get(proj_class.selected_index)));
             //proj_class.stages.set_num_objects(proj_class.stages.object_list.size());
             
             proj_class.stages.remove_object(proj_class.selected_index);
@@ -294,9 +293,7 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             proj_class.draw_mouse_state = 0;
             proj_class.stageadded = false;
             //proj_class.draw_mouse_state = 15;
-        }
-        else if (e.getSource() == remove_set)
-        {
+        } else if (e.getSource() == remove_set) {
             //proj_class.sets.object_list.removeElementAt(proj_class.sets.object_list.indexOf(proj_class.sets.object_list.get(proj_class.selected_index)));
             //proj_class.sets.set_num_objects(proj_class.sets.object_list.size());
             
@@ -305,52 +302,43 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             proj_class.selected_index = -1;
             proj_class.selected_type = -1;
             proj_class.draw_mouse_state = 0;
-        }
-        else if (e.getSource() == remove_bar)
-        {
-            int barIndex = 0;            
+        } else if (e.getSource() == remove_bar) {
+            int barIndex = 0;
             
             if(proj_class.instruments.object_list.size() > 0)//then there are instruments in array.
             {
-                int size = proj_class.instruments.object_list.size(), i = 0;                                
+                int size = proj_class.instruments.object_list.size(), i = 0;
                 barIndex = proj_class.selected_index;
-                while(i < size)
-                {                    
+                while(i < size) {
                     instrument aInstrument =(instrument)proj_class.instruments.object_list.get(i);
                     int barId = aInstrument.getBarID();
-                    if(aInstrument.getBarID() >= 0)
-                    {             
-                         if(barId==barIndex)
-                         {
+                    if(aInstrument.getBarID() >= 0) {
+                        if(barId==barIndex) {
                             //proj_class.instruments.object_list.removeElementAt(proj_class.instruments.object_list.indexOf(proj_class.instruments.object_list.get(i)));
                             //proj_class.instruments.set_num_objects(proj_class.instruments.object_list.size()-1);
-                                proj_class.instruments.remove_object(i);
-                             size -= 1;                                                                                  
-                         }    
-                         else
-                         {
-                             i++;
-                         }
+                            proj_class.instruments.remove_object(i);
+                            size -= 1;
+                        } else {
+                            i++;
+                        }
                     }
-                 }                              
-            }            
+                }
+            }
             proj_class.bars.remove_object(proj_class.selected_index);
             //proj_class.bars.set_num_objects(proj_class.bars.get_num_objects()-1);
             //remove the bar itself
-            for(int j = 0; j < proj_class.instruments.object_list.size(); j++)
-            {
-               //need the start point.
-               instrument tempInst = (instrument)proj_class.instruments.get_object(j);  
-               if(tempInst.Associated_barID > barIndex)
-                   tempInst.Associated_barID -= 1;
+            for(int j = 0; j < proj_class.instruments.object_list.size(); j++) {
+                //need the start point.
+                instrument tempInst = (instrument)proj_class.instruments.get_object(j);
+                if(tempInst.Associated_barID > barIndex)
+                    tempInst.Associated_barID -= 1;
             }
-             //mod bar id as well.
-            for(int k = 0; k < proj_class.bars.object_list.size(); k++)
-            {
-              bar tempBar = (bar)proj_class.bars.object_list.get(k);  
-              if(tempBar.index > barIndex)
-                  tempBar.index -= 1;
-            }                          
+            //mod bar id as well.
+            for(int k = 0; k < proj_class.bars.object_list.size(); k++) {
+                bar tempBar = (bar)proj_class.bars.object_list.get(k);
+                if(tempBar.index > barIndex)
+                    tempBar.index -= 1;
+            }
             proj_class.selected_index = -1;
             proj_class.selected_type = -1;
             proj_class.draw_mouse_state = 0;
@@ -358,9 +346,7 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             System.out.println("Selected Index action performed: "+proj_class.selected_index+"\n");
             System.out.println("Draw mouse state action performed: "+proj_class.draw_mouse_state);
             
-        }
-        else if (e.getSource() == remove_instr)
-        {
+        } else if (e.getSource() == remove_instr) {
             //System.out.println("Size is: "+proj_class.instruments.object_list.size());
             //System.out.println("Number of objects: "+proj_class.instruments.get_num_objects()+"\n");
             //proj_class.instruments.object_list.removeElementAt(proj_class.instruments.object_list.indexOf(proj_class.instruments.object_list.get(proj_class.selected_index)));
@@ -376,39 +362,32 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             proj_class.selected_type = -1;
             proj_class.draw_mouse_state = 0;
             //proj_class.draw_mouse_state = 18;
-        }
-        else if (e.getSource() == remove_house)
-        {   //loop over instruments, bars, stage et. to get rid of.
+        } else if (e.getSource() == remove_house) {   //loop over instruments, bars, stage et. to get rid of.
             
             System.out.println("*Before* Instr size is: "+proj_class.instruments.object_list.size());
-            while(proj_class.instruments.object_list.size() > 0)
-            {    
+            while(proj_class.instruments.object_list.size() > 0) {
                 //proj_class.instruments.object_list.remove(0);
                 //proj_class.instruments.set_num_objects(proj_class.instruments.object_list.size());
                 int inv_index=proj_class.getInstrumentByID(((instrument)proj_class.instruments.get_object(0)).getInventoryID());
                 proj_class.inventories.setItemUsed(inv_index,false);
                 proj_class.instruments.remove_object(0);
-            }   
+            }
             
             System.out.println("*After* Instr size is: "+proj_class.instruments.object_list.size());
-            while(proj_class.bars.object_list.size() > 0)
-            {    
+            while(proj_class.bars.object_list.size() > 0) {
                 proj_class.bars.remove_object(0);
                 //proj_class.bars.set_num_objects(proj_class.bars.object_list.size());
-            } 
-            while(proj_class.sets.object_list.size() > 0)
-            {
+            }
+            while(proj_class.sets.object_list.size() > 0) {
                 proj_class.sets.remove_object(0);
                 //proj_class.sets.set_num_objects(proj_class.sets.object_list.size());
-            }    
-            while(proj_class.stages.object_list.size() > 0)
-             {    
+            }
+            while(proj_class.stages.object_list.size() > 0) {
                 proj_class.stages.remove_object(0);
                 //proj_class.stages.set_num_objects(proj_class.stages.object_list.size());
-             }
+            }
             proj_class.stageadded = false;
-            while(proj_class.houses.object_list.size() > 0)
-            {
+            while(proj_class.houses.object_list.size() > 0) {
                 proj_class.houses.remove_object(0);
                 //proj_class.houses.set_num_objects(proj_class.houses.object_list.size());
             }
@@ -416,9 +395,22 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             proj_class.selected_index = -1;
             proj_class.houseadded = false;
             //proj_class.draw_mouse_state = 19;
-        }
-        else if(e.getSource() == zoom_in)
-        {   //begin chaplin edit.
+        }else if(e.getSource()==setStageInfo) {
+            //launch stage edit window
+            StageInfoWindow sw=new StageInfoWindow();
+            
+        }else if(e.getSource()==setSetInfo) {
+            //launch set edit window
+            SetInfoWindow sw = new SetInfoWindow();
+            
+            
+            
+        }else if(e.getSource()==setLightInfo) {
+            //launch light edit info
+            InstrumentInfoWindow iw=new InstrumentInfoWindow();
+            
+            
+        }else if(e.getSource() == zoom_in) {   //begin chaplin edit.
             if(proj_class.zoom_factor<1){
                 proj_class.zoom_factor+=.1;
                 aScreen.vert.setUnitIncrement((int)((1/(double)proj_class.zoom_factor)*(.05 * aScreen.vert.getHeight())));
@@ -481,50 +473,38 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             }
             
             proj_class.draw_mouse_state=0;
-        } 
-        else if(e.getSource()==confirm)
-        {
-            if(proj_class.draw_mouse_state==8)
-            {
+        } else if(e.getSource()==confirm) {
+            if(proj_class.draw_mouse_state==8) {
                 //commit the adding of the stage
                 proj_class.addStage(aScreen.temp_stage);
                 aScreen.temp_stage=null;
                 proj_class.draw_mouse_state=0;
-            }
-            else if(proj_class.draw_mouse_state==9)
-            {
+            } else if(proj_class.draw_mouse_state==9) {
                 proj_class.addSet(aScreen.temp_set);
                 aScreen.temp_set=null;
                 proj_class.draw_mouse_state=0;
-            }
-            else if(proj_class.draw_mouse_state==3){
+            } else if(proj_class.draw_mouse_state==3){
                 //editing a bar
                 proj_class.SetBar(aScreen.temp_bar,proj_class.selected_index);
                 aScreen.temp_bar=null;
                 proj_class.draw_mouse_state=0;
                 
-            }
-            else if(proj_class.draw_mouse_state==4)
-            {
+            } else if(proj_class.draw_mouse_state==4) {
                 //editing a house
                 proj_class.SetHouse(aScreen.temp_house,proj_class.selected_index);
                 aScreen.temp_house=null;
                 proj_class.draw_mouse_state=0;
-            }
-            else if(proj_class.draw_mouse_state==5)
-            {
+            } else if(proj_class.draw_mouse_state==5) {
                 //editing a stage
                 proj_class.SetStage(aScreen.temp_stage,proj_class.selected_index);
                 aScreen.temp_stage=null;
                 proj_class.draw_mouse_state=0;
-            }
-            else if(proj_class.draw_mouse_state==10)
-            {
+            } else if(proj_class.draw_mouse_state==10) {
                 //editing a set object
                 proj_class.SetSetObject(aScreen.temp_set,proj_class.selected_index);
                 aScreen.temp_set=null;
                 proj_class.draw_mouse_state=0;
-            }    
+            }
         }
         aScreen.repaint();
         ExplorerBrowser eb=(ExplorerBrowser)ExplorerBrowser.oClass;
