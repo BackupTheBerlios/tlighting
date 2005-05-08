@@ -294,7 +294,7 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener 
             System.exit(0);
          } else if(source.getText()=="Cue Editor"){
             //launch the controls for the lgiht levels
-            
+            CueEditor ce=new CueEditor();
          }else if(source.getText()=="Render Photons"){
             //execute the rendering and saving of photons
             PhotonRenderer phoren = new PhotonRenderer();

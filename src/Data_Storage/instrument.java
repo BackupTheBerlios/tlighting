@@ -31,7 +31,8 @@ public class instrument extends drawing_prog.General_Object {
     public float R;
     public float G;
     public float B;
-    public float radius;
+    public int radius;
+    int level;
     
     /** Creates a new instance of instrument */
     public instrument() {
@@ -180,5 +181,18 @@ public class instrument extends drawing_prog.General_Object {
         System.out.println("The type of the instrument is: " + this.link_type + " .");
         System.out.println("The description of the instrument is: " + this.Description + " .");
         System.out.println("The miscellaneous accessories of the instrument are: " + this.misc + " .\n\n");
+    }
+    
+    public int getLevel(){
+        return level;
+    }
+    public void setLevel(int l){
+        if(l>100){
+            l=100;
+        }
+        if(l<0){
+            l=0;
+        }
+        level=l;
     }
 }

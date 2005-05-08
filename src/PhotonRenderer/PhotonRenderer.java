@@ -44,7 +44,7 @@ public class PhotonRenderer {
         int numLightSamples=6;
         int maxDepth=5;
         boolean computerGI=true;
-        int numPhotons=50000;
+        int numPhotons=100000;
         int numGather=50;
         double irrTol=0.2;
         double irrSpace=0.05;

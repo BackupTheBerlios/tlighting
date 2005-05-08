@@ -47,7 +47,7 @@ class LightServer {
         this.options = options;
         intAccel.build();
         //if (output.isCanceled())
-         //   return;
+        //   return;
         long startTime;
         long endTime;
         startTime = System.currentTimeMillis();
@@ -58,27 +58,27 @@ class LightServer {
         int numEmitted = 0;
         proj_class.photonmap= new PhotonMap(options.getNumPhotons(), options.getNumGather(), 1e10);
         //globalPhotonMap = options.computeGI() ? new GlobalPhotonMap(options.getNumPhotons(), options.getNumGather(), 1e10) : null;
-            //causticPhotonMap = options.computeCaustics() ? new CausticPhotonMap(options.getNumPhotons(), options.getNumGather(), 1e10, 1.1) : null;
-            if (lights.length > 0) {
-                double[] lightPowers = new double[lights.length];
+        //causticPhotonMap = options.computeCaustics() ? new CausticPhotonMap(options.getNumPhotons(), options.getNumGather(), 1e10, 1.1) : null;
+        if (lights.length > 0) {
+            double[] lightPowers = new double[lights.length];
+            for (int i = 0; i < lights.length; i++) {
+                lightPowers[i] = lights[i].getAveragePower();
+                if (i > 0)
+                    lightPowers[i] += lightPowers[i - 1];
+            }
+            //output.println("[LSV] Tracing photons ...");
+            //if (options.computeGI())
+            //   output.setTask("Photon Tracing", 0, globalPhotonMap.maxSize());
+            //else
+            //    output.setTask("Photon Tracing", 0, causticPhotonMap.maxSize());
+            QMCSequence photonSampler = new Halton(2, 4);
+            while ((!proj_class.photonmap.isFull())&&(numEmitted<options.getNumPhotons()*(lights.length+2))) {
+                
+                double[] rnd = photonSampler.getNext();
+                double rand1x = rnd[0];
+                double rand = rand1x * lightPowers[lights.length - 1];
+                int light = -1;
                 for (int i = 0; i < lights.length; i++) {
-                    lightPowers[i] = lights[i].getAveragePower();
-                    if (i > 0)
-                        lightPowers[i] += lightPowers[i - 1];
-                }
-                //output.println("[LSV] Tracing photons ...");
-                //if (options.computeGI())
-                 //   output.setTask("Photon Tracing", 0, globalPhotonMap.maxSize());
-                //else
-                //    output.setTask("Photon Tracing", 0, causticPhotonMap.maxSize());
-                QMCSequence photonSampler = new Halton(2, 4);
-                while ((!proj_class.photonmap.isFull())&&(numEmitted<options.getNumPhotons()*(lights.length+2))) {
-                    
-                    double[] rnd = photonSampler.getNext();
-                    double rand1x = rnd[0];
-                    double rand = rand1x * lightPowers[lights.length - 1];
-                    int light = -1;
-                    for (int i = 0; i < lights.length; i++) {
                         /*if (rand < lightPowers[i]) {
                             light = i;
                             if (i == 0)
@@ -89,44 +89,44 @@ class LightServer {
                         }
                          http://game.theredstick.net - AhDoNo
                     } */
-                        light=i;
-                        if (light >= 0) {
-                            Point3 pt = new Point3();
-                            Vector3 dir = new Vector3();
-                            Color3 power = new Color3();
-                            lights[light].getPhoton(rand1x, rnd[1], rnd[2], rnd[3], pt, dir, power);
-                            
-                            RenderState aState=RenderState.createPhotonState(new Ray(pt, dir));
-                            aState.setCurrentLight(light);
-                            //power=Color.RED;
-                            
-                            tracePhoton(aState, power);
-                            numEmitted++;
-                        }
-                        //if (output.isCanceled())
-                            //return;
+                    light=i;
+                    if (light >= 0) {
+                        Point3 pt = new Point3();
+                        Vector3 dir = new Vector3();
+                        Color3 power = new Color3();
+                        lights[light].getPhoton(rand1x, rnd[1], rnd[2], rnd[3], pt, dir, power);
+                        
+                        RenderState aState=RenderState.createPhotonState(new Ray(pt, dir));
+                        aState.setCurrentLight(light);
+                        //power=Color.RED;
+                        
+                        tracePhoton(aState, power);
+                        numEmitted++;
                     }
+                    //if (output.isCanceled())
+                    //return;
                 }
-                
-                System.out.println("Done with creation of photonMap");
-               // if (options.computeGI())
-                //else
-                //    output.update(causticPhotonMap.size());
-                //if (options.computeGI()) {
-               //     output.setTask("Balancing global photon map", 0, 1);
-                //    output.println("[LSV] Balancing global photon map ...");
-                //    if (options.computeCaustics())
-                  //      globalPhotonMap.initialize(1.0 / numEmitted / (1.0 - options.getPhotonReductionRatio()));
-                  //  else
-                       proj_class.photonmap.initialize(1.0 / numEmitted);
-                  //  if (output.isCanceled())
-                   //     return;
-                   // output.setTask("Precomputing irradiance", 0, 1);
-                   // output.println("[LSV] Precomputing irradiance ...");
-                    //proj_class.photonmap.precomputeIrradiance(true, true);
-                   // if (output.isCanceled())
-                   //     return;
-              //  }
+            }
+            
+            System.out.println("Done with creation of photonMap");
+            // if (options.computeGI())
+            //else
+            //    output.update(causticPhotonMap.size());
+            //if (options.computeGI()) {
+            //     output.setTask("Balancing global photon map", 0, 1);
+            //    output.println("[LSV] Balancing global photon map ...");
+            //    if (options.computeCaustics())
+            //      globalPhotonMap.initialize(1.0 / numEmitted / (1.0 - options.getPhotonReductionRatio()));
+            //  else
+            proj_class.photonmap.initialize(1.0 / numEmitted);
+            //  if (output.isCanceled())
+            //     return;
+            // output.setTask("Precomputing irradiance", 0, 1);
+            // output.println("[LSV] Precomputing irradiance ...");
+            //proj_class.photonmap.precomputeIrradiance(true, true);
+            // if (output.isCanceled())
+            //     return;
+            //  }
                 /*if (options.computeCaustics()) {
                     output.setTask("Balancing caustic photon map", 0, 1);
                     output.println("[LSV] Balancing caustic photon map ...");
@@ -134,10 +134,10 @@ class LightServer {
                     if (output.isCanceled())
                         return;
                 }*/
-            }
-            //irradianceCache = options.irradianceCaching() ? new IrradianceCache(options.getIrradianceCacheTolerance(), options.getIrradianceCacheSpacing(), intAccel.getBounds()) : null;
-            //irrM = (int) Math.max(1, Math.sqrt(options.getIrradianceSamples() / Math.PI));
-            //irrN = (int) Math.max(1, (irrM * Math.PI));
+        }
+        //irradianceCache = options.irradianceCaching() ? new IrradianceCache(options.getIrradianceCacheTolerance(), options.getIrradianceCacheSpacing(), intAccel.getBounds()) : null;
+        //irrM = (int) Math.max(1, Math.sqrt(options.getIrradianceSamples() / Math.PI));
+        //irrN = (int) Math.max(1, (irrM * Math.PI));
         //}
         /*endTime = System.currentTimeMillis();
         output.println("[LSV] Light Server Statistics:");
@@ -163,12 +163,12 @@ class LightServer {
     /*void storePhoton(RenderState state, Vector3 dir, Color3 power,int curLight) {
         //boolean isCaustic = (state.getDiffuseDepth() == 0) && (state.getSpecularDepth() > 0);
         //if (options.computeGI() && (!options.computeCaustics() || (Math.random() >= options.getPhotonReductionRatio())))
-        
-        
+     
+     
         Photon pho=new Photon(p,d,c);
-        
+     
         proj_class.photonmap.storePhoton(state, dir, power, state.getDepth() == 0, isCaustic,curLight);
-       
+     
     }*/
     
     public void storePhoton(Point3 p, Vector3 n, Vector3 dir, Color3 power,boolean isDirect, int curLight) {
@@ -177,8 +177,8 @@ class LightServer {
         Color c=new Color((float)power.getR(),(float)power.getG(),(float)power.getB());
         
         Photon pho=new Photon(p,dir,c);
-        
-            proj_class.photonmap.storePhoton(pho);
+        pho.setLightSource(curLight);
+        proj_class.photonmap.storePhoton(pho);
         //}
     }
     
@@ -246,7 +246,7 @@ class LightServer {
             int hits = 0;
             double invR = 0.0;
             Vector3 w = new Vector3();
-            
+     
             // irradiance gradients
             Color3[] rotGradient = new Color3[3];
             Color3[] transGradient1 = new Color3[3];
@@ -256,7 +256,7 @@ class LightServer {
                 transGradient1[i] = new Color3(Color3.BLACK);
                 transGradient2[i] = new Color3(Color3.BLACK);
             }
-            
+     
             // irradiance gradients temp variables
             Vector3 vi = new Vector3();
             Color3 rotGradientTemp = new Color3();
@@ -315,7 +315,7 @@ class LightServer {
                         // increment rotational gradient
                         rotGradientTemp.madd(-sinTheta / cosTheta, lij);
                     }
-                    
+     
                     // increment translational gradient
                     double rij = temp.getT();
                     double sinThetam = Math.sqrt((double) j / irrM);
@@ -331,14 +331,14 @@ class LightServer {
                         r0[j] = rij;
                         l0[j].set(lij);
                     }
-                    
+     
                     // set previous
                     rijm = rij;
                     lijm.set(lij);
                     rim[j] = rij;
                     lim[j].set(lij);
                 }
-                
+     
                 // increment rotational gradient vector
                 rotGradient[0].madd(vi.x, rotGradientTemp);
                 rotGradient[1].madd(vi.y, rotGradientTemp);
@@ -351,7 +351,7 @@ class LightServer {
                 transGradient2[1].madd(vim.y, transGradient2Temp);
                 transGradient2[2].madd(vim.z, transGradient2Temp);
             }
-            
+     
             // finish computing second part of the translational gradient
             vim.x = 0.0;
             vim.y = 1.0;
@@ -408,7 +408,7 @@ class LightServer {
             }
             if (numVisibleLights > 0) {
                 //need to filter out all light sources so they do not get mixed together
-                
+     
                 for (int i = 0; i < options.getNumLightSamples(); i++) {
                     LightSample sample = new LightSample();
                     sample.getRadiance().set(Color3.BLACK);
@@ -438,7 +438,7 @@ class LightServer {
         if (sample.isValid())
             if (!options.traceShadows() || (sample.getShadowRay() == null) || !intAccel.intersects(sample.getShadowRay()))
                 return false;
-        
+     
         return true;
     }*/
     
@@ -512,7 +512,7 @@ class LightServer {
             int part=0;
             int temp_i=0;
             for(i=1;i<proj_class.photonmap.getStoredPhotons();i++){
-               
+                
                 
                 if(temp_i>1000){
                     try{
@@ -602,7 +602,7 @@ class LightServer {
         }
         
         System.out.println("Saving done");
-                
+        
         
         //save management file saying howmany lights and how many parts were saved for each light
         
