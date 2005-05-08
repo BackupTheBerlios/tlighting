@@ -361,7 +361,7 @@ public class xml_Reader {
             instrument tempi=new instrument();
             IXMLElement i_xml=xml.getChildAtIndex(i);
             
-            
+           try{ 
             tempi.setName(i_xml.getAttribute("name","default"));
             tempi.setDescription(i_xml.getAttribute("description","default"));
             tempi.setBarID(Integer.parseInt(i_xml.getAttribute("bar_id","0")));
@@ -375,12 +375,14 @@ public class xml_Reader {
             tempi.aimy=Integer.parseInt(i_xml.getAttribute("aimY","-1"));
             tempi.aimz=Integer.parseInt(i_xml.getAttribute("aimZ","-1"));
             
-            tempi.R=Integer.parseInt(i_xml.getAttribute("colorR","0"));
-            tempi.G=Integer.parseInt(i_xml.getAttribute("colorG","0"));
-            tempi.B=Integer.parseInt(i_xml.getAttribute("colorB","0"));
+            tempi.R=Float.parseFloat(i_xml.getAttribute("colorR","0.0"));
+            tempi.G=Float.parseFloat(i_xml.getAttribute("colorG","0.0"));
+            tempi.B=Float.parseFloat(i_xml.getAttribute("colorB","0.0"));
             
             tempi.radius=Integer.parseInt(i_xml.getAttribute("radius","0"));
-            
+           }catch(Exception ex){
+               System.out.println("Error parseing instrument data");
+           }
             //check to see if the bars exists for teh bars to go on and if they are in the right positions
             //check to see if the instruments are in inventory
             int i2;
