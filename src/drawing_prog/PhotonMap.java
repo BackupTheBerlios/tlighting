@@ -59,10 +59,15 @@ public class PhotonMap {
     public final void storePhoton(Photon p) {
         if (storedPhotons >= (photons.length - 1))
             return;
-        storedPhotons++;
-        photons[storedPhotons] = p;
-        bounds.include(new Point3(p.x, p.y, p.z));
-        System.out.println("photon added at "+p.x+","+p.y+","+p.z+" with power "+p.power);
+        //if(!alreadyExists(p)){
+            storedPhotons++;
+            photons[storedPhotons] = p;
+            bounds.include(new Point3(p.x, p.y, p.z));
+            System.out.println("photon added at "+p.x+","+p.y+","+p.z+" with power "+p.power);
+        //}else{
+            System.out.println("Tried to add a duplicate photon at "+p.x+","+p.y+","+p.z+" with power "+p.power);
+            
+        //}
     }
     
     public final int size() {
@@ -78,10 +83,10 @@ public class PhotonMap {
     }
     
     final void scalePhotonPower(double scale) {
-    Color3 c = new Color3();
-    for (int i = 1; i <= storedPhotons; i++)
-    photons[i].power = c.setRGBE(photons[i].power).mul(scale).toRGBE();
-   }
+        Color3 c = new Color3();
+        for (int i = 1; i <= storedPhotons; i++)
+            photons[i].power = c.setRGBE(photons[i].power).mul(scale).toRGBE();
+    }
     
     /*public final void display(Camera cam, String filename) {
         Bitmap img = new Bitmap(cam.getImageWidth(), cam.getImageHeight(), true);
@@ -101,7 +106,7 @@ public class PhotonMap {
         }
         img.save(filename);
     }
-    */ 
+     */
     final void locatePhotons(NearestPhotons np) {
         int i = 1;
         int level = 0;
@@ -263,6 +268,12 @@ public class PhotonMap {
             Photon pho=photons[i];
             if(pho!=null){
                 Color oc=screen.getColor();
+                
+               // screen.setColor(new Color((float)pho.R/2,(float)pho.B/2,(float)pho.G/2));
+               // Ellipse2D.Double node_circ1= new Ellipse2D.Double((pho.x+offsetX)*scale,(pho.y+offsetY)*scale,2*scale,2*scale);
+               // screen.fill(node_circ1);
+                
+                
                 screen.setColor(new Color((float)pho.R,(float)pho.B,(float)pho.G));
                 Ellipse2D.Double node_circ= new Ellipse2D.Double((pho.x+offsetX)*scale,(pho.y+offsetY)*scale,1*scale,1*scale);
                 screen.fill(node_circ);
@@ -272,7 +283,7 @@ public class PhotonMap {
     }
     
     
-     public void initialize(double scale) {
+    public void initialize(double scale) {
         balance();
         scalePhotonPower(scale);
         maxPower *= scale;
@@ -280,11 +291,11 @@ public class PhotonMap {
         if (gatherRadius > maxRadius)
             gatherRadius = maxRadius;
     }
-
+    
    /* public void precomputeIrradiance(boolean includeDirect, boolean includeCaustics) {
         if (size() == 0)
             return;
-
+    
         // precompute the indirect irradiance for all photons that are neither
         // leaves nor parents of leaves in the tree.
         int quadStoredPhotons = halfStoredPhotons / 2;
@@ -327,7 +338,7 @@ public class PhotonMap {
             curr.irradiance = irr.toRGBE();
             temp[i] = curr;
         }
-
+    
         // resize photon map to only include irradiance photons
         gatherNum /= 4;
         maxRadius = 1.4 * Math.sqrt(maxPower * gatherNum);
@@ -341,5 +352,26 @@ public class PhotonMap {
         photons = temp;
         hasIrradiance = true;
     }*/
-    
+    public boolean alreadyExists(Photon p){
+        
+        int i=0;
+        while(i<storedPhotons){
+            Photon pho=photons[i];
+            if(pho!=null){
+                if((int)pho.x==(int)p.x){
+                    if((int)pho.y==(int)p.y){
+                        if((int)pho.z==(int)p.z){
+                            if((int)pho.lightSource==(int)p.lightSource){
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            i++;
+        }
+        
+        return false;
+    }
 }

@@ -297,7 +297,9 @@ public class PhotonRenderer {
             Vertex v1 = new Vertex();
             Vertex v2 = new Vertex();
             Vertex v3 = new Vertex();
-            
+             Vertex v4 = new Vertex();
+            Vertex v5= new Vertex();
+            Vertex v6 = new Vertex();
             v1.p.x=gx+xs[i];
             v1.p.y=gy+ys[i];
             v1.p.z=gz;
@@ -316,20 +318,20 @@ public class PhotonRenderer {
             //points are bottom right top right and top left
             
             
-            v1.p.x=gx+xs[i+1];
-            v1.p.y=gy+ys[i+1];
-            v1.p.z=gz;
+            v4.p.x=gx+xs[i+1];
+            v4.p.y=gy+ys[i+1];
+            v4.p.z=gz;
             
-            v2.p.x=gx+xs[i+1];
-            v2.p.y=gy+ys[i+1];
-            v2.p.z=gz+height;
+            v5.p.x=gx+xs[i+1];
+            v5.p.y=gy+ys[i+1];
+            v5.p.z=gz+height;
             
-            v3.p.x=gx+xs[i];
-            v3.p.y=gy+ys[i];
-            v3.p.z=gz+height;
+            v6.p.x=gx+xs[i];
+            v6.p.y=gy+ys[i];
+            v6.p.z=gz+height;
             
             
-            Triangle aTri2=new Triangle(shader,v1,v2,v3);
+            Triangle aTri2=new Triangle(shader,v4,v5,v6);
             scene.addObject(aTri2);
             
             
@@ -343,20 +345,23 @@ public class PhotonRenderer {
             Vertex v1 = new Vertex();
             Vertex v2 = new Vertex();
             Vertex v3 = new Vertex();
+            Vertex v4 = new Vertex();
+            Vertex v5 = new Vertex();
+            Vertex v6 = new Vertex();
             
-            v1.p.x=gx+xs[i];
-            v1.p.y=gy+ys[i];
-            v1.p.z=gz;
+            v4.p.x=gx+xs[i];
+            v4.p.y=gy+ys[i];
+            v4.p.z=gz;
             
-            v2.p.x=gx+xs[i];
-            v2.p.y=gy+ys[i];
-            v2.p.z=gz+height;
+            v5.p.x=gx+xs[i];
+            v5.p.y=gy+ys[i];
+            v5.p.z=gz+height;
             
-            v3.p.x=gx+xs[0];
-            v3.p.y=gy+ys[0];
-            v3.p.z=gz;
+            v6.p.x=gx+xs[0];
+            v6.p.y=gy+ys[0];
+            v6.p.z=gz;
             
-            Triangle aTri=new Triangle(shader,v1,v2,v3);
+            Triangle aTri=new Triangle(shader,v4,v5,v6);
             scene.addObject(aTri);
             
             //points are bottom right top right and top left

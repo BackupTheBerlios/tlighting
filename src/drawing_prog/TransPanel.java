@@ -343,7 +343,9 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
     
     /* Blank mouse listener methods  */
     public void mouseClicked(MouseEvent event) {}
-    public void mouseEntered(MouseEvent event) {}
+    public void mouseEntered(MouseEvent event) {
+    
+    }
     public void mouseExited(MouseEvent event) {}
     public void mouseReleased(MouseEvent event) {
     }
@@ -376,6 +378,25 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         
         project proj_class=(project)project.oClass;
         
+        int adjx=0;
+        int adjy=0;
+        if(proj_class.snapToGrid){
+            adjx =proj_class.ScreenXtoWorld(e.getX())%proj_class.snapToGridValue;
+            adjy =proj_class.ScreenYtoWorld(e.getY())%proj_class.snapToGridValue;
+            
+            //int halfSnap=proj_class.snapToGridValue/2;
+            
+            //if(adjx<halfSnap){
+                adjx=adjx*-1;
+            //}
+            
+            //if(adjy<halfSnap){
+                adjy=adjy*-1;
+            //}
+            
+        }
+        
+        
         if((e.getButton() == MouseEvent.BUTTON3)||((e.getModifiersEx()&MouseEvent.CTRL_DOWN_MASK)!=0)){
             //System.out.println("Mouse 3 Was Clicked with in stage area at "+e.getX()+" "+e.getY());
             //System.out.println("inside mouse pressed. first if statement");
@@ -395,7 +416,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 int curx=proj_class.ScreenXtoWorld(e.getX());
                 
                 int cury=proj_class.ScreenYtoWorld(e.getY());
-                
+            
                 int search_area=10;
                 
                 boolean found_item=false;
@@ -542,8 +563,8 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 //drawing a bar
                 if(temp_bar.num_nodes==0) {
                     //begin chaplin edit redited by JoshZ
-                    temp_bar.worldx=proj_class.ScreenXtoWorld(e.getX());
-                    temp_bar.worldy=proj_class.ScreenYtoWorld(e.getY());
+                    temp_bar.worldx=proj_class.ScreenXtoWorld(e.getX())+adjx;
+                    temp_bar.worldy=proj_class.ScreenYtoWorld(e.getY())+adjy;
                     
                     //end chaplin edit and reediting by JoshZ
                     
@@ -551,7 +572,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     
                 } else {
                     //begin chaplin edit rededited by JOSHZ
-                    temp_bar.add_node(proj_class.ScreenXtoWorld(e.getX())-temp_bar.worldx,proj_class.ScreenYtoWorld(e.getY())-temp_bar.worldy);
+                    temp_bar.add_node(proj_class.ScreenXtoWorld(adjx+e.getX())-temp_bar.worldx,adjy+proj_class.ScreenYtoWorld(e.getY())-temp_bar.worldy);
                     //end chaplin edit and reediting by JoshZ
                     if(temp_bar.num_nodes>=2) {
                         proj_class.addBar(temp_bar);
@@ -588,7 +609,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 //swap the points to make the math easier because assume point 1 is to the right
                 
                 //begin chaplin edit reediting by JoshZ
-                pot_x = proj_class.ScreenXtoWorld(e.getX());
+                pot_x = proj_class.ScreenXtoWorld(e.getX())+adjx;
                 //end chaplin edit reedited by JoshZ
                 
                 //this is done wrong. this assumes bar is either slanted or horizontal.
@@ -613,7 +634,7 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                     slope = ((double)(bary1-bary2))/ ((double)(barx1-barx2));
                     
                     if( (slope == Double.NEGATIVE_INFINITY) || (slope == Double.POSITIVE_INFINITY) ) {
-                        pot_y =  e.getY();
+                        pot_y =  e.getY()+adjy;
                         pot_x = (int)((pot_y-bary1)/slope) + barx1;
                         //pot_x off bar slightly. use point slope to get x point on line. subtract mouse cursor from poit on line and set as pot x.
                         System.out.println("Inside if. bary1 is: "+bary1+"barx1 "+barx1+" slope is:"+slope+". pot_x is: "+pot_x+".");
@@ -676,8 +697,8 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 //actually move the bar
                 bar tb=new bar();
                 tb.copyBar((bar)proj_class.bars.get_object(proj_class.selected_index));
-                tb.worldx=proj_class.ScreenXtoWorld(e.getX());
-                tb.worldy=proj_class.ScreenYtoWorld(e.getY());
+                tb.worldx=proj_class.ScreenXtoWorld(e.getX())+adjx;
+                tb.worldy=proj_class.ScreenYtoWorld(e.getY())+adjy;
                 proj_class.SetBar(tb,proj_class.selected_index);
                 
                 proj_class.draw_mouse_state=0;
@@ -686,14 +707,14 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 //adding a stage object
                 
                 if(temp_stage.num_nodes==0) {
-                    temp_stage.worldx=proj_class.ScreenXtoWorld(e.getX());
-                    temp_stage.worldy=proj_class.ScreenYtoWorld(e.getY());
+                    temp_stage.worldx=proj_class.ScreenXtoWorld(e.getX())+adjx;
+                    temp_stage.worldy=proj_class.ScreenYtoWorld(e.getY())+adjy;
                     
                     temp_stage.add_node(0,0);
                     
                 } else {
                     
-                    temp_stage.add_node(proj_class.ScreenXtoWorld(e.getX())-temp_stage.worldx,proj_class.ScreenYtoWorld(e.getY())-temp_stage.worldy);
+                    temp_stage.add_node(adjx+proj_class.ScreenXtoWorld(e.getX())-temp_stage.worldx,adjy+proj_class.ScreenYtoWorld(e.getY())-temp_stage.worldy);
                     
                     if(temp_stage.num_nodes>=15) {
                         proj_class.addStage(temp_stage);
@@ -710,13 +731,13 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 
                 if(temp_set.num_nodes==0) {
                     
-                    temp_set.worldx=proj_class.ScreenXtoWorld(e.getX());
-                    temp_set.worldy=proj_class.ScreenYtoWorld(e.getY());
+                    temp_set.worldx=proj_class.ScreenXtoWorld(e.getX())+adjx;
+                    temp_set.worldy=proj_class.ScreenYtoWorld(e.getY())+adjy;
                     
                     temp_set.add_node(0,0);
                     
                 } else {
-                    temp_set.add_node(proj_class.ScreenXtoWorld(e.getX())-temp_set.worldx,proj_class.ScreenYtoWorld(e.getY())-temp_set.worldy);
+                    temp_set.add_node(adjx+proj_class.ScreenXtoWorld(e.getX())-temp_set.worldx,adjy+proj_class.ScreenYtoWorld(e.getY())-temp_set.worldy);
                     
                     
                     if(temp_set.num_nodes>=15) {
@@ -737,11 +758,11 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 if(selected_node<0) {
                     //find a node to select
                     
-                    selected_node=temp_house.closest_node(proj_class.ScreenXtoWorld(e.getX()),proj_class.ScreenYtoWorld(e.getY()));
+                    selected_node=temp_house.closest_node(adjx+proj_class.ScreenXtoWorld(e.getX()),adjy+proj_class.ScreenYtoWorld(e.getY()));
                 } else {
                     //set the node to the new position
                     
-                    temp_house.move_node(selected_node, proj_class.ScreenXtoWorld(e.getX()), proj_class.ScreenYtoWorld(e.getY()));
+                    temp_house.move_node(selected_node, adjx+proj_class.ScreenXtoWorld(e.getX()), adjy+proj_class.ScreenYtoWorld(e.getY()));
                     
                     selected_node=-1;
                 }
@@ -754,12 +775,12 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 if(selected_node<0) {
                     //find a node to select
                     
-                    selected_node=temp_stage.closest_node(proj_class.ScreenXtoWorld(e.getX()),proj_class.ScreenYtoWorld(e.getY()));
+                    selected_node=temp_stage.closest_node(adjx+proj_class.ScreenXtoWorld(e.getX()),adjy+proj_class.ScreenYtoWorld(e.getY()));
                     
                 } else {
                     //set the node to the new position
                     
-                    temp_stage.move_node(selected_node, proj_class.ScreenXtoWorld(e.getX()), proj_class.ScreenYtoWorld(e.getY()));
+                    temp_stage.move_node(selected_node, adjx+proj_class.ScreenXtoWorld(e.getX()), adjy+proj_class.ScreenYtoWorld(e.getY()));
                     
                     selected_node=-1;
                 }
@@ -772,12 +793,12 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 if(selected_node<0) {
                     
                     //find a node to select
-                    selected_node=temp_bar.closest_node(proj_class.ScreenXtoWorld(e.getX()),proj_class.ScreenYtoWorld(e.getY()));
+                    selected_node=temp_bar.closest_node(adjx+proj_class.ScreenXtoWorld(e.getX()),adjy+proj_class.ScreenYtoWorld(e.getY()));
                     
                 } else {
                     //set the node to the new position
                     
-                    temp_bar.move_node(selected_node, proj_class.ScreenXtoWorld(e.getX()), proj_class.ScreenYtoWorld(e.getY()));
+                    temp_bar.move_node(selected_node, adjx+proj_class.ScreenXtoWorld(e.getX()), adjy+proj_class.ScreenYtoWorld(e.getY()));
                     
                     selected_node=-1;
                 }
@@ -790,11 +811,11 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 if(selected_node<0) {
                     //find a node to select
                     
-                    selected_node=temp_set.closest_node(proj_class.ScreenXtoWorld(e.getX()),proj_class.ScreenYtoWorld(e.getY()));
+                    selected_node=temp_set.closest_node(adjx+proj_class.ScreenXtoWorld(e.getX()),adjy+proj_class.ScreenYtoWorld(e.getY()));
                 } else {
                     //set the node to the new position
                     
-                    temp_set.move_node(selected_node, proj_class.ScreenXtoWorld(e.getX()), proj_class.ScreenYtoWorld(e.getY()));
+                    temp_set.move_node(selected_node, adjx+proj_class.ScreenXtoWorld(e.getX()), adjy+proj_class.ScreenYtoWorld(e.getY()));
                     
                     selected_node=-1;
                 }
@@ -821,16 +842,16 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 int xdiff;
                 int ydiff;
                 
-                xdiff = old_stage_x-proj_class.ScreenXtoWorld(e.getX());
-                ydiff = old_stage_y-proj_class.ScreenYtoWorld(e.getY());
+                xdiff = old_stage_x-(adjx+proj_class.ScreenXtoWorld(e.getX()));
+                ydiff = old_stage_y-(adjy+proj_class.ScreenYtoWorld(e.getY()));
                 
                 //actually move the stage
                 //proj_class.stages.get_object(0).worldx=proj_class.ScreenXtoWorld(e.getX());
                 //proj_class.stages.get_object(0).worldy=proj_class.ScreenYtoWorld(e.getY());
                 stage ts=new stage();
                 ts.copyStage((stage)proj_class.stages.get_object(0));
-                ts.worldx=proj_class.ScreenXtoWorld(e.getX());
-                ts.worldy=proj_class.ScreenYtoWorld(e.getY());
+                ts.worldx=adjx+proj_class.ScreenXtoWorld(e.getX());
+                ts.worldy=adjy+proj_class.ScreenYtoWorld(e.getY());
                 proj_class.SetStage(ts,0);
                 proj_class.draw_mouse_state=0;
                 
@@ -851,16 +872,16 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 int xdiff;
                 int ydiff;
                 
-                xdiff = old_x-proj_class.ScreenXtoWorld(e.getX());
-                ydiff = old_y-proj_class.ScreenYtoWorld(e.getY());
+                xdiff = old_x-(adjx+proj_class.ScreenXtoWorld(e.getX()));
+                ydiff = old_y-(adjy+proj_class.ScreenYtoWorld(e.getY()));
                 
                 //actually move the house
                 //proj_class.houses.get_object(0).worldx=proj_class.ScreenXtoWorld(e.getX());
                 //proj_class.houses.get_object(0).worldy=proj_class.ScreenYtoWorld(e.getY());
                 house th=new house();
                 th.copyHouse((house)proj_class.houses.get_object(0));
-                th.worldx=proj_class.ScreenXtoWorld(e.getX());
-                th.worldy=proj_class.ScreenYtoWorld(e.getY());
+                th.worldx=adjx+proj_class.ScreenXtoWorld(e.getX());
+                th.worldy=adjy+proj_class.ScreenYtoWorld(e.getY());
                 proj_class.SetHouse(th,0);
                 
                 proj_class.draw_mouse_state=0;
@@ -881,16 +902,16 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 int xdiff;
                 int ydiff;
                 
-                xdiff = old_x-proj_class.ScreenXtoWorld(e.getX());
-                ydiff = old_y-proj_class.ScreenYtoWorld(e.getY());
+                xdiff = old_x-(adjx+proj_class.ScreenXtoWorld(e.getX()));
+                ydiff = old_y-(adjy+proj_class.ScreenYtoWorld(e.getY()));
                 
                 //actually move the house
                 //proj_class.sets.get_object(proj_class.selected_index).worldx=proj_class.ScreenXtoWorld(e.getX());
                 //proj_class.sets.get_object(proj_class.selected_index).worldy=proj_class.ScreenYtoWorld(e.getY());
                 setobject ts=new setobject();
                 ts.copySetObject((setobject)proj_class.sets.get_object(proj_class.selected_index));
-                ts.worldx=proj_class.ScreenXtoWorld(e.getX());
-                ts.worldy=proj_class.ScreenYtoWorld(e.getY());
+                ts.worldx=adjx+proj_class.ScreenXtoWorld(e.getX());
+                ts.worldy=adjy+proj_class.ScreenYtoWorld(e.getY());
                 proj_class.SetSetObject(ts,proj_class.selected_index);
                 proj_class.draw_mouse_state=0;
                 

@@ -79,7 +79,7 @@ public class project{
     public inventory inventories;
     public Vector types;
     
-    public PhotonMap photonmap; 
+    public PhotonMap photonmap;
     
     //istance of the explorer pane
     public Object oExplorer;
@@ -92,16 +92,30 @@ public class project{
     boolean bSetItemVisible = true;
     boolean bBarVisible = true;
     boolean bInstrumentVisible = true;
-    public boolean bPhotonsVisible;
+    public boolean bPhotonsVisible=false;
+    public boolean bAimvisible=false;
     
-    public boolean hasPhotons;
-    public boolean photonsRendered;
+    public boolean hasPhotons=false;
+    public boolean photonsRendered=false;
     public int selectedArraySize = -1;  //the size of the array in the selected area.
     public int selectedListIndex = -1;
     
     public int templightid;
     
-    public double[] lightpowers; 
+    public double[] lightpowers;
+    
+    //preference values
+    
+    public int numPhotons=500000;
+    public boolean snapToGrid=true;
+    public int snapToGridValue=5;
+    
+    Color setColor=Color.BLACK;
+    Color barColor=Color.BLACK;
+    Color stageColor=Color.BLACK;
+    Color houseColor=Color.BLACK;
+    
+    
     
     /** Creates a new instance of hold_project */
     public project() {
@@ -705,6 +719,7 @@ public class project{
                 //there is a stage
                 if(!ObjectInside(houses.get_object(0),stages.get_object(0))){
                     stages.set_num_objects(0);
+                    
                 }
             }
             //check the sets
@@ -847,6 +862,13 @@ public class project{
         for(i=0;i<instruments.get_num_objects();i++){
             instruments.get_object(i).index=i;
         }
+        
+        if(stages.get_num_objects()<=0){
+            stageadded=false;
+        }else{
+            stageadded=true;
+        }
+        
         
         if(somethingRemoved==true){
             JInternalFrame error_Window;

@@ -112,28 +112,28 @@ public class InstrumentInfoWindow extends JDialog implements ActionListener{
         
         
         JLabel lblR = new JLabel( "Red Color:" );
-        lblR.setBounds( 400, 90, 150, 20 );
+        lblR.setBounds( 500, 90, 150, 20 );
         jpMain.add( lblR );
         
         JR = new JTextField();
-        JR.setBounds( 550, 90, 250, 20 );
+        JR.setBounds( 650, 90, 250, 20 );
         jpMain.add( JR );
         
         JLabel lblG = new JLabel( "Green Color:" );
-        lblG.setBounds( 400, 120, 150, 20 );
+        lblG.setBounds( 500, 120, 150, 20 );
         jpMain.add( lblG );
         
         JG = new JTextField();
-        JG.setBounds( 550, 120, 250, 20 );
+        JG.setBounds( 650, 120, 250, 20 );
         jpMain.add( JG );
         
         
         JLabel lblB = new JLabel( "Blue Color:" );
-        lblB.setBounds( 400, 140, 150, 20 );
+        lblB.setBounds( 500, 140, 150, 20 );
         jpMain.add( lblB );
         
         JB = new JTextField();
-        JB.setBounds( 550, 140, 250, 20 );
+        JB.setBounds( 650, 140, 250, 20 );
         jpMain.add( JB );
         
         

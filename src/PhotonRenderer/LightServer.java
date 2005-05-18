@@ -72,7 +72,7 @@ class LightServer {
             //else
             //    output.setTask("Photon Tracing", 0, causticPhotonMap.maxSize());
             QMCSequence photonSampler = new Halton(2, 4);
-            while ((!proj_class.photonmap.isFull())&&(numEmitted<options.getNumPhotons()*(lights.length+2))) {
+            while ((!proj_class.photonmap.isFull())&&(numEmitted<options.getNumPhotons()*(lights.length))) {
                 
                 double[] rnd = photonSampler.getNext();
                 double rand1x = rnd[0];

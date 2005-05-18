@@ -41,6 +41,7 @@ public class StageInfoWindow extends JDialog implements ActionListener {
         proj_class=(project)project.oClass;
         
         addComponents();
+        populateComponents();
         setBounds(10,50, iScreenHeight,iScreenWidth);
         //setSize(500,500);
         setResizable(true);

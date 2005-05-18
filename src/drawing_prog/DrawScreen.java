@@ -16,7 +16,7 @@ import Data_Storage.*;
  *
  * @author jzawisla
  */
-public class DrawScreen extends theatre.Window implements ItemListener, ActionListener
+public class DrawScreen extends theatre.Window implements ItemListener, ActionListener, MouseListener
 {
     JLabel primLabel, lineLabel, paintLabel, transLabel, strokeLabel; 
     public TransPanel display; 
@@ -54,6 +54,14 @@ public class DrawScreen extends theatre.Window implements ItemListener, ActionLi
         validate();
     } 
     
+    /* Blank mouse listener methods  */
+    public void mouseClicked(MouseEvent event) {}
+    public void mouseEntered(MouseEvent event) {
+     
+    }
+    public void mouseExited(MouseEvent event) {}
+    public void mouseReleased(MouseEvent event) {}    
+    public void mousePressed(MouseEvent e){}
     public void itemStateChanged(ItemEvent e){} 
     public void actionPerformed(ActionEvent e) { 
         //display.setTrans(trans.getSelectedIndex()); 

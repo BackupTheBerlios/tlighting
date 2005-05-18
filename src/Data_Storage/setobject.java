@@ -91,7 +91,7 @@ public class setobject extends General_Object{
     }
     
     public int getsize(){
-        return this.size;
+       return this.size;
     }
     
     public String getname(){
