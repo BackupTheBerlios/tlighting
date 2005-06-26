@@ -264,7 +264,9 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener 
             file_Window.setBounds(0,0, 400,400);
             file_Window.setVisible(true);
             m_fileChooser = new JFileChooser();
-            int retval = m_fileChooser.showOpenDialog(file_Window);
+            m_fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+            m_fileChooser.setDialogTitle("Save");
+            int retval = m_fileChooser.showSaveDialog(file_Window);
             if (retval == JFileChooser.APPROVE_OPTION) {
                 //... The user selected a file, process it.
                 m_fileChooser.setVisible(true);
@@ -301,6 +303,12 @@ public class BasicWindow extends JFrame implements ItemListener, ActionListener 
             phoren.setOptions();
             phoren.setScene();
             phoren.renderScene();
+         }else if(source.getText()=="Preferences"){
+            Preferences pref=new Preferences();
+            
+            
+            
+            
          }
         
         
