@@ -106,16 +106,22 @@ public class project{
     
     //preference values
     
-    public int numPhotons=500000;
-    public boolean snapToGrid=true;
-    public int snapToGridValue=5;
+    public int prefNumPhotons=500000;
+    public boolean prefSnapToGrid=true;
+    public int prefSnapToGridValue=5;
     
-    Color setColor=Color.BLACK;
-    Color barColor=Color.BLACK;
-    Color stageColor=Color.BLACK;
-    Color houseColor=Color.BLACK;
+    public int prefSetColor=0;
+    public int prefBarColor=0;
+    public int prefStageColor=0;
+    public int prefHouseColor=0;
     
+    public int prefLineWidth=1;
     
+    public int prefColorSelected=2;
+    public int prefColorSelectedNode=3;
+    public int prefColorBackground=4;
+    
+    public boolean prefColorInstruments=false;
     
     /** Creates a new instance of hold_project */
     public project() {
