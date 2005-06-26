@@ -15,6 +15,7 @@ package xml_Interface;
 
 import net.n3.nanoxml.*;
 import Data_Storage.*;
+import java.io.*;
 public class xml_Reader {
     
     public project proj_class;
@@ -37,15 +38,27 @@ public class xml_Reader {
         IXMLParser parser=null;
         IXMLReader reader=null;
         IXMLElement xml=null;
-        
+        File inputFile;
         //check what type of file was opened
         try{
+            inputFile= new File(inBarPath);
+            if(inputFile.exists()){
+              //I know the file exists
+          
             parser = XMLParserFactory.createDefaultXMLParser();
-            reader = StdXMLReader.fileReader(inBarPath);
+           
+            inBarPath="file:///"+inBarPath;
+            reader = StdXMLReader.fileReader(inputFile, inBarPath);
+            
             parser.setReader(reader);
             xml = (IXMLElement) parser.parse();
+                
+            }
+            
+            
+            
         }catch(Exception e){
-            System.out.println("exception parsing house");
+            System.out.println(e);
         }
         
         if(xml==null){
@@ -414,7 +427,7 @@ public class xml_Reader {
         IXMLElement instxml=null;
         IXMLElement invxml=null;
         IXMLElement typexml=null;
-        
+        File inputFile;
         
         //if(xml==null){
         //    return false;
@@ -438,9 +451,14 @@ public class xml_Reader {
         if(house){
             try{
                 parser = XMLParserFactory.createDefaultXMLParser();
-                reader = StdXMLReader.fileReader(path+"/house.xml");
-                parser.setReader(reader);
-                housexml = (IXMLElement) parser.parse();
+                String housePath=path+"/house.xml";
+                inputFile=new File(housePath);
+                if((inputFile.exists())&&(inputFile!=null)){
+                    housePath="file:///"+housePath;
+                    reader = StdXMLReader.fileReader(inputFile,housePath);
+                    parser.setReader(reader);
+                    housexml = (IXMLElement) parser.parse();
+                }
             }catch(Exception e){
                 System.out.println("exception parsing house");
             }
@@ -452,11 +470,16 @@ public class xml_Reader {
             if(stage){
                 try{
                     parser = XMLParserFactory.createDefaultXMLParser();
-                    reader = StdXMLReader.fileReader(path+"/stage.xml");
-                    parser.setReader(reader);
-                    stagexml = (IXMLElement) parser.parse();
+                    String stagePath=path+"/stage.xml";
+                    inputFile=new File(stagePath);
+                    if((inputFile.exists())&&(inputFile!=null)){
+                        stagePath="file:///"+stagePath;
+                        reader = StdXMLReader.fileReader(inputFile,stagePath);
+                        parser.setReader(reader);
+                        stagexml = (IXMLElement) parser.parse();
+                    }
                 }catch(Exception e){
-                    System.out.println("exception parsing house");
+                    System.out.println("exception parsing stage");
                 }
                 if(stagexml!=null){
                     get_stage(stagexml);
@@ -466,9 +489,14 @@ public class xml_Reader {
             if(set){
                 try{
                     parser = XMLParserFactory.createDefaultXMLParser();
-                    reader = StdXMLReader.fileReader(path+"/sets.xml");
-                    parser.setReader(reader);
-                    setxml = (IXMLElement) parser.parse();
+                    String setPath=path+"/set.xml";
+                    inputFile=new File(setPath);
+                    if((inputFile.exists())&&(inputFile!=null)){
+                        setPath="file:///"+setPath;
+                        reader = StdXMLReader.fileReader(inputFile,setPath);
+                        parser.setReader(reader);
+                        setxml = (IXMLElement) parser.parse();
+                    }
                 }catch(Exception e){
                     System.out.println("exception parsing set");
                 }
@@ -480,9 +508,14 @@ public class xml_Reader {
             if(bar){
                 try{
                     parser = XMLParserFactory.createDefaultXMLParser();
-                    reader = StdXMLReader.fileReader(path+"/bars.xml");
-                    parser.setReader(reader);
-                    setxml = (IXMLElement) parser.parse();
+                    String barPath=path+"/bars.xml";
+                    inputFile=new File(barPath);
+                    if((inputFile.exists())&&(inputFile!=null)){
+                        barPath="file:///"+barPath;
+                        reader = StdXMLReader.fileReader(inputFile,barPath);
+                        parser.setReader(reader);
+                        setxml = (IXMLElement) parser.parse();
+                    }
                 }catch(Exception e){
                     System.out.println("exception parsing bars");
                 }
@@ -494,9 +527,14 @@ public class xml_Reader {
             if(type){
                 try{
                     parser = XMLParserFactory.createDefaultXMLParser();
-                    reader = StdXMLReader.fileReader(path+"/known_types.xml");
-                    parser.setReader(reader);
-                    typexml = (IXMLElement) parser.parse();
+                    String typePath=path+"/known_types.xml";
+                    inputFile=new File(typePath);
+                    if((inputFile.exists())&&(inputFile!=null)){
+                        typePath="file:///"+typePath;
+                        reader = StdXMLReader.fileReader(inputFile,typePath);
+                        parser.setReader(reader);
+                        typexml = (IXMLElement) parser.parse();
+                    }
                 }catch(Exception e){
                     System.out.println("exception parsing types");
                 }
@@ -508,9 +546,14 @@ public class xml_Reader {
             if(inv){
                 try{
                     parser = XMLParserFactory.createDefaultXMLParser();
-                    reader = StdXMLReader.fileReader(path+"/inventory.xml");
-                    parser.setReader(reader);
-                    invxml = (IXMLElement) parser.parse();
+                    String inventoryPath=path+"/inventory.xml";
+                    inputFile=new File(inventoryPath);
+                    if((inputFile.exists())&&(inputFile!=null)){
+                        inventoryPath="file:///"+inventoryPath;
+                        reader = StdXMLReader.fileReader(inputFile,inventoryPath);
+                        parser.setReader(reader);
+                        invxml = (IXMLElement) parser.parse();
+                    }
                 }catch(Exception e){
                     System.out.println("exception parsing inventory");
                 }
@@ -522,9 +565,14 @@ public class xml_Reader {
             if(ins){
                 try{
                     parser = XMLParserFactory.createDefaultXMLParser();
-                    reader = StdXMLReader.fileReader(path+"/instruments.xml");
-                    parser.setReader(reader);
-                    instxml = (IXMLElement) parser.parse();
+                    String insPath=path+"/instruments.xml";
+                    inputFile=new File(insPath);
+                    if((inputFile.exists())&&(inputFile!=null)){
+                        insPath="file:///"+insPath;
+                        reader = StdXMLReader.fileReader(inputFile,insPath);
+                        parser.setReader(reader);
+                        instxml = (IXMLElement) parser.parse();
+                    }
                 }catch(Exception e){
                     System.out.println("exception parsing instrument");
                 }
