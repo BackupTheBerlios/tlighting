@@ -380,9 +380,9 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         
         int adjx=0;
         int adjy=0;
-        if(proj_class.snapToGrid){
-            adjx =proj_class.ScreenXtoWorld(e.getX())%proj_class.snapToGridValue;
-            adjy =proj_class.ScreenYtoWorld(e.getY())%proj_class.snapToGridValue;
+        if(proj_class.prefSnapToGrid){
+            adjx =proj_class.ScreenXtoWorld(e.getX())%proj_class.prefSnapToGridValue;
+            adjy =proj_class.ScreenYtoWorld(e.getY())%proj_class.prefSnapToGridValue;
             
             //int halfSnap=proj_class.snapToGridValue/2;
             
