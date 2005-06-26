@@ -489,7 +489,7 @@ public class xml_Reader {
             if(set){
                 try{
                     parser = XMLParserFactory.createDefaultXMLParser();
-                    String setPath=path+"/set.xml";
+                    String setPath=path+"/sets.xml";
                     inputFile=new File(setPath);
                     if((inputFile.exists())&&(inputFile!=null)){
                         setPath="file:///"+setPath;
@@ -500,7 +500,7 @@ public class xml_Reader {
                 }catch(Exception e){
                     System.out.println("exception parsing set");
                 }
-                if(stagexml!=null){
+                if(setxml!=null){
                     get_set(setxml);
                 }
             }
@@ -514,13 +514,13 @@ public class xml_Reader {
                         barPath="file:///"+barPath;
                         reader = StdXMLReader.fileReader(inputFile,barPath);
                         parser.setReader(reader);
-                        setxml = (IXMLElement) parser.parse();
+                        barxml = (IXMLElement) parser.parse();
                     }
                 }catch(Exception e){
                     System.out.println("exception parsing bars");
                 }
-                if(stagexml!=null){
-                    get_bars(setxml);
+                if(barxml!=null){
+                    get_bars(barxml);
                 }
             }
             //is there types
