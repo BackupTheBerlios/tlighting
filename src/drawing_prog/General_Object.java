@@ -29,6 +29,10 @@ public class General_Object {
     
     public static Object oClass = null;
     
+ 
+    
+    
+    
     /** Creates a new instance of General_Object */
     public General_Object() {	//- Default Constructor
         worldx=0;
