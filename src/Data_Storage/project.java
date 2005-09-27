@@ -608,7 +608,7 @@ public class project{
         }
     }
     
-    //funstion to detect if obj2 is fully contained inside obj1
+    //function to detect if obj2 is fully contained inside obj1
     public boolean ObjectInside(General_Object obj1, General_Object obj2){
         if(obj1==null){
             return false;
