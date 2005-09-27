@@ -30,11 +30,12 @@ public class InstrumentInfoWindow extends JDialog implements ActionListener{
     private JTextField JB= new JTextField();
     private JTextField JRad= new JTextField();
     private JTextField jHeight= new JTextField();
+    private JComboBox jDimmer = new JComboBox();
     
     private project proj_class;
     /** Creates a new instance of InstrumentInfoWindow */
     public InstrumentInfoWindow() {
-        super(BasicWindow.curWindow,"Stage Info", true);
+        super(BasicWindow.curWindow,"Instrument Info", true);
         //setTitle("Inventory Manager");
         proj_class=(project)project.oClass;
         
@@ -136,6 +137,21 @@ public class InstrumentInfoWindow extends JDialog implements ActionListener{
         JB.setBounds( 650, 140, 250, 20 );
         jpMain.add( JB );
         
+        JLabel lblDim = new JLabel( "Dimmer:" );
+        lblB.setBounds( 500, 180, 150, 20 );
+        jpMain.add( lblDim );
+        
+        jDimmer = new JComboBox();
+        jDimmer.setBounds( 650, 180, 250, 20 );
+        if(proj_class.selected_type==3){
+            int barid=((instrument)proj_class.instruments.get_object(proj_class.selected_index)).getBarID();
+            bar tempbar=(bar)proj_class.bars.get_object(barid);
+        
+            for(int q=0;q<tempbar.getNum_dimmers();q++){
+                jDimmer.addItem(String.valueOf(tempbar.getDimmer(q)));
+            }
+        }
+        jpMain.add( jDimmer );
         
         JButton jbOk = new JButton("Ok");
         jbOk.addActionListener(this);
