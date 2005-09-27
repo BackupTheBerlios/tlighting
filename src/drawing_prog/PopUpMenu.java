@@ -22,7 +22,8 @@ import theatre.*;
 public class PopUpMenu extends JPopupMenu implements ActionListener {
     JMenuItem edit_house, edit_stage, edit_bar,add_bar, move_bar, move_stage,add_stage;
     JMenuItem add_instrument, add_set, edit_set,move_set,move_house,aim_instrument;
-    JMenuItem remove_house, remove_bar, remove_set, remove_instr, remove_stage;//check these against object list.
+    JMenuItem remove_house, remove_bar, remove_set, remove_instr, remove_stage, info_bar;
+    //check these against object list.
     JMenuItem zoom_in,zoom_out;
     JMenuItem cancel,confirm;
     JMenuItem setStageInfo,setLightInfo,setSetInfo;
@@ -72,6 +73,7 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
                 //bar selected
                 edit_bar = new JMenuItem("Edit Bar");
                 move_bar = new JMenuItem("Move Bar");
+                info_bar = new JMenuItem("Edit Bar Info");
                 
                 remove_bar = new JMenuItem("Remove Bar");
                 
@@ -79,12 +81,13 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
                 
                 edit_bar.addActionListener(this);
                 move_bar.addActionListener(this);
+                info_bar.addActionListener(this);
                 remove_bar.addActionListener(this);
                 add_instrument.addActionListener(this);
                 
                 add(edit_bar);
                 add(move_bar);
-                
+                add(info_bar);
                 add(remove_bar);
                 
                 add(add_instrument);
@@ -408,7 +411,9 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
         }else if(e.getSource()==setLightInfo) {
             //launch light edit info
             InstrumentInfoWindow iw=new InstrumentInfoWindow();
-            
+        }else if(e.getSource()==info_bar) {
+            //launch bar edit info window
+            BarInfoWindow bw=new BarInfoWindow();   
             
         }else if(e.getSource() == zoom_in) {   //begin chaplin edit.
             if(proj_class.zoom_factor<1){
