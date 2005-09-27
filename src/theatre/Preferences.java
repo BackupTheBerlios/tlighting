@@ -269,8 +269,8 @@ public class Preferences extends JDialog implements ActionListener{
         }
     }
     
-      public void actionPerformed(java.awt.event.ActionEvent e) {    
-          if(e.getSource()=="Save"){
+      public void actionPerformed(java.awt.event.ActionEvent e) {
+          if(e.getActionCommand()=="Save"){
               saveValues();
               this.dispose();
           }else{
