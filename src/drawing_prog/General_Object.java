@@ -18,7 +18,9 @@ public class General_Object {
     public int index; 				//- lists the index of an object if grouped
     public boolean grouped; 		//- toggled value to see if an object is included in a group
     public int color_index; 		//- index to what color the object should be
-    
+    public int r;
+    public int g;
+    public int b;
     
     private Vector colors; 			//- color palette
     private int minx; 			//- value to hold a quick reference to objects area in reference to world variables
@@ -144,6 +146,8 @@ public class General_Object {
             screen.setColor(Color.BLACK);
         }else if(color_index==15){
             screen.setColor(Color.BLACK);
+        }else if(color_index==-1){
+            screen.setColor(new Color(r,g,b));
         }
         
         BasicStroke stroke = new BasicStroke(4);
@@ -246,10 +250,7 @@ public class General_Object {
                 miny=gy;
                 maxx=gx;
                 maxy=gy;
-                
             }else{
-                
-                
                 if(gx<minx){
                     minx=gx;
                 }else if(gx>maxx){
@@ -262,10 +263,8 @@ public class General_Object {
                     maxy=gy;
                 }
             }
-            
             return true;
         }
-        
         return false;
     }
     
@@ -303,8 +302,6 @@ public class General_Object {
                 maxy=gy;
                 
             }else{
-                
-                
                 if(gx<minx){
                     minx=gx;
                 }else if(gx>maxx){
@@ -393,8 +390,6 @@ public class General_Object {
             }
         }
         
-        
-        
         return false;
     }
     
@@ -417,8 +412,6 @@ public class General_Object {
                 }
             }
         }
-        
-        
         
         return false;
     }
@@ -492,10 +485,13 @@ public class General_Object {
     public int getmaxy(){
         return maxy;    
     }
+    
     public int getminx(){
         return minx;    
     }
+    
     public int getminy(){
         return miny;    
     }
+    
 }
