@@ -95,15 +95,17 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
         //chaplin edit
         
         g2.setColor(Color.LIGHT_GRAY);
-        for(int i = 100; i < (BasicWindow.iScreenWidth-(ExplorerBrowserPanel.iWidth*2) - 24); i+= 100) {
+        int max_distance=6000;
+        int inc_distance=50;
+        for(int i = inc_distance-proj_class.scroll_x; i < (max_distance)-proj_class.scroll_x; i+= inc_distance) {
             String temp = ""+i;
-            g2.draw(new Line2D.Double(i, 0, i, 1250));
+            g2.draw(new Line2D.Double(i*proj_class.zoom_factor, 0, i*proj_class.zoom_factor, max_distance));
             //maybe change 1250.
             //g2.drawString(temp, i, 10);  grid numbers here.
         }
-        for(int i = 100; i < BasicWindow.iScreenHeight - 149; i+= 100) {
+        for(int i = inc_distance-proj_class.scroll_y; i < (max_distance)-proj_class.scroll_y; i+= inc_distance) {
             String temp = ""+i;
-            g2.draw(new Line2D.Double(0, i, 1000, i));
+            g2.draw(new Line2D.Double(0, i*proj_class.zoom_factor, max_distance, i*proj_class.zoom_factor));
             //maybe change 1250.
             //g2.drawString(temp, 0, i); grid numbers here.
         }
