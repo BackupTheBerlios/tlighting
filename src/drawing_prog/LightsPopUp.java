@@ -31,7 +31,7 @@ public class LightsPopUp extends JDialog implements ActionListener{
         proj_class=(project)project.oClass;
         
         addComponents();
-        setBounds(10,50, iScreenHeight,iScreenWidth);
+        setBounds(10,50, iScreenHeight-100,iScreenWidth-50);
         //setSize(500,500);
         setResizable(true);
         setVisible(true);
@@ -73,12 +73,15 @@ public class LightsPopUp extends JDialog implements ActionListener{
     public void loadItems() {
         jcInst.removeAllItems();
         int i;
+        int j=0;
         for(i=0;i<proj_class.inventories.getNumItems();i++){
             if(!proj_class.inventories.getItemUsed(i)){
                 jcInst.addItem(String.valueOf(proj_class.inventories.getItemID(i)));
+                j++;
             }
         }
         jcInst.validate();
+        if(j!=0){
         jcInst.setSelectedIndex(0);
         //find out which item was selected 
             int inv_id = Integer.parseInt((String)jcInst.getSelectedItem());
@@ -90,12 +93,18 @@ public class LightsPopUp extends JDialog implements ActionListener{
             s += "Type: "+proj_class.inventories.getItemType(index)+"\n";
             
             jText.setText(s);
+        }else{
+            jText.setText("All lights in inventory already in use");
+        }
     }
     
     public void actionPerformed(java.awt.event.ActionEvent e) {
         if (e.getActionCommand().equals("ok")) {
-            proj_class.templightid=Integer.parseInt((String)jcInst.getSelectedItem());
-            this.dispose();
+            int numi=jcInst.getItemCount();
+            if(numi>0){
+                proj_class.templightid=Integer.parseInt((String)jcInst.getSelectedItem());
+                this.dispose();
+            }
         }else if (e.getActionCommand().equals("cancel")) {
             proj_class.templightid=-1;
             this.dispose();
