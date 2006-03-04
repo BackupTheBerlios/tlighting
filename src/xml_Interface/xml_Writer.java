@@ -232,9 +232,11 @@ public class xml_Writer {
             bar_obj.setName("bar");
             
             //attributes for bar id, description, x1, x2, y1, y2, z1, z2, house_id
-            if(((bar)proj_class.bars.get_object(i)).getID()!=null){
-                bar_obj.setAttribute("id",((bar)proj_class.bars.get_object(i)).getID());
+            if(((bar)proj_class.bars.get_object(i)).getName()!=null){
+                bar_obj.setAttribute("Name",((bar)proj_class.bars.get_object(i)).getName());
             }
+            bar_obj.setAttribute("id",Integer.toString(((bar)proj_class.bars.get_object(i)).getID()));
+            
             //if(){
             bar_obj.setAttribute("description","BAR DESCRIPTION");
             //}
@@ -535,34 +537,34 @@ public class xml_Writer {
             type_obj.setAttribute("desc",((knowntype)proj_class.types.get(i)).getDesc());
             type_obj.setAttribute("aim",String.valueOf(((knowntype)proj_class.types.get(i)).getAim()));
             
-         
-        int j;
-        int num_nodes=((knowntype)proj_class.types.get(i)).getNumNodes();
-        int val;
-        for(j=0;j<num_nodes;j++){
-            XMLElement node_obj=new XMLElement();
-            node_obj.setName("node");
             
-            val=((knowntype)proj_class.types.get(i)).getX(j);
-            node_obj.setAttribute("x",String.valueOf(val));
-            
-            val=((knowntype)proj_class.types.get(i)).getY(j);
-            node_obj.setAttribute("y",String.valueOf(val));
-            
-            val=((knowntype)proj_class.types.get(i)).getHeight();
-            node_obj.setAttribute("z",String.valueOf(val));
-            type_obj.addChild(node_obj);
-        }   
+            int j;
+            int num_nodes=((knowntype)proj_class.types.get(i)).getNumNodes();
+            int val;
+            for(j=0;j<num_nodes;j++){
+                XMLElement node_obj=new XMLElement();
+                node_obj.setName("node");
+                
+                val=((knowntype)proj_class.types.get(i)).getX(j);
+                node_obj.setAttribute("x",String.valueOf(val));
+                
+                val=((knowntype)proj_class.types.get(i)).getY(j);
+                node_obj.setAttribute("y",String.valueOf(val));
+                
+                val=((knowntype)proj_class.types.get(i)).getHeight();
+                node_obj.setAttribute("z",String.valueOf(val));
+                type_obj.addChild(node_obj);
+            }
             
             parent_obj.addChild(type_obj);
             
             
         }
         try{
-                writer.write(parent_obj,true);
-            }catch(Exception e){
-                System.out.println("Error exporting types to xml");
-            }
+            writer.write(parent_obj,true);
+        }catch(Exception e){
+            System.out.println("Error exporting types to xml");
+        }
     }
     
     //*****************************************************************************
