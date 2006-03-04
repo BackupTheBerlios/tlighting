@@ -207,7 +207,7 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
                 }
                 bar b = (bar)p.bars.object_list.elementAt(i-1);
                 // create bar leaf node with bar id
-                child = new DefaultMutableTreeNode(b.getID().toString());
+                child = new DefaultMutableTreeNode(b.getName());
                 treeModel.insertNodeInto(child, parent, 0);
                 
             }
@@ -359,7 +359,7 @@ public class ExplorerBrowser extends JPanel  implements MouseListener//,ActionLi
                     //figure out what index it is
                     int i;
                     for(i=0;i<p.bars.get_num_objects();i++){
-                        if(((bar)p.bars.get_object(i)).getID().equalsIgnoreCase(child)){
+                        if(((bar)p.bars.get_object(i)).getName().equalsIgnoreCase(child)){
                             p.selected_index=i;
                             temp_obj=p.bars.get_object(i);
                             i=p.bars.get_num_objects();
