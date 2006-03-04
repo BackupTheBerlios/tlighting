@@ -24,10 +24,11 @@ public class WiringPlot extends JDialog implements ActionListener{
     protected JPanel jp;
     protected JButton barB, dimB, lightB;
     protected JButton btn_print;
-    
+    // Make the table vertically scrollable
+    protected JScrollPane scrollPane;
     //Data
-    protected int iScreenHeight =BasicWindow.iScreenWidth-50;
-    protected int iScreenWidth = BasicWindow.iScreenHeight-100;
+    protected int iScreenWidth =BasicWindow.iScreenWidth-50;
+    protected int iScreenHeight = BasicWindow.iScreenHeight-50;
     protected int selection;
     
     /** Creates a new instance of WiringPlot */
@@ -35,7 +36,7 @@ public class WiringPlot extends JDialog implements ActionListener{
         super(BasicWindow.curWindow,"Inventory Manager", true);
         proj_class=(project)project.oClass;
         this.setTitle("Wiring Output Diagram");
-        this.setBounds(20, 20, 600,700);
+        this.setBounds(20, 20, iScreenWidth-40,iScreenHeight-40);
         initAll();
         this.setVisible(true);
         
@@ -47,28 +48,28 @@ public class WiringPlot extends JDialog implements ActionListener{
         
         
         barB = new JButton("Sort On Bar");
-        barB.setBounds(30,500,135,30);
+        barB.setBounds(10,iScreenHeight-150,130,30);
         barB.setVisible(true);
         barB.addActionListener(this);
         barB.setActionCommand("bar");
         jp.add(barB);
         
         dimB = new JButton("Sort On Dimmer");
-        dimB.setBounds(30,550,135,30);
+        dimB.setBounds(150,iScreenHeight-150,135,30);
         dimB.setVisible(true);
         dimB.addActionListener(this);
         dimB.setActionCommand("dimmer");
         jp.add(dimB);
         
         lightB = new JButton("Sort On Light");
-        lightB.setBounds(30,600,135,30);
+        lightB.setBounds(300,iScreenHeight-150,135,30);
         lightB.setVisible(true);
         lightB.addActionListener(this);
         lightB.setActionCommand("light");
         jp.add(lightB);
         
         btn_print = new JButton("Print");
-        btn_print.setBounds(195,500,135,30);
+        btn_print.setBounds(450,iScreenHeight-150,135,30);
         btn_print.setVisible(true);
         btn_print.addActionListener(this);
         btn_print.setActionCommand("print");
@@ -76,7 +77,7 @@ public class WiringPlot extends JDialog implements ActionListener{
         jp.add(btn_print);
         
         System.out.println("Test 1");
-        jp.setBounds(22,22, 780,695);
+        jp.setBounds(5,5, iScreenWidth-50,iScreenHeight-50);
         
         //add table default draw on sort by light
         selection = 2;
@@ -84,10 +85,11 @@ public class WiringPlot extends JDialog implements ActionListener{
         
         getContentPane().add(jp);
     }
+  
+    
     private void makeTable() {
-        String[] columnNames =  {   "Bar",
-                "Dimmer",
-                "Light/Item"
+        String[] columnNames =  {"Instrument","Type","Bar Name","Bar ID",
+            "Dimmer","Color","Position","Aim At"
         };
         
         Object[][]  data    = populateTable();
@@ -104,9 +106,20 @@ public class WiringPlot extends JDialog implements ActionListener{
         //populateTable();
         outTable = new javax.swing.JTable(data, columnNames);
        
-        outTable.setBounds(30,30,500,465);
-        outTable.setVisible(true);
-        jp.add(outTable);
+        outTable.setBounds(10,10,iScreenWidth-90,iScreenHeight-200);
+        //outTable.setVisible(true);
+        outTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        Dimension dimen= new Dimension();
+        dimen.height=iScreenHeight-210;
+        dimen.width=iScreenWidth-100;
+        outTable.setPreferredScrollableViewportSize(dimen);
+        outTable.setAutoscrolls(true);
+        
+        // Make the table vertically scrollable
+        scrollPane = new JScrollPane(outTable);
+        scrollPane.setBounds(10,10, iScreenWidth-90, iScreenHeight-200);    
+
+        jp.add(scrollPane);
         jp.validate();
     }
     private Object[][] populateTable() {
@@ -118,7 +131,7 @@ public class WiringPlot extends JDialog implements ActionListener{
         String[] a = new String[3];
         a = new String[] {"bar", "a", "b"};
         
-        retval = new Object[proj_class.instruments.get_num_objects()+1][3];
+        retval = new Object[proj_class.instruments.get_num_objects()+1][8];
         
         if(selection == 1){
             //handle sort on dimmer
@@ -126,9 +139,7 @@ public class WiringPlot extends JDialog implements ActionListener{
         } else if(selection == 2){
             //handle sort on light
             System.out.println("sorting by light");
-            retval[0][0]=new String("Instrument");
-            retval[0][1]=new String("Dimmer");
-            retval[0][2]=new String("Bar");
+            
             
             if(proj_class.instruments.get_num_objects()>0){
                 //there are lights that we can display
@@ -142,8 +153,13 @@ public class WiringPlot extends JDialog implements ActionListener{
                 while(last!=null){
                     //add last to the list to display
                     retval[i][0]=new Integer(last.getInventoryID());
-                    retval[i][1]=new Integer(last.Associated_dimmerID);
-                    retval[i][2]=new Integer(last.Associated_barID);
+                    retval[i][1]=new String(last.getType());
+                    retval[i][2]=new String(proj_class.getBarNameByID(last.Associated_barID));
+                    retval[i][3]=new Integer(last.Associated_barID);
+                    retval[i][4]=new Integer(last.Associated_dimmerID);
+                    retval[i][5]=new String("R:"+last.R+" B:"+last.B+" G:"+last.G);
+                    retval[i][6]=new String("X:"+last.worldx+" Y:"+last.worldy+" Z:"+last.worldz);
+                    retval[i][7]=new String("X:"+last.aimx+" Y:"+last.aimy+" Z:"+last.aimz);
                     i++;
                     last = getNextInstrument(last);
                 }
@@ -203,7 +219,7 @@ public class WiringPlot extends JDialog implements ActionListener{
             selection = 2;
             makeTable();
         } else if(e.getActionCommand() == "print"){
-            PrintUtilities.printComponent(outTable);
+            PrintUtilities.printComponent(scrollPane);
         }
         
     }
