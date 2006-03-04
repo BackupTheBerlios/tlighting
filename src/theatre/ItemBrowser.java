@@ -27,20 +27,27 @@ public class ItemBrowser extends Window {
     public static void displayInfo(Object o) {
         if (o instanceof bar) {
             bar b = (bar)o;
-            String s = "Bar ID: "+b.getID()+"\n";
+            String s = "Bar Name:"+b.getName()+"\n";
+            s +="Bar ID: "+b.getID()+"\n";
             s += "Num Nodes: "+b.num_nodes + "\n";
-            s += "x: "+b.worldx+"\n";
-            s += "y: "+b.worldy+"\n";
-            s += "number of dimmers: " + b.getNum_dimmers()+"\n";
+            s += "X: "+b.worldx+"\n";
+            s += "Y: "+b.worldy+"\n";
+            s += "Height:"+b.getHeight()+"\n";
+            s += "Number of Dimmers: " + b.getNum_dimmers()+"\n";
+            s+= "Dimmers:"+b.getDimmerString()+"\n";
             jText.setText(s);
         }else if (o instanceof instrument) {
             instrument i = (instrument)o;
             String s = "Instrument ID: "+i.getInventoryID()+"\n";
             s += "Description: "+i.getDescription() + "\n";
-            s += "x: "+i.worldx+"\n";
-            s += "y: "+i.worldy+"\n";
+            s += "Type:"+i.getType()+"\n";
+            s += "X: "+i.worldx+"\n";
+            s += "Y: "+i.worldy+"\n";
+            s += "Height:"+i.getZ()+"\n";
             s += "Bar: " + i.getBarID()+"\n";
             s += "Dimmer: " + i.getDimmerId()+"\n";
+            s += "Color R"+i.R+" G:"+i.G+" B:"+i.B+"\n";
+            s += "Level:"+i.getLevel()+"\n";
             s += "Misc: " + i.getMisc()+"\n";
             jText.setText(s);
         }else if (o instanceof setobject) {
@@ -64,8 +71,8 @@ public class ItemBrowser extends Window {
             house b = (house)o;
             String s = "House ID: "+b.getid()+"\n";
             s += "Description: " + b.getdescription()+"\n";
-            s += "x: "+b.worldx+"\n";
-            s += "y: "+b.worldy+"\n";
+            s += "X: "+b.worldx+"\n";
+            s += "Y: "+b.worldy+"\n";
             s += "Width: " + b.getmaxx()+"\n";
             s += "Length: " + b.getmaxy()+"\n";
             s += "Height: " + b.getheight()+"\n";
