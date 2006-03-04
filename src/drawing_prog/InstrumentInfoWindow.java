@@ -129,16 +129,16 @@ public class InstrumentInfoWindow extends JDialog implements ActionListener{
         jpMain.add( JG );
         
         
-        JLabel lblB = new JLabel( "Blue Color:" );
-        lblB.setBounds( 500, 140, 150, 20 );
+        JLabel lblB = new JLabel( "Blue:" );
+        lblB.setBounds( 500, 150, 150, 20 );
         jpMain.add( lblB );
         
         JB = new JTextField();
-        JB.setBounds( 650, 140, 250, 20 );
+        JB.setBounds( 650, 150, 250, 20 );
         jpMain.add( JB );
         
         JLabel lblDim = new JLabel( "Dimmer:" );
-        lblB.setBounds( 500, 180, 150, 20 );
+        lblDim.setBounds( 500, 180, 150, 20 );
         jpMain.add( lblDim );
         
         jDimmer = new JComboBox();
@@ -182,6 +182,22 @@ public class InstrumentInfoWindow extends JDialog implements ActionListener{
             JB.setText( String.valueOf(tempi.B));
             jHeight.setText(String.valueOf(tempi.worldz));
             JRad.setText(String.valueOf(tempi.radius));
+            
+            //select the appropriate dimmer #
+            instrument ti=((instrument)proj_class.instruments.get_object(proj_class.selected_index));
+            for(int i=0;i<jDimmer.getItemCount();i++){
+                try{
+                    int dimn=Integer.parseInt(jDimmer.getItemAt(i).toString());
+                    
+                if(dimn==ti.Associated_dimmerID){
+                    jDimmer.setSelectedIndex(i);
+                }
+                }catch(Exception ex){
+                    System.out.println("error a dimmer number could not be parsed into an integer");
+                }
+                
+            }
+            
         }
     }
     
@@ -198,7 +214,7 @@ public class InstrumentInfoWindow extends JDialog implements ActionListener{
                 ((instrument)proj_class.instruments.get_object(proj_class.selected_index)).aimz=Integer.parseInt(Jaimz.getText());
                 ((instrument)proj_class.instruments.get_object(proj_class.selected_index)).worldz=Integer.parseInt(jHeight.getText());
                 ((instrument)proj_class.instruments.get_object(proj_class.selected_index)).radius=Integer.parseInt(JRad.getText());
-                
+                ((instrument)proj_class.instruments.get_object(proj_class.selected_index)).Associated_dimmerID=Integer.parseInt(jDimmer.getSelectedItem().toString());
                 
             }catch(Exception ex){
                 System.out.println("Error editing instrument error:"+ex.getMessage());
