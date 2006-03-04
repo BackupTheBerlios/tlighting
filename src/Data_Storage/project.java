@@ -9,7 +9,7 @@ package Data_Storage;
 /**
  *
  * @author Harikrishna Patel
- * last edited by joshua zawislak 4-25-05 
+ * last edited by joshua zawislak 4-25-05
  */
 
 import drawing_prog.*;
@@ -133,7 +133,7 @@ public class project{
         inventories=new inventory();
         types=new Vector();
         
-        photonmap=new PhotonMap(500000,50,1e10); 
+        photonmap=new PhotonMap(500000,50,1e10);
         
         selected_type=-1;
         selected_index=-1;
@@ -188,7 +188,7 @@ public class project{
                         nameused=false;
                         int iter;
                         for(iter=0;iter<bars.get_num_objects();iter++){
-                            if(tempname.equalsIgnoreCase(((bar)bars.get_object(iter)).getID())){
+                            if(tempname.equalsIgnoreCase(((bar)bars.get_object(iter)).getName())){
                                 nameused=true;
                             }
                         }
@@ -197,7 +197,23 @@ public class project{
                             tempname="Bar"+tempnum;
                         }
                     }
-                    abar.setID(tempname);
+                    
+                    boolean numUsed=true;
+                    int lastnum=bars.get_num_objects();
+                    if(lastnum>0){
+                        while(numUsed){
+                            int iter;
+                            for(iter=0;iter<bars.get_num_objects();iter++){
+                                if(lastnum==((bar)bars.get_object(iter)).getID()){
+                                    lastnum++;
+                                }else{
+                                    numUsed=false;
+                                }
+                            }
+                        }
+                    }
+                    abar.setName(tempname);
+                    abar.setID(lastnum);
                     //System.out.println("Bar "+abar.getID()+" got added");
                     if(bars.add_object(abar)==tempnum+1){
                         ExplorerBrowser ib = (ExplorerBrowser)ExplorerBrowser.oClass;
@@ -702,14 +718,29 @@ public class project{
         return -1;
     }
     
+    public String getBarNameByID(int ID){
+        return ((bar)this.bars.get_object(getBarByID(ID))).getName();
+    }
+    
     public int getBarByName(String bname){
         int i;
         for(i=0;i<bars.get_num_objects();i++){
-            if(((bar)bars.get_object(i)).getID().equals(bname)){
+            if(((bar)bars.get_object(i)).getName().equals(bname)){
                 return i;
             }
         }
         return -1;
+    }
+    
+    public int getBarByID(int id){
+        int i;
+        for(i=0;i<bars.get_num_objects();i++){
+            if(((bar)bars.get_object(i)).getID()==id){
+                return i;
+            }
+        }
+        return -1;
+        
     }
     
     public void verifyData(){
@@ -905,10 +936,10 @@ public class project{
             Color power = new Color((float)R,(float)G,(float)B);
             
             
-            Photon pho= new Photon(p, dir, power); 
+            Photon pho= new Photon(p, dir, power);
             pho.setN(nx,ny, nz);
             photonmap.storePhoton(pho);
-
+            
             return true;
         }
         
