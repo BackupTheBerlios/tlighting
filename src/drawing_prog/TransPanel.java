@@ -600,13 +600,15 @@ public class TransPanel extends JPanel implements MouseListener, AdjustmentListe
                 
                 int pot_y=-1;
                 
-                int barx1=proj_class.bars.get_object(temp_instrument.Associated_barID).x[0]+proj_class.bars.get_object(temp_instrument.Associated_barID).worldx;
+                bar tbar=(bar)proj_class.bars.get_object(proj_class.getBarByID(temp_instrument.Associated_barID));
                 
-                int barx2=proj_class.bars.get_object(temp_instrument.Associated_barID).x[1]+proj_class.bars.get_object(temp_instrument.Associated_barID).worldx;
+                int barx1=tbar.x[0]+tbar.worldx;
                 
-                int bary1=proj_class.bars.get_object(temp_instrument.Associated_barID).y[0]+proj_class.bars.get_object(temp_instrument.Associated_barID).worldy;
+                int barx2=tbar.x[1]+tbar.worldx;
                 
-                int bary2=proj_class.bars.get_object(temp_instrument.Associated_barID).y[1]+proj_class.bars.get_object(temp_instrument.Associated_barID).worldy;
+                int bary1=tbar.y[0]+tbar.worldy;
+                
+                int bary2=tbar.y[1]+tbar.worldy;
                 
                 //swap the points to make the math easier because assume point 1 is to the right
                 
