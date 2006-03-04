@@ -182,10 +182,10 @@ public class xml_Reader {
             
             //and add all the bars info to it
             //attributes for bar id, description, x1, x2, y1, y2, z1, z2, house_id
-            String bar_id;
-            int x1=0,x2=0,y1=0,y2=0,z1=0,z2=0;
+            String bar_name;
+            int x1=0,x2=0,y1=0,y2=0,z1=0,z2=0,bar_id=0;
             String house_id;
-            bar_id=b_xml.getAttribute("bar_id","DEFAULT");
+            bar_name=b_xml.getAttribute("bar_id","DEFAULT");
             house_id=b_xml.getAttribute("house_id","DEFAULT");
             try{
                 x1=Integer.parseInt(b_xml.getAttribute("x1","100"));
@@ -194,6 +194,7 @@ public class xml_Reader {
                 y2=Integer.parseInt(b_xml.getAttribute("y2","100"));
                 z1=Integer.parseInt(b_xml.getAttribute("z1","100"));
                 z2=Integer.parseInt(b_xml.getAttribute("z2","100"));
+                bar_id=Integer.parseInt(b_xml.getAttribute("id","0"));
             }catch(Exception e){
                 
                 System.out.println("there was an error parseing the size of the bar from file");
@@ -211,14 +212,19 @@ public class xml_Reader {
             temp_b.worldy=wy;
             temp_b.add_node(x1, y1);
             temp_b.add_node(x2, y2);
-            
+            temp_b.setID(bar_id);
+            temp_b.setName(bar_name);
+            temp_b.setZ(0, z1);
+            temp_b.setZ(1, z2);
+           
             //get all the dimmers on the bar
             int i2;
             int num2=b_xml.getChildrenCount();
+            temp_b.setNumDim(num2);
             for(i2=0;i2<num2;i2++){
                 IXMLElement n_xml=b_xml.getChildAtIndex(i2);
                 int dimmer;
-                dimmer=Integer.parseInt(n_xml.getAttribute("dimmer","0"));
+                dimmer=Integer.parseInt(n_xml.getAttribute("number","0"));
                 temp_b.setDimmers(i2,dimmer);
             }
             
