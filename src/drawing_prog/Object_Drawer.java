@@ -62,6 +62,9 @@ public class Object_Drawer {
         obj.index=num_objects;
         
         object_list.add(obj);
+        for(int i=0;i<object_list.size();i++){
+            ((General_Object)object_list.get(i)).index=i;
+        }
         num_objects++;
         return num_objects;
     }
