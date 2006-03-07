@@ -120,6 +120,16 @@ public class inventory
         }
     }
     
+    public int getItembyID(int id){
+        int i;
+        for(i=0;i<list.size();i++){
+            if(((inventory_item)list.get(i)).getInvId()==id){
+                return i;
+            }
+        }
+        return -1;
+    }
+    
     public void inventoryOut()
     {
         System.out.println("The inventory name is: "+this.inv_name);
