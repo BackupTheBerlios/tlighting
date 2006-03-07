@@ -254,7 +254,7 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             aScreen.temp_instrument.add_node(15,20);
             aScreen.temp_instrument.add_node(5,20);
             aScreen.temp_instrument.add_node(5,5);
-            aScreen.temp_instrument.setBarID(proj_class.selected_index);
+            aScreen.temp_instrument.setBarID(((bar)proj_class.bars.get_object(proj_class.selected_index)).getID());
         } else if(e.getSource()==add_stage) {
             //ADD STAGE
             //System.out.println("adding a stage");
@@ -308,17 +308,19 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
         } else if (e.getSource() == remove_bar) {
             int barIndex = 0;
             
-            if(proj_class.instruments.object_list.size() > 0)//then there are instruments in array.
+            if(proj_class.instruments.get_num_objects() > 0)//then there are instruments in array.
             {
-                int size = proj_class.instruments.object_list.size(), i = 0;
+                int size = proj_class.instruments.get_num_objects(), i = 0;
                 barIndex = proj_class.selected_index;
                 while(i < size) {
-                    instrument aInstrument =(instrument)proj_class.instruments.object_list.get(i);
+                    instrument aInstrument =(instrument)proj_class.instruments.get_object(i);
                     int barId = aInstrument.getBarID();
                     if(aInstrument.getBarID() >= 0) {
-                        if(barId==barIndex) {
+                        if(barId==((bar)proj_class.bars.get_object(barIndex)).getID()) {
                             //proj_class.instruments.object_list.removeElementAt(proj_class.instruments.object_list.indexOf(proj_class.instruments.object_list.get(i)));
                             //proj_class.instruments.set_num_objects(proj_class.instruments.object_list.size()-1);
+                            //((inventory_item)proj_class.inventories.getList(aInstrument.getInventoryID()));
+                            proj_class.inventories.setItemUsed(proj_class.inventories.getItembyID(aInstrument.getInventoryID()), false);            
                             proj_class.instruments.remove_object(i);
                             size -= 1;
                         } else {
@@ -330,12 +332,12 @@ public class PopUpMenu extends JPopupMenu implements ActionListener {
             proj_class.bars.remove_object(proj_class.selected_index);
             //proj_class.bars.set_num_objects(proj_class.bars.get_num_objects()-1);
             //remove the bar itself
-            for(int j = 0; j < proj_class.instruments.object_list.size(); j++) {
+            /*for(int j = 0; j < proj_class.instruments.get_num_objects(); j++) {
                 //need the start point.
                 instrument tempInst = (instrument)proj_class.instruments.get_object(j);
-                if(tempInst.Associated_barID > barIndex)
-                    tempInst.Associated_barID -= 1;
-            }
+                if(tempInst.Associated_barID == ((bar)proj_class.bars.get_object(barIndex)).getID())
+                    tempInst.Associated_barID=-1;
+            } removed by JZ 3-7-06*/
             //mod bar id as well.
             for(int k = 0; k < proj_class.bars.object_list.size(); k++) {
                 bar tempBar = (bar)proj_class.bars.object_list.get(k);
