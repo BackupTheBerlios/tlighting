@@ -812,42 +812,44 @@ public class project{
         for(i=0;i<instruments.get_num_objects();i++){
             if(((instrument)instruments.get_object(i)).getBarID()<bars.get_num_objects()){
                 //make sure all the instruments are on a valid point in a bar
-                bar tbar=(bar)bars.get_object(((instrument)instruments.get_object(i)).getBarID());
+                bar tbar=(bar)bars.get_object(getBarByID(((instrument)instruments.get_object(i)).getBarID()));
                 boolean vert=false;
                 boolean hori=false;
-                if((tbar.getmaxx()==tbar.getminx())){
-                    vert=true;
-                }
-                if(tbar.getmaxy()==tbar.getminy()){
-                    hori=true;
-                }
-                if((!vert)&&(!hori)){
-                    if(!instruments.get_object(i).in_area(tbar.getminx(),tbar.getminy(),tbar.getmaxx(),tbar.getmaxy())){
-                        instruments.remove_object(i);
-                        somethingRemoved=true;
+                if(tbar!=null){
+                    //then it is on bar
+                    if((tbar.getmaxx()==tbar.getminx())){
+                        vert=true;
                     }
-                }
-                if(vert){
-                    //just make sure the y's are in range
-                    if(!instruments.get_object(i).in_area(tbar.getminx()-1,tbar.getminy(),tbar.getmaxx()+1,tbar.getmaxy())){
-                        instruments.remove_object(i);
-                        somethingRemoved=true;
+                    if(tbar.getmaxy()==tbar.getminy()){
+                        hori=true;
                     }
-                }
-                if(hori){
-                    //just make sure the x's are in range
-                    if(!instruments.get_object(i).in_area(tbar.getminx(),tbar.getminy()-1,tbar.getmaxx(),tbar.getmaxy()+1)){
-                        instruments.remove_object(i);
-                        somethingRemoved=true;
+                    if((!vert)&&(!hori)){
+                        if(!instruments.get_object(i).in_area(tbar.getminx(),tbar.getminy(),tbar.getmaxx(),tbar.getmaxy())){
+                            instruments.remove_object(i);
+                            somethingRemoved=true;
+                        }
                     }
+                    if(vert){
+                        //just make sure the y's are in range
+                        if(!instruments.get_object(i).in_area(tbar.getminx()-1,tbar.getminy(),tbar.getmaxx()+1,tbar.getmaxy())){
+                            instruments.remove_object(i);
+                            somethingRemoved=true;
+                        }
+                    }
+                    if(hori){
+                        //just make sure the x's are in range
+                        if(!instruments.get_object(i).in_area(tbar.getminx(),tbar.getminy()-1,tbar.getmaxx(),tbar.getmaxy()+1)){
+                            instruments.remove_object(i);
+                            somethingRemoved=true;
+                        }
+                    }
+                }else{
+                    //remove the instrument
+                    instruments.remove_object(i);
+                    
+                    somethingRemoved=true;
                 }
-            }else{
-                //remove the instrument
-                instruments.remove_object(i);
-                
-                somethingRemoved=true;
             }
-            
         }
         
         //make sure all the instruments are marked as used
